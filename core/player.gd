@@ -12,6 +12,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _ready():
 	current_cam = get_viewport().get_camera_3d()
+	motion_mode = 1
+	floor_max_angle = PI
 
 
 func update_up():
@@ -32,8 +34,10 @@ func _physics_process(delta):
 	if get_up_direction() != Vector3.UP:
 		direction = direction.slide(get_up_direction())
 	if is_on_floor() or is_on_wall():
+		print("Floor: ", is_on_floor(), " Wall: ", is_on_wall())
 		velocity = direction * SPEED
 	else:
+		print("falling")
 		set_up_direction(Vector3.UP)
 		velocity.y -= gravity * delta
 	move_and_slide()
