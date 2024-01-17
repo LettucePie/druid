@@ -2,3 +2,5 @@
 .godot/
 *.kra~
 *.kra-autosave.kra
+
+export_presets.cfg

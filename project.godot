@@ -11,9 +11,16 @@ config_version=5
 [application]
 
 config/name="Druid"
+run/main_scene="res://stages/stage_0.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=472
 
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
