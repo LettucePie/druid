@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://diia2x4wqmq48"]
+[gd_scene load_steps=9 format=3 uid="uid://diia2x4wqmq48"]
 
 [ext_resource type="Script" path="res://testing/testvecs.gd" id="1_86oty"]
 
@@ -15,6 +15,13 @@ size = Vector3(0.2, 0.2, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_13she"]
 size = Vector3(0.2, 2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yfpaj"]
+albedo_color = Color(0, 0.647059, 0.368627, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yf53b"]
+material = SubResource("StandardMaterial3D_yfpaj")
+size = Vector3(0.6, 0.6, 0.1)
 
 [node name="testvecs" type="Node3D"]
 script = ExtResource("1_86oty")
@@ -41,7 +48,7 @@ transform = Transform3D(-0.446576, 3.90409e-08, 0, 1.70653e-15, 1.95205e-08, -0.
 mesh = SubResource("PrismMesh_gee7p")
 
 [node name="Normal" type="Node3D" parent="."]
-transform = Transform3D(0.847867, -0.3706, -0.379179, 0.452379, 0.878641, 0.152786, 0.276539, -0.301074, 0.912623, 0, 0, 0)
+transform = Transform3D(0.990444, 0.0385419, -0.13242, -0.131897, 0.545242, -0.827838, 0.0402943, 0.837392, 0.545115, 0, 0, 0)
 
 [node name="shaft" type="MeshInstance3D" parent="Normal"]
 mesh = SubResource("BoxMesh_13she")
@@ -60,5 +67,10 @@ mesh = SubResource("BoxMesh_786ji")
 transform = Transform3D(-0.446576, 3.90409e-08, 0, 1.70653e-15, 1.95205e-08, -0.446576, -3.90409e-08, -0.446576, -1.95205e-08, 2.38419e-07, 4.06822e-08, -0.930697)
 mesh = SubResource("PrismMesh_gee7p")
 
+[node name="base" type="MeshInstance3D" parent="Result"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.884712)
+mesh = SubResource("BoxMesh_yf53b")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.728491, 4.34214e-08, 0.685056, -0.505553, 0.674831, 0.537606, -0.462297, -0.737973, 0.491608, 0, 0, 0)
+transform = Transform3D(0.728491, 6.51321e-08, 0.685056, -0.505553, 0.674831, 0.537606, -0.462297, -0.737973, 0.491608, 0, 0, 0)
+shadow_enabled = true

@@ -28,7 +28,7 @@ func _process(delta):
 #	$Normal.rotation = normal
 #	normal = n_tran.basis * normal
 #	normal = $Normal.transform.basis.get_rotation_quaternion().get_axis()
-	normal = $Normal.transform.basis * Vector3.UP
+	normal = ($Normal.transform.basis * Vector3.UP).normalized()
 	print(normal)
 	
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -41,5 +41,5 @@ func _process(delta):
 #	var result_dir = input_3d.reflect(normal)
 	var result_dir = input_3d.slide(normal)
 #	var result_dir = input_3d.cross(normal)
-	$Result.look_at(result_dir + $Result.position, Vector3.UP)
+	$Result.look_at(result_dir + $Result.position, normal)
 
