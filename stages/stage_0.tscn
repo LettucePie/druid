@@ -30,6 +30,16 @@ shape = SubResource("BoxShape3D_321b2")
 material_override = SubResource("StandardMaterial3D_5cjng")
 mesh = SubResource("BoxMesh_oup2k")
 
+[node name="wall" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -4.75023, 2.07639e-07, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall"]
+shape = SubResource("BoxShape3D_321b2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="wall"]
+material_override = SubResource("StandardMaterial3D_5cjng")
+mesh = SubResource("BoxMesh_oup2k")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.784214, 0.190011, 0.590682, -0.620491, 0.240147, 0.746539, 0, -0.951958, 0.306227, 0, 0, 0)
 shadow_enabled = true

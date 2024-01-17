@@ -51,13 +51,15 @@ func _physics_process(delta):
 	var direction = input_dir.rotated(Vector3.UP, current_cam.rotation.y)
 	
 	## Transform direction perpindicular to get_up_direction()
-	## How? I don't know if it's cross, slide, bounce, reflect...
-#	direction = direction.slide(get_up_direction())
-	direction = direction.cross(get_up_direction())
+	print("up ", get_up_direction())
+	print("indir ", direction)
+	direction = direction.slide(get_up_direction())
+	print("manipulated dir ", direction)
 	
 #	print(direction)
 	if stop:
-		velocity.lerp(Vector3.ZERO, delta)
+		if is_on_floor():
+			velocity = Vector3.ZERO
 	else:
 		velocity = direction * SPEED
 
