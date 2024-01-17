@@ -1,9 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://ddgwvml0m7dbo"]
+[gd_scene load_steps=6 format=3 uid="uid://ddgwvml0m7dbo"]
 
 [ext_resource type="PackedScene" uid="uid://bmicu2av4r0qn" path="res://core/player.tscn" id="1_sw48k"]
+[ext_resource type="Texture2D" uid="uid://d4h6a07wyekdn" path="res://art/textures/forest_floor_a.png" id="2_mqfbb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_321b2"]
 size = Vector3(10, 0.5, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5cjng"]
+albedo_texture = ExtResource("2_mqfbb")
 
 [sub_resource type="BoxMesh" id="BoxMesh_oup2k"]
 size = Vector3(10, 0.5, 10)
@@ -22,6 +26,7 @@ current = true
 shape = SubResource("BoxShape3D_321b2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+material_override = SubResource("StandardMaterial3D_5cjng")
 mesh = SubResource("BoxMesh_oup2k")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
