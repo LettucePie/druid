@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://ddgwvml0m7dbo"]
+[gd_scene load_steps=7 format=3 uid="uid://ddgwvml0m7dbo"]
 
 [ext_resource type="PackedScene" uid="uid://bmicu2av4r0qn" path="res://core/player.tscn" id="1_sw48k"]
 [ext_resource type="Texture2D" uid="uid://d4h6a07wyekdn" path="res://art/textures/forest_floor_a.png" id="2_mqfbb"]
+[ext_resource type="PackedScene" uid="uid://kakcm6rnbmqo" path="res://core/stage_pieces/winding_shape_a.tscn" id="3_g1715"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_321b2"]
 size = Vector3(10, 0.5, 10)
@@ -15,7 +16,7 @@ size = Vector3(10, 0.5, 10)
 [node name="stage_0" type="Node3D"]
 
 [node name="Room_Cam" type="Camera3D" parent="."]
-transform = Transform3D(0.749002, -0.331284, 0.573801, 0, 0.866025, 0.5, -0.662568, -0.374501, 0.648655, 3.87956, 4.61453, 4.29263)
+transform = Transform3D(0.771658, -0.190021, 0.606989, 0, 0.954329, 0.298758, -0.636038, -0.230539, 0.736416, 4.51547, 3.58306, 5.35311)
 current = true
 
 [node name="player" parent="." instance=ExtResource("1_sw48k")]
@@ -32,3 +33,6 @@ mesh = SubResource("BoxMesh_oup2k")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.784214, 0.190011, 0.590682, -0.620491, 0.240147, 0.746539, 0, -0.951958, 0.306227, 0, 0, 0)
 shadow_enabled = true
+
+[node name="winding_shape_a" parent="." instance=ExtResource("3_g1715")]
+transform = Transform3D(0.185264, 0, 0.452823, 0, 0.489256, 0, -0.452823, 0, 0.185264, -1.05607, 1.53157, -4.70339)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=8 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 
@@ -6,12 +6,20 @@
 
 [sub_resource type="SphereMesh" id="SphereMesh_0fjhr"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wh7jq"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hmww8"]
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.831373, 0, 0.709804, 1)
+albedo_color = Color(0.301961, 0.419608, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_55uq3"]
-material = SubResource("StandardMaterial3D_wh7jq")
+material = SubResource("StandardMaterial3D_hmww8")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ylkh8"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.898039, 0.0980392, 0.309804, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aftjj"]
+material = SubResource("StandardMaterial3D_ylkh8")
 size = Vector3(0.2, 0.2, 0.2)
 
 [node name="player" type="CharacterBody3D" groups=["player"]]
@@ -27,6 +35,10 @@ mesh = SubResource("SphereMesh_0fjhr")
 [node name="Player_Cam" type="Camera3D" parent="." groups=["player_camera"]]
 transform = Transform3D(1, 0, 0, 0, 0.986873, 0.1615, 0, -0.1615, 0.986873, 0, 1.14094, 4.97653)
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="z" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.707599)
 mesh = SubResource("BoxMesh_55uq3")
+
+[node name="z2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.708, 0, 0)
+mesh = SubResource("BoxMesh_aftjj")
