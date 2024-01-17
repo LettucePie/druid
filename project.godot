@@ -20,6 +20,54 @@ config/icon="res://icon.svg"
 window/size/viewport_width=640
 window/size/viewport_height=472
 
+[input]
+
+jump={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
+]
+}
+stick_l_x-={
+"deadzone": 0.15,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":0,"axis_value":-1.0,"script":null)
+]
+}
+stick_l_y-={
+"deadzone": 0.15,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":1,"axis_value":-1.0,"script":null)
+]
+}
+stick_r_x-={
+"deadzone": 0.15,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":-1.0,"script":null)
+]
+}
+stick_r_y-={
+"deadzone": 0.15,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":-1.0,"script":null)
+]
+}
+stick_l_x+={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":0,"axis_value":1.0,"script":null)
+]
+}
+stick_l_y+={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":1,"axis_value":1.0,"script":null)
+]
+}
+stick_r_x+={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":1.0,"script":null)
+]
+}
+stick_r_y+={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
+]
+}
+
 [rendering]
 
 renderer/rendering_method="mobile"
