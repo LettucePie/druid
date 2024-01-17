@@ -4,6 +4,7 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
+var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -25,14 +26,19 @@ func _physics_process(delta):
 	var col = get_last_slide_collision()
 	if col != null:
 		if col.get_normal() != get_up_direction():
+			previous_normal = get_up_direction()
 			set_up_direction(col.get_normal())
 			print("Update Up Direction ", get_up_direction())
 	var input_h = Input.get_axis("stick_l_x-", "stick_l_x+")
 	var input_v = Input.get_axis("stick_l_y-", "stick_l_y+")
 	var input_vec : Vector3 = Vector3(input_h, 0, input_v)
-	var direction = input_vec.rotated(Vector3.UP, current_cam.rotation.y)
+	var direction = input_vec.rotated(Vector3.UP, current_cam.rotation.y).normalized()
 	if get_up_direction() != Vector3.UP:
-		direction = direction.slide(get_up_direction())
+#		direction = input_vec.slide(get_up_direction())
+		direction = input_vec.rotated(
+			Vector3.UP.cross(get_up_direction()),
+			Vector3.UP.angle_to(get_up_direction())
+		).normalized()
 	if is_on_floor() or is_on_wall():
 		print("Floor: ", is_on_floor(), " Wall: ", is_on_wall())
 		velocity = direction * SPEED
