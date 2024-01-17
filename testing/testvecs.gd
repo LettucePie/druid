@@ -40,6 +40,8 @@ func _process(delta):
 	
 #	var result_dir = input_3d.reflect(normal)
 	var result_dir = input_3d.slide(normal)
+	print("input dir ", input_3d)
+	print("result dir ", result_dir)
 #	var result_dir = input_3d.cross(normal)
 	$Result.look_at(result_dir + $Result.position, normal)
 
