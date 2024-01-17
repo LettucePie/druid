@@ -35,8 +35,8 @@ func _physics_process(delta):
 	var direction = input_vec.rotated(Vector3.UP, current_cam.rotation.y).normalized()
 	if get_up_direction() != Vector3.UP:
 #		direction = input_vec.slide(get_up_direction())
-		direction = input_vec.rotated(
-			Vector3.UP.cross(get_up_direction()),
+		direction = direction.rotated(
+			Vector3.UP.cross(get_up_direction()).normalized(),
 			Vector3.UP.angle_to(get_up_direction())
 		).normalized()
 	if is_on_floor() or is_on_wall():
