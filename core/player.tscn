@@ -32,16 +32,20 @@ shape = SubResource("SphereShape3D_tq1pq")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_0fjhr")
 
-[node name="Player_Cam" type="Camera3D" parent="." groups=["player_camera"]]
-transform = Transform3D(1, 0, 0, 0, 0.986873, 0.1615, 0, -0.1615, 0.986873, 0, 1.14094, 4.97653)
-
-[node name="z" type="MeshInstance3D" parent="."]
+[node name="z" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.707599)
 mesh = SubResource("BoxMesh_55uq3")
+skeleton = NodePath("../..")
 
-[node name="x" type="MeshInstance3D" parent="."]
+[node name="x" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.708, 0, 0)
 mesh = SubResource("BoxMesh_aftjj")
+skeleton = NodePath("../..")
+
+[node name="cam_dial" type="Node3D" parent="."]
+
+[node name="Player_Cam" type="Camera3D" parent="cam_dial" groups=["player_camera"]]
+transform = Transform3D(1, 0, 0, 0, 0.986873, 0.1615, 0, -0.1615, 0.986873, 0, 1.14094, 4.97653)
 
 [node name="magnet_ray" type="RayCast3D" parent="."]
 debug_shape_custom_color = Color(0.501961, 0, 0.847059, 1)
