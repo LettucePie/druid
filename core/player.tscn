@@ -39,6 +39,10 @@ transform = Transform3D(1, 0, 0, 0, 0.986873, 0.1615, 0, -0.1615, 0.986873, 0, 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.707599)
 mesh = SubResource("BoxMesh_55uq3")
 
-[node name="z2" type="MeshInstance3D" parent="."]
+[node name="x" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.708, 0, 0)
 mesh = SubResource("BoxMesh_aftjj")
+
+[node name="magnet_ray" type="RayCast3D" parent="."]
+debug_shape_custom_color = Color(0.501961, 0, 0.847059, 1)
+debug_shape_thickness = 5
