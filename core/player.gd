@@ -25,6 +25,10 @@ func update_up(up : Vector3):
 	print("Update Up Direction ", get_up_direction())
 
 
+func turn_mesh(target : Vector3):
+	$MeshInstance3D.look_at(target + position, get_up_direction())
+
+
 func _physics_process(delta):
 	current_cam = get_viewport().get_camera_3d()
 	var col = get_last_slide_collision()
@@ -41,6 +45,7 @@ func _physics_process(delta):
 			Vector3.UP.cross(get_up_direction()).normalized(),
 			floor_angle
 		).normalized()
+	turn_mesh(direction)
 	if is_on_floor() or is_on_wall():
 		velocity = direction * SPEED
 	else:

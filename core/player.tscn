@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=10 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 
@@ -12,6 +12,14 @@ albedo_color = Color(0.301961, 0.419608, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_55uq3"]
 material = SubResource("StandardMaterial3D_hmww8")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_heehu"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.101961, 0.584314, 0.34902, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chb3p"]
+material = SubResource("StandardMaterial3D_heehu")
 size = Vector3(0.2, 0.2, 0.2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ylkh8"]
@@ -35,6 +43,11 @@ mesh = SubResource("SphereMesh_0fjhr")
 [node name="z" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.707599)
 mesh = SubResource("BoxMesh_55uq3")
+skeleton = NodePath("../..")
+
+[node name="Y" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69777, 0.000264585)
+mesh = SubResource("BoxMesh_chb3p")
 skeleton = NodePath("../..")
 
 [node name="x" type="MeshInstance3D" parent="MeshInstance3D"]
