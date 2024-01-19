@@ -69,6 +69,8 @@ func _physics_process(delta):
 			## normal and the current up direction to enhance the 
 			## Magnet Pull while moving.
 			blended_normal = get_up_direction().lerp(edge_ray.get_collision_normal(), 0.5)
+			if blended_normal.angle_to(get_up_direction()) > 0.25:
+				update_up(blended_normal)
 	
 	if is_on_floor() or is_on_wall():
 		velocity = direction * SPEED
