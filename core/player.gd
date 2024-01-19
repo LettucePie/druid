@@ -85,6 +85,10 @@ func _physics_process(delta):
 			velocity.y -= gravity * delta
 	move_and_slide()
 	lerp_mesh(delta)
+	
+	if position.y < -10:
+		velocity = Vector3.ZERO
+		position = Vector3(0, 2, 0)
 
 
 func _input(event):
