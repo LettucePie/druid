@@ -7,6 +7,7 @@ const MAG_PULL = SPEED + 1.5
 
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
+@onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -30,7 +31,6 @@ func turn_swivel_ring(target : Vector3):
 
 
 func lerp_mesh(delta : float):
-#	$MeshInstance3D.rotation = $MeshInstance3D.rotation.lerp($swivel_ring.rotation, 0.25)
 	var mesh_t3 : Transform3D = $MeshInstance3D.transform
 	var swiv_t3 : Transform3D = $swivel_ring.transform
 	$MeshInstance3D.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
@@ -52,16 +52,33 @@ func _physics_process(delta):
 			Vector3.UP.cross(get_up_direction()).normalized(),
 			floor_angle
 		)
+	
+	## Turn the Swivel Ring to match the input direction.
+	## Swivel ring is used to help align the players input with
+	## Mesh and Edge Detection.
 	turn_swivel_ring(direction)
-	print(direction.length_squared())
+	
+	## Check if moving at all before bothering with edge_ray
+	var blended_normal : Vector3 = get_up_direction()
+	if direction.length_squared() > 0.0:
+		## Move Edge Ray further when full sprinting and closer when creeping
+		## adds realism to the accuracy of the edge_detection
+		edge_ray.position.z = lerp(0.0, -0.5, direction.length_squared() / 1.0)
+		if edge_ray.is_colliding():
+			## Set the blended_normal to the halfway between the detected
+			## normal and the current up direction to enhance the 
+			## Magnet Pull while moving.
+			blended_normal = get_up_direction().lerp(edge_ray.get_collision_normal(), 0.5)
+	
 	if is_on_floor() or is_on_wall():
 		velocity = direction * SPEED
 	else:
-#		if $magnet_ray.is_colliding() and floor_angle > (PI / 6):
+		## Check if the Magnet Ray is colliding, if so pull the player to it
+		## by subtracting up normal against the velocity.
 		if $magnet_ray.is_colliding():
-			velocity -= get_up_direction() * MAG_PULL
+			velocity -= blended_normal * MAG_PULL
 		else:
-			if get_up_direction() != Vector3.UP:
+			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
 			velocity.y -= gravity * delta
 	move_and_slide()
