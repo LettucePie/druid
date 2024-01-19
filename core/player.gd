@@ -45,14 +45,15 @@ func _physics_process(delta):
 	var input_h = Input.get_axis("stick_l_x-", "stick_l_x+")
 	var input_v = Input.get_axis("stick_l_y-", "stick_l_y+")
 	var input_vec : Vector3 = Vector3(input_h, 0, input_v)
-	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y).normalized()
+	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
 	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
 	if floor_angle > (PI / 6):
 		direction = direction.rotated(
 			Vector3.UP.cross(get_up_direction()).normalized(),
 			floor_angle
-		).normalized()
+		)
 	turn_swivel_ring(direction)
+	print(direction.length_squared())
 	if is_on_floor() or is_on_wall():
 		velocity = direction * SPEED
 	else:
