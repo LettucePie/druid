@@ -25,8 +25,15 @@ func update_up(up : Vector3):
 	print("Update Up Direction ", get_up_direction())
 
 
-func turn_mesh(target : Vector3):
-	$MeshInstance3D.look_at(target + position, get_up_direction())
+func turn_swivel_ring(target : Vector3):
+	$swivel_ring.look_at(target + position, get_up_direction())
+
+
+func lerp_mesh(delta : float):
+#	$MeshInstance3D.rotation = $MeshInstance3D.rotation.lerp($swivel_ring.rotation, 0.25)
+	var mesh_t3 : Transform3D = $MeshInstance3D.transform
+	var swiv_t3 : Transform3D = $swivel_ring.transform
+	$MeshInstance3D.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
 
 
 func _physics_process(delta):
@@ -45,7 +52,7 @@ func _physics_process(delta):
 			Vector3.UP.cross(get_up_direction()).normalized(),
 			floor_angle
 		).normalized()
-	turn_mesh(direction)
+	turn_swivel_ring(direction)
 	if is_on_floor() or is_on_wall():
 		velocity = direction * SPEED
 	else:
@@ -57,6 +64,7 @@ func _physics_process(delta):
 				update_up(Vector3.UP)
 			velocity.y -= gravity * delta
 	move_and_slide()
+	lerp_mesh(delta)
 
 
 func _input(event):
