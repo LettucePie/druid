@@ -44,6 +44,7 @@ func set_form_variables(form : Form):
 		motion_mode = 0
 		climb_angle = 0.45
 		floor_max_angle = climb_angle
+		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		motion_mode = 0
 		climb_angle = PI + (PI / 2)
@@ -114,7 +115,7 @@ func _physics_process(delta):
 	
 	## Check if moving at all before bothering with edge_ray
 	var blended_normal : Vector3 = get_up_direction()
-	if current_form == Form.SPIDER and direction.length_squared() > 0.0:
+	if direction.length_squared() > 0.0:
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
 		edge_ray.position.z = lerp(0.0, -0.5, direction.length_squared() / 1.0)
@@ -123,7 +124,8 @@ func _physics_process(delta):
 			## normal and the current up direction to enhance the 
 			## Magnet Pull while moving.
 			blended_normal = get_up_direction().lerp(edge_ray.get_collision_normal(), 0.5)
-			if blended_normal.angle_to(get_up_direction()) > 0.25:
+			if blended_normal.angle_to(get_up_direction()) > 0.25 \
+			and Vector3.UP.angle_to(blended_normal) < climb_angle:
 				update_up(blended_normal)
 	
 	if is_on_floor() or is_on_wall():
