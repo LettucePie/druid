@@ -10,5 +10,5 @@ func set_current_form(new_form : String):
 
 
 func update_info():
-	$PanelContainer/current_form.text = current_form
+	$PanelContainer/current_form.text = "Current Form: " + current_form
 

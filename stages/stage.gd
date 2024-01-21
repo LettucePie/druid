@@ -2,6 +2,8 @@ extends Node3D
 
 class_name Stage
 
+@export var start_point : Marker3D
+
 @export var checkpoint_spawns : Array[Marker3D]
 @export var checkpoint_gates : Array
 var current_checkpoint : int = 0

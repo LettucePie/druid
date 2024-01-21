@@ -51,10 +51,13 @@ func _ready():
 	else:
 		print("Failed to connect Core ELements")
 		get_tree().quit()
+	initialize_player()
 
 
 func initialize_player():
-	player.position = stage.checkpoint_spawns[stage.current_checkpoint].position
+	player.position = stage.start_point.position
+#	player.position = stage.checkpoint_spawns[stage.current_checkpoint].position
+	player.set_form_to(player.Form.HUMAN)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
