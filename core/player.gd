@@ -1,16 +1,25 @@
 extends CharacterBody3D
 
+class_name Player
 
+## Signals
+signal report_current_form(form)
+
+
+## Movement Variables
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const MAG_PULL = SPEED + 1.5
-
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
-
-# Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+
+## Druid Variables
+enum Form {HUMAN, SPIDER, RAT, WOLF}
+var available_forms : Array = [Form.HUMAN, Form.SPIDER]
+var current_form : Form = Form.HUMAN
 
 
 func _ready():
@@ -19,6 +28,31 @@ func _ready():
 #	floor_max_angle = PI
 
 
+###
+### Druid Form Block
+###
+func set_form_to(form : Form):
+	if available_forms.has(form):
+		current_form = form
+	emit_signal("report_current_form", form_as_string(form))
+
+
+func form_as_string(form : Form) -> String:
+	var result : String = "Form"
+	if form == Form.HUMAN:
+		result = "Human"
+	if form == Form.SPIDER:
+		result = "Spider"
+	if form == Form.RAT:
+		result = "Rat"
+	if form == Form.WOLF:
+		result = "Wolf"
+	return result
+
+
+###
+### Movement Block
+###
 func update_up(up : Vector3):
 	previous_normal = get_up_direction()
 	set_up_direction(up)

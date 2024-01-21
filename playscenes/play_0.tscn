@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://38xabr081erv"]
+
+[ext_resource type="PackedScene" uid="uid://ddgwvml0m7dbo" path="res://stages/stage_0.tscn" id="1_2168l"]
+[ext_resource type="Script" path="res://playscenes/play_setup.gd" id="1_eekld"]
+[ext_resource type="PackedScene" uid="uid://bmicu2av4r0qn" path="res://core/player.tscn" id="2_tdm4s"]
+[ext_resource type="PackedScene" uid="uid://i24gu0sj315s" path="res://ui/gui.tscn" id="3_7kqrl"]
+
+[node name="play_0" type="Node"]
+script = ExtResource("1_eekld")
+player_scene = ExtResource("2_tdm4s")
+
+[node name="stage_0" parent="." instance=ExtResource("1_2168l")]
+
+[node name="gui" parent="." instance=ExtResource("3_7kqrl")]

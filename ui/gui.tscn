@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://i24gu0sj315s"]
+
+[ext_resource type="Script" path="res://ui/gui.gd" id="1_1pmre"]
+
+[node name="gui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1pmre")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 36.0
+grow_horizontal = 2
+
+[node name="current_form" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "Current Form : "
+horizontal_alignment = 1
+vertical_alignment = 1
