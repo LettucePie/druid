@@ -14,6 +14,7 @@ var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var climb_angle : float = 0.3
 
 
 ## Druid Variables
@@ -34,7 +35,23 @@ func _ready():
 func set_form_to(form : Form):
 	if available_forms.has(form):
 		current_form = form
+	set_form_variables(form)
 	emit_signal("report_current_form", form_as_string(form))
+
+
+func set_form_variables(form : Form):
+	if form == Form.HUMAN:
+		motion_mode = 0
+		climb_angle = 0.45
+		floor_max_angle = climb_angle
+	if form == Form.SPIDER:
+		motion_mode = 0
+		climb_angle = PI + (PI / 2)
+		floor_max_angle = climb_angle
+	if form == Form.RAT:
+		pass
+	if form == Form.WOLF:
+		pass
 
 
 func form_as_string(form : Form) -> String:
@@ -58,6 +75,7 @@ func update_up(up : Vector3):
 	set_up_direction(up)
 	$magnet_ray.target_position = up * -1.0
 	print("Update Up Direction ", get_up_direction())
+	print("Angle from Vec3UP : ", Vector3.UP.angle_to(get_up_direction()))
 
 
 func turn_swivel_ring(target : Vector3):
@@ -72,20 +90,22 @@ func lerp_mesh(delta : float):
 
 func _physics_process(delta):
 	current_cam = get_viewport().get_camera_3d()
+	
+	## Climbing / Steepness
 	var col = get_last_slide_collision()
 	if col != null:
 		if col.get_normal() != get_up_direction():
-			update_up(col.get_normal())
+			if Vector3.UP.angle_to(col.get_normal()) < climb_angle:
+				update_up(col.get_normal())
+	
 	var input_h = Input.get_axis("stick_l_x-", "stick_l_x+")
 	var input_v = Input.get_axis("stick_l_y-", "stick_l_y+")
 	var input_vec : Vector3 = Vector3(input_h, 0, input_v).limit_length(1.0)
 	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
 	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
-	if floor_angle > (PI / 6):
-		direction = direction.rotated(
-			Vector3.UP.cross(get_up_direction()).normalized(),
-			floor_angle
-		)
+	direction = direction.rotated(
+		Vector3.UP.cross(get_up_direction()).normalized(),
+		floor_angle)
 	
 	## Turn the Swivel Ring to match the input direction.
 	## Swivel ring is used to help align the players input with
@@ -94,7 +114,7 @@ func _physics_process(delta):
 	
 	## Check if moving at all before bothering with edge_ray
 	var blended_normal : Vector3 = get_up_direction()
-	if direction.length_squared() > 0.0:
+	if current_form == Form.SPIDER and direction.length_squared() > 0.0:
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
 		edge_ray.position.z = lerp(0.0, -0.5, direction.length_squared() / 1.0)
