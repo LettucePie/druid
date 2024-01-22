@@ -3,6 +3,7 @@ extends CharacterBody3D
 class_name Player
 
 ## Signals
+signal request_form_wheel()
 signal report_current_form(form)
 
 
@@ -10,6 +11,7 @@ signal report_current_form(form)
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const MAG_PULL = SPEED + 1.5
+const MAG_ANGLE = 0.85
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
@@ -69,7 +71,7 @@ func form_as_string(form : Form) -> String:
 
 
 ###
-### Movement Block
+### Movement Input Block
 ###
 func update_up(up : Vector3):
 	previous_normal = get_up_direction()
@@ -88,9 +90,7 @@ func lerp_mesh(delta : float):
 	$MeshInstance3D.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
 
 
-func _physics_process(delta):
-	current_cam = get_viewport().get_camera_3d()
-	
+func movement_process(delta : float):
 	## Climbing / Steepness
 	var col = get_last_slide_collision()
 	if col != null:
@@ -103,6 +103,7 @@ func _physics_process(delta):
 	var input_vec : Vector3 = Vector3(input_h, 0, input_v).limit_length(1.0)
 	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
 	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
+#	print("Angle from UP: ", floor_angle)
 	var cross_vec : Vector3 = Vector3.UP.cross(get_up_direction()).normalized()
 	if cross_vec != Vector3.ZERO:
 		direction = direction.rotated(cross_vec, floor_angle)
@@ -132,18 +133,42 @@ func _physics_process(delta):
 	else:
 		## Check if the Magnet Ray is colliding, if so pull the player to it
 		## by subtracting up normal against the velocity.
-		if $magnet_ray.is_colliding():
+		if $magnet_ray.is_colliding() and floor_angle >= MAG_ANGLE:
+#			print("Magnet ray is pulling for wall : ", is_on_wall())
 			velocity -= blended_normal * MAG_PULL
+#			velocity -= blended_normal * delta
 		else:
 			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
 			velocity.y -= gravity * delta
-	move_and_slide()
-	lerp_mesh(delta)
 	
 	if position.y < -10:
 		velocity = Vector3.ZERO
 		position = Vector3(0, 2, 0)
+
+
+###
+### Action Input Block
+###
+func action_process(delta):
+	if Input.is_action_pressed("jump") and is_on_floor():
+		if current_form == Form.HUMAN:
+#			velocity = velocity.lerp(get_up_direction() * JUMP_VELOCITY, 0.5)
+			velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("form_switcher"):
+		if current_form == Form.HUMAN:
+			set_form_to(Form.SPIDER)
+		else:
+			set_form_to(Form.HUMAN)
+
+
+func _physics_process(delta):
+	current_cam = get_viewport().get_camera_3d()
+	movement_process(delta)
+	action_process(delta)
+	move_and_slide()
+	lerp_mesh(delta)
+
 
 
 func _input(event):
