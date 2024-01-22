@@ -98,8 +98,8 @@ func _physics_process(delta):
 			if Vector3.UP.angle_to(col.get_normal()) < climb_angle:
 				update_up(col.get_normal())
 	
-	var input_h = Input.get_axis("stick_l_x-", "stick_l_x+")
-	var input_v = Input.get_axis("stick_l_y-", "stick_l_y+")
+	var input_h = Input.get_axis("move_left", "move_right")
+	var input_v = Input.get_axis("move_up", "move_down")
 	var input_vec : Vector3 = Vector3(input_h, 0, input_v).limit_length(1.0)
 	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
 	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
