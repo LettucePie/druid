@@ -13,9 +13,10 @@ albedo_texture = ExtResource("2_mqfbb")
 [sub_resource type="BoxMesh" id="BoxMesh_oup2k"]
 size = Vector3(10, 0.5, 10)
 
-[node name="stage_0" type="Node3D" node_paths=PackedStringArray("start_point")]
+[node name="stage_0" type="Node3D" node_paths=PackedStringArray("start_point", "checkpoint_spawns")]
 script = ExtResource("1_8cdmm")
 start_point = NodePath("spawn_0")
+checkpoint_spawns = [NodePath("spawn_0")]
 
 [node name="cam_dial" type="Node3D" parent="."]
 

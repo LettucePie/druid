@@ -76,7 +76,6 @@ func update_up(up : Vector3):
 	set_up_direction(up)
 	$magnet_ray.target_position = up * -1.0
 	print("Update Up Direction ", get_up_direction())
-	print("Angle from Vec3UP : ", Vector3.UP.angle_to(get_up_direction()))
 
 
 func turn_swivel_ring(target : Vector3):
@@ -104,18 +103,18 @@ func _physics_process(delta):
 	var input_vec : Vector3 = Vector3(input_h, 0, input_v).limit_length(1.0)
 	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
 	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
-	direction = direction.rotated(
-		Vector3.UP.cross(get_up_direction()).normalized(),
-		floor_angle)
+	var cross_vec : Vector3 = Vector3.UP.cross(get_up_direction()).normalized()
+	if cross_vec != Vector3.ZERO:
+		direction = direction.rotated(cross_vec, floor_angle)
 	
 	## Turn the Swivel Ring to match the input direction.
 	## Swivel ring is used to help align the players input with
 	## Mesh and Edge Detection.
-	turn_swivel_ring(direction)
 	
 	## Check if moving at all before bothering with edge_ray
 	var blended_normal : Vector3 = get_up_direction()
 	if direction.length_squared() > 0.0:
+		turn_swivel_ring(direction)
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
 		edge_ray.position.z = lerp(0.0, -0.5, direction.length_squared() / 1.0)
