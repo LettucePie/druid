@@ -19,9 +19,10 @@ start_point = NodePath("spawn_0")
 checkpoint_spawns = [NodePath("spawn_0")]
 
 [node name="cam_dial" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Room_Cam" type="Camera3D" parent="cam_dial"]
-transform = Transform3D(0.771658, -0.190021, 0.606989, 0, 0.954329, 0.298758, -0.636038, -0.230539, 0.736416, 4.51547, 5.02769, 5.35311)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.6449)
 current = true
 
 [node name="floor" type="StaticBody3D" parent="."]

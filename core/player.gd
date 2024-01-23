@@ -5,6 +5,7 @@ class_name Player
 ## Signals
 signal request_form_wheel()
 signal report_current_form(form)
+signal request_cam_movement(direction)
 
 
 ## Movement Variables
@@ -71,6 +72,33 @@ func form_as_string(form : Form) -> String:
 
 
 ###
+### Camera Input Block
+###
+func cam_process(delta):
+	current_cam = get_viewport().get_camera_3d()
+	var input : Vector2 = Vector2(
+		Input.get_axis("cam_left", "cam_right"),
+		Input.get_axis("cam_up", "cam_down")
+	).limit_length(1.0)
+	
+	## Why am I doing this?
+	## This gets me the exact angle from camera input vector to \
+	## Camera Position forward, which is neat but why?
+#	var orient : Vector3 = input * current_cam.global_transform.basis
+#	var cam_forward : Vector3 = \
+#		Vector3.FORWARD * current_cam.global_transform.basis
+#	var cam_up : Vector3 = \
+#		Vector3.UP * current_cam.global_transform.basis
+#	var angle_from_forward = cam_forward.angle_to(orient)
+	
+	var parent_dial = current_cam.get_parent()
+	if parent_dial.name == "cam_dial":
+		parent_dial.rotate_y(input.x * delta)
+		var dial_right = parent_dial.transform.basis * Vector3.RIGHT
+		parent_dial.rotate(dial_right, input.y * delta)
+
+
+###
 ### Movement Input Block
 ###
 func update_up(up : Vector3):
@@ -91,35 +119,47 @@ func lerp_mesh(delta : float):
 
 
 func movement_process(delta : float):
-	## Climbing / Steepness
+	## Get the Latest Collision data to reference the new Up Direction \
+	## Based on the Normal of the collision.
 	var col = get_last_slide_collision()
 	if col != null:
 		if col.get_normal() != get_up_direction():
 			if Vector3.UP.angle_to(col.get_normal()) < climb_angle:
 				update_up(col.get_normal())
 	
-	var input_h = Input.get_axis("move_left", "move_right")
-	var input_v = Input.get_axis("move_up", "move_down")
-	var input_vec : Vector3 = Vector3(input_h, 0, input_v).limit_length(1.0)
+	## Gather input vector for movement.
+	var input_vec : Vector3 = Vector3(
+		Input.get_axis("move_left", "move_right"), 
+		0, 
+		Input.get_axis("move_up", "move_down")).limit_length(1.0)
+	
+	## Orientate the input vector to the camera angle.
+	## **Note** This is currently limited to the aspect of walking on \
+	## the ground, and only the ground.
 	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
+	
+	## Get the Floor Angle by comparing the floor normal against Vector3.UP.
+	## Then get the cross product to find a perpindicular axis to rotate \
+	## the Orientated Input vector upon, by Floor Angle amount.
 	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
-#	print("Angle from UP: ", floor_angle)
 	var cross_vec : Vector3 = Vector3.UP.cross(get_up_direction()).normalized()
 	if cross_vec != Vector3.ZERO:
 		direction = direction.rotated(cross_vec, floor_angle)
 	
-	## Turn the Swivel Ring to match the input direction.
-	## Swivel ring is used to help align the players input with
-	## Mesh and Edge Detection.
-	
 	## Check if moving at all before bothering with edge_ray
 	var blended_normal : Vector3 = get_up_direction()
 	if direction.length_squared() > 0.0:
+		
+		## Turn the Swivel Ring to match the input direction.
+		## Swivel ring is used to help align the players input with
+		## Mesh and Edge Detection.
 		turn_swivel_ring(direction)
+		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
 		edge_ray.position.z = lerp(0.0, -0.5, direction.length_squared() / 1.0)
 		if edge_ray.is_colliding():
+			
 			## Set the blended_normal to the halfway between the detected
 			## normal and the current up direction to enhance the 
 			## Magnet Pull while moving.
@@ -128,20 +168,22 @@ func movement_process(delta : float):
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
 				update_up(blended_normal)
 	
+	## Finally, apply the velocity
 	if is_on_floor() or is_on_wall():
 		velocity = direction * SPEED
 	else:
+		
 		## Check if the Magnet Ray is colliding, if so pull the player to it
-		## by subtracting up normal against the velocity.
+		## by subtracting blended_normal from the velocity.
 		if $magnet_ray.is_colliding() and floor_angle >= MAG_ANGLE:
-#			print("Magnet ray is pulling for wall : ", is_on_wall())
 			velocity -= blended_normal * MAG_PULL
-#			velocity -= blended_normal * delta
 		else:
 			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
 			velocity.y -= gravity * delta
 	
+	## For Testing Purposes.
+	## Resets player to Center if they "fall out"
 	if position.y < -10:
 		velocity = Vector3.ZERO
 		position = Vector3(0, 2, 0)
@@ -163,7 +205,7 @@ func action_process(delta):
 
 
 func _physics_process(delta):
-	current_cam = get_viewport().get_camera_3d()
+	cam_process(delta)
 	movement_process(delta)
 	action_process(delta)
 	move_and_slide()
