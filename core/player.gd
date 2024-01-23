@@ -9,10 +9,13 @@ signal request_cam_movement(direction)
 
 
 ## Camera Variables
+var cam_locked : bool = false
 var cam_min_y : float = -PI
 var cam_max_y : float = PI
 var cam_min_x : float = PI * -0.35
 var cam_max_x : float = PI * 0.35
+@export var cam_distance_curve : Curve
+var cam_distance_max : float = 10.0
 
 
 ## Movement Variables
@@ -90,9 +93,18 @@ func cam_process(delta):
 	
 	var parent_dial = current_cam.get_parent()
 	if parent_dial.name == "cam_dial":
-		parent_dial.rotate_y(input.x * delta)
-		var dial_right = parent_dial.transform.basis * Vector3.RIGHT
-		parent_dial.rotate(dial_right, input.y * delta)
+		if !cam_locked:
+			parent_dial.rotate_y(input.x * delta)
+			parent_dial.rotate(
+				parent_dial.transform.basis * Vector3.RIGHT, 
+				input.y * delta)
+			var x_percent = 1.0 - inverse_lerp(
+				cam_min_x, 
+				cam_max_x, 
+				parent_dial.rotation.x)
+			current_cam.position.z = \
+				cam_distance_max * cam_distance_curve.sample(x_percent)
+			current_cam.position.y = current_cam.position.z * 0.12
 		
 		parent_dial.rotation.y = clamp(
 			parent_dial.rotation.y, 
