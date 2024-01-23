@@ -8,6 +8,13 @@ signal report_current_form(form)
 signal request_cam_movement(direction)
 
 
+## Camera Variables
+var cam_min_y : float = -PI
+var cam_max_y : float = PI
+var cam_min_x : float = PI * -0.35
+var cam_max_x : float = PI * 0.35
+
+
 ## Movement Variables
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -81,21 +88,20 @@ func cam_process(delta):
 		Input.get_axis("cam_up", "cam_down")
 	).limit_length(1.0)
 	
-	## Why am I doing this?
-	## This gets me the exact angle from camera input vector to \
-	## Camera Position forward, which is neat but why?
-#	var orient : Vector3 = input * current_cam.global_transform.basis
-#	var cam_forward : Vector3 = \
-#		Vector3.FORWARD * current_cam.global_transform.basis
-#	var cam_up : Vector3 = \
-#		Vector3.UP * current_cam.global_transform.basis
-#	var angle_from_forward = cam_forward.angle_to(orient)
-	
 	var parent_dial = current_cam.get_parent()
 	if parent_dial.name == "cam_dial":
 		parent_dial.rotate_y(input.x * delta)
 		var dial_right = parent_dial.transform.basis * Vector3.RIGHT
 		parent_dial.rotate(dial_right, input.y * delta)
+		
+		parent_dial.rotation.y = clamp(
+			parent_dial.rotation.y, 
+			cam_min_y, 
+			cam_max_y)
+		parent_dial.rotation.x = clamp(
+			parent_dial.rotation.x,
+			cam_min_x,
+			cam_max_x)
 
 
 ###

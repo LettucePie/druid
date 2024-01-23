@@ -78,6 +78,7 @@ skeleton = NodePath("../..")
 
 [node name="Player_Cam" type="Camera3D" parent="cam_dial" groups=["player_camera"]]
 transform = Transform3D(1, 0, 0, 0, 0.986873, 0.1615, 0, -0.1615, 0.986873, 0, 1.14094, 4.97653)
+current = true
 
 [node name="magnet_ray" type="RayCast3D" parent="."]
 debug_shape_custom_color = Color(0.501961, 0, 0.847059, 1)
