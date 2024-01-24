@@ -187,7 +187,7 @@ func movement_process(delta : float):
 				update_up(blended_normal)
 	
 	## Finally, apply the velocity
-	if is_on_floor() or is_on_wall():
+	if is_on_floor():
 		velocity = direction * SPEED
 	else:
 		
