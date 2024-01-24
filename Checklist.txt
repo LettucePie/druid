@@ -1,3 +1,13 @@
+###
+### Checklist Key
+###
+
+" - " Is a Task
+" ? " Is an idea or potential Task
+" ! " Is an important Note or Reminder.
+" X " Is a Completed Task
+
+
 ##
 ## Druid / Player
 ##
@@ -190,4 +200,10 @@
 	- Composed of bright triangles with singular color
 - Spell Wheel
 - Transform Wheel
+	- Spider Icon
+		? Gecko Icon
+	- Wolf Icon
+		? Jaguar Icon
+	? Bird Icon
+	- Rat Icon
 - Health
