@@ -19,8 +19,9 @@ var cam_distance_max : float = 10.0
 
 
 ## Movement Variables
-var form_speed = 5.0
-var form_jump = 4.5
+var form_speed : float = 5.0
+var form_jump : float = 4.5
+var form_air_control : float = 0.15
 const MAG_PULL = 6.5
 const MAG_ANGLE = 0.85
 var floor_angle : float
@@ -29,6 +30,8 @@ var current_cam : Camera3D
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var climb_angle : float = 0.3
+var jump_velocity : Vector3 = Vector3.ZERO
+var jump_velocity_mag : float = 0.0
 
 
 ## Druid Variables
@@ -64,6 +67,7 @@ func set_form_variables(form : Form):
 		floor_max_angle = climb_angle
 		form_speed = 5.0
 		form_jump = 4.5
+		form_air_control = 0.5
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		motion_mode = 0
@@ -71,6 +75,7 @@ func set_form_variables(form : Form):
 		floor_max_angle = climb_angle
 		form_speed = 4.0
 		form_jump = 4.0
+		form_air_control = 0.9
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
@@ -79,6 +84,7 @@ func set_form_variables(form : Form):
 		floor_max_angle = climb_angle
 		form_speed = 7.0
 		form_jump = 5.0
+		form_air_control = 0.1
 		update_up(Vector3.UP)
 
 
@@ -137,7 +143,6 @@ func update_up(up : Vector3):
 	previous_normal = get_up_direction()
 	set_up_direction(up)
 	$magnet_ray.target_position = up * -1.0
-	print("Update Up Direction ", get_up_direction())
 
 
 func turn_swivel_ring(target : Vector3):
@@ -148,6 +153,10 @@ func lerp_mesh(delta : float):
 	var mesh_t3 : Transform3D = $MeshInstance3D.transform
 	var swiv_t3 : Transform3D = $swivel_ring.transform
 	$MeshInstance3D.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
+
+
+func player_landed():
+	jump_velocity = Vector3.ZERO
 
 
 func movement_process(delta : float):
@@ -204,6 +213,8 @@ func movement_process(delta : float):
 	var accelerated_dir : Vector3 = direction * form_speed
 	if is_on_floor():
 		velocity = accelerated_dir
+		if jump_velocity != Vector3.ZERO:
+			player_landed()
 	else:
 		## Check if the Magnet Ray is colliding, if so pull the player to it
 		## by subtracting blended_normal from the velocity.
@@ -214,9 +225,26 @@ func movement_process(delta : float):
 		else:
 			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
-			velocity.x = accelerated_dir.x
+			## Apply Gravity
 			velocity.y -= gravity * delta
-			velocity.z = accelerated_dir.z
+			
+			## Shift Jump Velocity by input. Multiply it by percent of \
+			## Air Control.
+			jump_velocity.x = clamp(
+				jump_velocity.x + direction.x \
+					* (form_air_control * form_speed) * delta,
+				jump_velocity_mag * -1.0,
+				jump_velocity_mag)
+			jump_velocity.z = clamp(
+				jump_velocity.z + direction.z \
+					* (form_air_control * form_speed) * delta,
+				jump_velocity_mag * -1.0,
+				jump_velocity_mag)
+			print("jump vel : ", jump_velocity)
+			
+			## Apply (possibly) modified jump velocity
+			velocity.x = jump_velocity.x
+			velocity.z = jump_velocity.z
 	
 	## For Testing Purposes.
 	## Resets player to Center if they "fall out"
@@ -228,6 +256,18 @@ func movement_process(delta : float):
 ###
 ### Action Input Block
 ###
+func action_cooldowns():
+	if magnet_cooldown > 0:
+		magnet_cooldown -= 1
+
+
+func set_jump_velocity():
+	jump_velocity = velocity
+	jump_velocity_mag = Vector2(
+		jump_velocity.x, 
+		jump_velocity.z).limit_length(form_speed).length()
+
+
 func action_process(delta):
 	## Process Action Cooldowns before... I guess?
 	## I'm not sure.
@@ -239,12 +279,15 @@ func action_process(delta):
 	if Input.is_action_just_pressed("jump"):
 		if current_form == Form.HUMAN and is_on_floor():
 			velocity.y = form_jump
-		if current_form == Form.SPIDER:
+			set_jump_velocity()
+		if current_form == Form.SPIDER \
+		and (is_on_floor() or is_on_ceiling() or is_on_wall()):
 			if floor_angle >= MAG_ANGLE:
 				magnet_cooldown = 30
 				velocity = get_up_direction() * 5
 			else:
 				velocity.y = form_jump
+			set_jump_velocity()
 	if Input.is_action_just_pressed("form_switcher"):
 		if current_form == Form.HUMAN:
 			set_form_to(Form.SPIDER)
@@ -252,12 +295,6 @@ func action_process(delta):
 			set_form_to(Form.WOLF)
 		elif current_form == Form.WOLF:
 			set_form_to(Form.HUMAN)
-	
-
-
-func action_cooldowns():
-	if magnet_cooldown > 0:
-		magnet_cooldown -= 1
 
 
 func _physics_process(delta):
