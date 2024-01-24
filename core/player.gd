@@ -75,7 +75,7 @@ func set_form_variables(form : Form):
 		floor_max_angle = climb_angle
 		form_speed = 4.0
 		form_jump = 4.0
-		form_air_control = 0.9
+		form_air_control = 4.9
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
@@ -84,7 +84,7 @@ func set_form_variables(form : Form):
 		floor_max_angle = climb_angle
 		form_speed = 7.0
 		form_jump = 5.0
-		form_air_control = 0.1
+		form_air_control = 1.0
 		update_up(Vector3.UP)
 
 
@@ -228,8 +228,30 @@ func movement_process(delta : float):
 			## Apply Gravity
 			velocity.y -= gravity * delta
 			
-			jump_velocity.x += (accelerated_dir.x * form_air_control) * delta
-			jump_velocity.z += (accelerated_dir.z * form_air_control) * delta
+			## Catch the directional movement and clamp down corner speed
+			var float_dir = Vector2(
+				accelerated_dir.x, 
+				accelerated_dir.z).limit_length(form_speed * form_air_control)
+			
+			## Add on the new airborne directional movement.
+			jump_velocity.x = clamp(
+				jump_velocity.x + float_dir.x * delta,
+				jump_velocity_mag * -1.0,
+				jump_velocity_mag
+			)
+			jump_velocity.z = clamp(
+				jump_velocity.z + float_dir.y * delta,
+				jump_velocity_mag * -1.0,
+				jump_velocity_mag
+			)
+			
+			## Clamp down the cornering speed AGAIN...
+			## There's probably a better way to do this.
+			var mag_limited = Vector2(
+				jump_velocity.x,
+				jump_velocity.z).limit_length(jump_velocity_mag)
+			jump_velocity.x = mag_limited.x
+			jump_velocity.z = mag_limited.y
 			
 			## Apply (possibly) modified jump velocity
 			velocity.x = jump_velocity.x
