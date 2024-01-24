@@ -187,10 +187,10 @@ func movement_process(delta : float):
 				update_up(blended_normal)
 	
 	## Finally, apply the velocity
+	var accelerated_dir : Vector3 = direction * SPEED
 	if is_on_floor():
-		velocity = direction * SPEED
+		velocity = accelerated_dir
 	else:
-		
 		## Check if the Magnet Ray is colliding, if so pull the player to it
 		## by subtracting blended_normal from the velocity.
 		if $magnet_ray.is_colliding() and floor_angle >= MAG_ANGLE:
@@ -198,7 +198,9 @@ func movement_process(delta : float):
 		else:
 			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
+			velocity.x = accelerated_dir.x
 			velocity.y -= gravity * delta
+			velocity.z = accelerated_dir.z
 	
 	## For Testing Purposes.
 	## Resets player to Center if they "fall out"
