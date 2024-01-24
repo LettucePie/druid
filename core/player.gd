@@ -19,9 +19,9 @@ var cam_distance_max : float = 10.0
 
 
 ## Movement Variables
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-const MAG_PULL = SPEED + 1.5
+var form_speed = 5.0
+var form_jump = 4.5
+const MAG_PULL = 6.5
 const MAG_ANGLE = 0.85
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
@@ -32,7 +32,7 @@ var climb_angle : float = 0.3
 
 ## Druid Variables
 enum Form {HUMAN, SPIDER, RAT, WOLF}
-var available_forms : Array = [Form.HUMAN, Form.SPIDER]
+var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
 
 
@@ -57,15 +57,24 @@ func set_form_variables(form : Form):
 		motion_mode = 0
 		climb_angle = 0.45
 		floor_max_angle = climb_angle
+		form_speed = 5.0
+		form_jump = 4.5
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		motion_mode = 0
 		climb_angle = PI + (PI / 2)
 		floor_max_angle = climb_angle
+		form_speed = 4.0
+		form_jump = 4.0
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
-		pass
+		motion_mode = 0
+		climb_angle = 0.5
+		floor_max_angle = climb_angle
+		form_speed = 7.0
+		form_jump = 5.0
+		update_up(Vector3.UP)
 
 
 func form_as_string(form : Form) -> String:
@@ -187,7 +196,7 @@ func movement_process(delta : float):
 				update_up(blended_normal)
 	
 	## Finally, apply the velocity
-	var accelerated_dir : Vector3 = direction * SPEED
+	var accelerated_dir : Vector3 = direction * form_speed
 	if is_on_floor():
 		velocity = accelerated_dir
 	else:
@@ -216,11 +225,13 @@ func action_process(delta):
 	if Input.is_action_pressed("jump") and is_on_floor():
 		if current_form == Form.HUMAN:
 #			velocity = velocity.lerp(get_up_direction() * JUMP_VELOCITY, 0.5)
-			velocity.y = JUMP_VELOCITY
+			velocity.y = form_jump
 	if Input.is_action_just_pressed("form_switcher"):
 		if current_form == Form.HUMAN:
 			set_form_to(Form.SPIDER)
-		else:
+		elif current_form == Form.SPIDER:
+			set_form_to(Form.WOLF)
+		elif current_form == Form.WOLF:
 			set_form_to(Form.HUMAN)
 
 
