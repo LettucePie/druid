@@ -23,6 +23,7 @@ var form_speed = 5.0
 var form_jump = 4.5
 const MAG_PULL = 6.5
 const MAG_ANGLE = 0.85
+var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
@@ -34,6 +35,10 @@ var climb_angle : float = 0.3
 enum Form {HUMAN, SPIDER, RAT, WOLF}
 var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
+
+
+## Action Variables
+var magnet_cooldown : int = 0
 
 
 func _ready():
@@ -168,7 +173,7 @@ func movement_process(delta : float):
 	## Get the Floor Angle by comparing the floor normal against Vector3.UP.
 	## Then get the cross product to find a perpindicular axis to rotate \
 	## the Orientated Input vector upon, by Floor Angle amount.
-	var floor_angle : float = Vector3.UP.angle_to(get_up_direction())
+	floor_angle = Vector3.UP.angle_to(get_up_direction())
 	var cross_vec : Vector3 = Vector3.UP.cross(get_up_direction()).normalized()
 	if cross_vec != Vector3.ZERO:
 		direction = direction.rotated(cross_vec, floor_angle)
@@ -202,7 +207,9 @@ func movement_process(delta : float):
 	else:
 		## Check if the Magnet Ray is colliding, if so pull the player to it
 		## by subtracting blended_normal from the velocity.
-		if $magnet_ray.is_colliding() and floor_angle >= MAG_ANGLE:
+		if $magnet_ray.is_colliding() \
+		and floor_angle >= MAG_ANGLE \
+		and magnet_cooldown <= 0:
 			velocity -= blended_normal * MAG_PULL
 		else:
 			if blended_normal != Vector3.UP:
@@ -222,10 +229,22 @@ func movement_process(delta : float):
 ### Action Input Block
 ###
 func action_process(delta):
-	if Input.is_action_pressed("jump") and is_on_floor():
-		if current_form == Form.HUMAN:
-#			velocity = velocity.lerp(get_up_direction() * JUMP_VELOCITY, 0.5)
+	## Process Action Cooldowns before... I guess?
+	## I'm not sure.
+	## I suppose having their status updated before actionable input \
+	## allows the player to experience the full set of frames of an action?
+	## ... Right?
+	action_cooldowns()
+	
+	if Input.is_action_just_pressed("jump"):
+		if current_form == Form.HUMAN and is_on_floor():
 			velocity.y = form_jump
+		if current_form == Form.SPIDER:
+			if floor_angle >= MAG_ANGLE:
+				magnet_cooldown = 30
+				velocity = get_up_direction() * 5
+			else:
+				velocity.y = form_jump
 	if Input.is_action_just_pressed("form_switcher"):
 		if current_form == Form.HUMAN:
 			set_form_to(Form.SPIDER)
@@ -233,6 +252,12 @@ func action_process(delta):
 			set_form_to(Form.WOLF)
 		elif current_form == Form.WOLF:
 			set_form_to(Form.HUMAN)
+	
+
+
+func action_cooldowns():
+	if magnet_cooldown > 0:
+		magnet_cooldown -= 1
 
 
 func _physics_process(delta):
