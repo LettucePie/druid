@@ -82,7 +82,6 @@ skeleton = NodePath("../..")
 [node name="cam_dial" type="Node3D" parent="."]
 
 [node name="Player_Cam" type="Camera3D" parent="cam_dial" groups=["player_camera"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 current = true
 
 [node name="magnet_ray" type="RayCast3D" parent="."]

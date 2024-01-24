@@ -1,0 +1,193 @@
+##
+## Druid / Player
+##
+
+- Human Form
+	- Model
+		- Animations
+			- Walk
+			- Run
+			- Jump
+			- Fall
+			- Crouch/Transform
+			- Swing Weapon
+			- Aim
+			- Fire Spell
+		- Connect Animations
+	- Movement
+		- Jumping
+	- Spellcasting
+		- Aiming Spells
+		- Firing Spells
+		- Basic Bolt
+			- Minor Cooldown
+		- Shockwave
+			- Medium Cooldown
+		- Tangle Roots
+			- Large Cooldown
+		- Charge Beam
+			- Large Cooldown
+
+
+- Spider Form
+	- Movement
+		- Jumping / Wall Dismount
+		- Grapple / Swing
+	? Attacking
+	- Smart Wall Camera
+	- Model
+		? Gecko Variant
+		- Animations
+			- Movement
+			- Jump
+			- Fall
+			- Grapple
+			- Web Shot
+			? Attack
+		- Connect Animations
+
+
+- Wolf Form
+	- Movement
+		- Sprinting
+		- Long Jump
+	- Model
+		? Jaguar Variant
+		- Animations
+			- Movement
+			- Jump
+			- Sprint
+			- Bite
+				- 3 Piece Combo
+			? Slash
+		- Connect Animations
+	- Attacking
+		- Combo
+
+
+? Bird Form
+	- Movement
+		- Hovering / Floating
+		- Flapping to gain height.
+		- Holding button to enter travel mode
+
+
+- Rat Form
+	- Movement
+		- Classic 2D Platformer Mode
+			- Move
+			- Jump
+		- Scurry 3D Mode
+			- Move
+			- Dig / Burrow
+	- Model
+		- Move
+		- Jump
+		- Dig
+	- Dirt Mound Model
+	- Connect Animations
+
+
+##
+## Gameplay / Mobs
+##
+
+? Goopy Monsters (Plagued or Corrupted)
+
+
+##
+## Gameplay / Puzzles
+##
+
+- Interactable Levers
+- Pressure Switches
+- Platforming Obstacles
+	- Basic Platforming
+	- Special Platforming (Transform)
+		- Spider
+			- Wall Climbing
+			- Web Grapple
+		- Wolf
+			- Long Distance Jumps
+			- Cutting down Bramble
+			- Sprint Segments
+		? Bird
+			- Vertical Platforming
+			- Glide
+		- Rat
+			- 2D Segments
+			- Burrow under obstacles
+
+
+##
+## Visuals / World Assets
+##
+
+- Biomes
+	- Forest
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+	? Jungle
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+	? City
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Objects
+	? Desert
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+	? Cliffs
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+	? Shoreline
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+	? Tropics
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+	? Plains
+		- Floor Textures
+		- Dense Wall Textures
+		- Clutter
+			! Low Poly
+			- Foliage
+			- Rocks
+
+
+##
+## Visuals / UI
+##
+
+? Prismatic Style
+	- Composed of bright triangles with singular color
+- Spell Wheel
+- Transform Wheel
+- Health
