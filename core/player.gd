@@ -67,7 +67,7 @@ func set_form_variables(form : Form):
 		floor_max_angle = climb_angle
 		form_speed = 5.0
 		form_jump = 4.5
-		form_air_control = 0.5
+		form_air_control = 2.5
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		motion_mode = 0
@@ -228,19 +228,8 @@ func movement_process(delta : float):
 			## Apply Gravity
 			velocity.y -= gravity * delta
 			
-			## Shift Jump Velocity by input. Multiply it by percent of \
-			## Air Control.
-			jump_velocity.x = clamp(
-				jump_velocity.x + direction.x \
-					* (form_air_control * form_speed) * delta,
-				jump_velocity_mag * -1.0,
-				jump_velocity_mag)
-			jump_velocity.z = clamp(
-				jump_velocity.z + direction.z \
-					* (form_air_control * form_speed) * delta,
-				jump_velocity_mag * -1.0,
-				jump_velocity_mag)
-			print("jump vel : ", jump_velocity)
+			jump_velocity.x += (accelerated_dir.x * form_air_control) * delta
+			jump_velocity.z += (accelerated_dir.z * form_air_control) * delta
 			
 			## Apply (possibly) modified jump velocity
 			velocity.x = jump_velocity.x
