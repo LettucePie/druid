@@ -26,8 +26,8 @@ var cam_distance_max : float = 10.0
 var form_speed : float = 5.0
 var form_jump : float = 4.5
 var form_air_control : float = 0.15
+var form_mag_angle : float = 0.15
 const MAG_PULL = 10.5
-const MAG_ANGLE = 0.85
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
@@ -72,6 +72,7 @@ func set_form_variables(form : Form):
 		form_speed = 5.0
 		form_jump = 4.5
 		form_air_control = 2.5
+		form_mag_angle = 0.8
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		motion_mode = 0
@@ -80,6 +81,7 @@ func set_form_variables(form : Form):
 		form_speed = 4.0
 		form_jump = 4.0
 		form_air_control = 4.9
+		form_mag_angle = 0.15
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
@@ -89,6 +91,7 @@ func set_form_variables(form : Form):
 		form_speed = 7.0
 		form_jump = 5.0
 		form_air_control = 1.0
+		form_mag_angle = 0.4
 		update_up(Vector3.UP)
 
 
@@ -232,7 +235,7 @@ func movement_process(delta : float):
 		## Check if the Magnet Ray is colliding, if so pull the player to it
 		## by subtracting blended_normal from the velocity.
 		if $magnet_ray.is_colliding() \
-		and Vector3.UP.angle_to(blended_normal) >= MAG_ANGLE \
+		and Vector3.UP.angle_to(blended_normal) >= form_mag_angle \
 		and magnet_cooldown <= 0:
 			velocity -= blended_normal * MAG_PULL
 			$norm_vec/mag.visible = true
@@ -310,7 +313,7 @@ func action_process(delta):
 			set_jump_velocity()
 		if current_form == Form.SPIDER \
 		and (is_on_floor() or is_on_ceiling() or is_on_wall()):
-			if floor_angle >= MAG_ANGLE:
+			if floor_angle >= form_mag_angle:
 				magnet_cooldown = 30
 				velocity = get_up_direction() * 5
 			else:
