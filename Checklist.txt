@@ -61,6 +61,7 @@
 	- Movement
 		- Sprinting
 		- Long Jump
+		- Dodge
 	- Model
 		? Jaguar Variant
 		- Animations

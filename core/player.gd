@@ -8,6 +8,10 @@ signal report_current_form(form)
 signal request_cam_movement(direction)
 
 
+## Testing Variables
+@export var test_mat_a : Material
+@export var test_mat_b : Material
+
 ## Camera Variables
 var cam_locked : bool = false
 var cam_min_y : float = -PI
@@ -22,7 +26,7 @@ var cam_distance_max : float = 10.0
 var form_speed : float = 5.0
 var form_jump : float = 4.5
 var form_air_control : float = 0.15
-const MAG_PULL = 6.5
+const MAG_PULL = 10.5
 const MAG_ANGLE = 0.85
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
@@ -143,6 +147,8 @@ func update_up(up : Vector3):
 	previous_normal = get_up_direction()
 	set_up_direction(up)
 	$magnet_ray.target_position = up * -1.0
+	print("Update Up : ", up)
+	$norm_vec.look_at(up + position, Vector3.UP)
 
 
 func turn_swivel_ring(target : Vector3):
@@ -150,13 +156,14 @@ func turn_swivel_ring(target : Vector3):
 
 
 func lerp_mesh(delta : float):
-	var mesh_t3 : Transform3D = $MeshInstance3D.transform
+	var mesh_t3 : Transform3D = $player_mesh.transform
 	var swiv_t3 : Transform3D = $swivel_ring.transform
-	$MeshInstance3D.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
+	$player_mesh.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
 
 
 func player_landed():
 	jump_velocity = Vector3.ZERO
+	$norm_vec/mag.visible = false
 
 
 func movement_process(delta : float):
@@ -198,16 +205,21 @@ func movement_process(delta : float):
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
-		edge_ray.position.z = lerp(0.0, -0.5, direction.length_squared() / 1.0)
+		edge_ray.position.z = lerp(0.0, -0.3, direction.length_squared() / 1.0)
 		if edge_ray.is_colliding():
 			
 			## Set the blended_normal to the halfway between the detected
 			## normal and the current up direction to enhance the 
 			## Magnet Pull while moving.
 			blended_normal = get_up_direction().lerp(edge_ray.get_collision_normal(), 0.5)
-			if blended_normal.angle_to(get_up_direction()) > 0.25 \
+			if blended_normal.angle_to(get_up_direction()) > 0.1 \
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
+				print("Assigning Blended Normal")
 				update_up(blended_normal)
+				$player_mesh.material_override = test_mat_a
+			else:
+				print("Blended Normal is too steep or insignificant")
+				$player_mesh.material_override = test_mat_b
 	
 	## Finally, apply the velocity
 	var accelerated_dir : Vector3 = direction * form_speed
@@ -215,47 +227,52 @@ func movement_process(delta : float):
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:
 			player_landed()
+		$norm_vec/mag.visible = false
 	else:
 		## Check if the Magnet Ray is colliding, if so pull the player to it
 		## by subtracting blended_normal from the velocity.
 		if $magnet_ray.is_colliding() \
-		and floor_angle >= MAG_ANGLE \
+		and Vector3.UP.angle_to(blended_normal) >= MAG_ANGLE \
 		and magnet_cooldown <= 0:
 			velocity -= blended_normal * MAG_PULL
+			$norm_vec/mag.visible = true
 		else:
 			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
 			## Apply Gravity
 			velocity.y -= gravity * delta
+			$norm_vec/mag.visible = false
 			
-			## Catch the directional movement and clamp down corner speed
-			var float_dir = Vector2(
-				accelerated_dir.x, 
-				accelerated_dir.z).limit_length(form_speed * form_air_control)
-			
-			## Add on the new airborne directional movement.
-			jump_velocity.x = clamp(
-				jump_velocity.x + float_dir.x * delta,
-				jump_velocity_mag * -1.0,
-				jump_velocity_mag
-			)
-			jump_velocity.z = clamp(
-				jump_velocity.z + float_dir.y * delta,
-				jump_velocity_mag * -1.0,
-				jump_velocity_mag
-			)
-			
-			## Clamp down the cornering speed AGAIN...
-			## There's probably a better way to do this.
-			var mag_limited = Vector2(
-				jump_velocity.x,
-				jump_velocity.z).limit_length(jump_velocity_mag)
-			jump_velocity.x = mag_limited.x
-			jump_velocity.z = mag_limited.y
-			
-			## Apply (possibly) modified jump velocity
-			velocity.x = jump_velocity.x
-			velocity.z = jump_velocity.z
+			## Check if player has jumped, and apply jump velocity
+			if jump_velocity != Vector3.ZERO:
+				## Catch the directional movement and clamp down corner speed
+				var float_dir = Vector2(
+					accelerated_dir.x, 
+					accelerated_dir.z).limit_length(form_speed * form_air_control)
+				
+				## Add on the new airborne directional movement.
+				jump_velocity.x = clamp(
+					jump_velocity.x + float_dir.x * delta,
+					jump_velocity_mag * -1.0,
+					jump_velocity_mag
+				)
+				jump_velocity.z = clamp(
+					jump_velocity.z + float_dir.y * delta,
+					jump_velocity_mag * -1.0,
+					jump_velocity_mag
+				)
+				
+				## Clamp down the cornering speed AGAIN...
+				## There's probably a better way to do this.
+				var mag_limited = Vector2(
+					jump_velocity.x,
+					jump_velocity.z).limit_length(jump_velocity_mag)
+				jump_velocity.x = mag_limited.x
+				jump_velocity.z = mag_limited.y
+				
+				## Apply (possibly) modified jump velocity
+				velocity.x = jump_velocity.x
+				velocity.z = jump_velocity.z
 	
 	## For Testing Purposes.
 	## Resets player to Center if they "fall out"
@@ -298,6 +315,11 @@ func action_process(delta):
 				velocity = get_up_direction() * 5
 			else:
 				velocity.y = form_jump
+			set_jump_velocity()
+		if current_form == Form.WOLF and is_on_floor():
+			## Adding Lunge Speed by multiplying velocity.
+			velocity *= 1.25
+			velocity.y = form_jump
 			set_jump_velocity()
 	if Input.is_action_just_pressed("form_switcher"):
 		if current_form == Form.HUMAN:
