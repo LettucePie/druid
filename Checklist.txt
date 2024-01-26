@@ -59,6 +59,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 		X Jumping
 	- Spellcasting
 		- Aiming Spells
+			- Tilt Aim Assist
 		- Firing Spells
 		- Basic Bolt
 			- Minor Cooldown
