@@ -348,6 +348,10 @@ func action_process(delta):
 			velocity.y = form_jump
 			set_jump_velocity()
 	
+	if Input.is_action_just_pressed("interact"):
+		if current_form == Form.HUMAN and nearest_interactable != null:
+			print("Interacting with Nearest Interactable")
+	
 	if Input.is_action_just_pressed("special"):
 		print("Special Key Pressed")
 		if current_form == Form.WOLF \
@@ -396,6 +400,7 @@ func find_nearest_interactable():
 
 
 func proximity_interactable(interactable : Interactable):
+	print("Player reached by interactable : ", interactable)
 	## Add to Nearby Interactables list. 
 	nearby_interactables.append(interactable)
 	
@@ -413,6 +418,8 @@ func out_of_range_interactable(interactable : Interactable):
 		find_nearest_interactable()
 	else:
 		nearest_interactable = nearby_interactables.front()
+	if nearby_interactables.size() == 0:
+		nearest_interactable = null
 
 
 func _input(event):

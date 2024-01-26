@@ -70,7 +70,7 @@ albedo_color = Color(1, 0, 1, 1)
 [sub_resource type="PrismMesh" id="PrismMesh_ma6o0"]
 size = Vector3(0.62, 0.83, 0.295)
 
-[node name="player" type="CharacterBody3D" groups=["player"]]
+[node name="player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.96485, 0)
 script = ExtResource("1_dpv4o")
 test_mat_a = SubResource("StandardMaterial3D_vqemf")

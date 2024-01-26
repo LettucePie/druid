@@ -17,6 +17,7 @@ var proximity : bool = false
 
 
 func _on_proxim_body_entered(body):
+	print("Interactable Proxim Entered")
 	if player_only:
 		if body.is_in_group("Player") and body is Player:
 			player = body
