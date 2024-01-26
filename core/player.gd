@@ -28,6 +28,7 @@ var form_jump : float = 4.5
 var form_air_control : float = 0.15
 var form_mag_angle : float = 0.15
 const MAG_PULL = 10.5
+var move_input_vec : Vector3 = Vector3.ZERO
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
@@ -46,6 +47,15 @@ var current_form : Form = Form.HUMAN
 
 ## Action Variables
 var magnet_cooldown : int = 0
+var dodge_cooldown : int = 0
+var dodge_active : int = 0
+var dodge_direction : Vector3
+const DODGE_SPEED = 10.0
+
+#var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
+## This didn't work. It just made an array of 0, 0, 0.
+## I think there is a way to make arrays of references to variables... \
+## I just don't know how yet.
 
 
 func _ready():
@@ -179,7 +189,7 @@ func movement_process(delta : float):
 				update_up(col.get_normal())
 	
 	## Gather input vector for movement.
-	var input_vec : Vector3 = Vector3(
+	move_input_vec = Vector3(
 		Input.get_axis("move_left", "move_right"), 
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
@@ -187,7 +197,8 @@ func movement_process(delta : float):
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
 	## the ground, and only the ground.
-	var direction = input_vec.rotated(Vector3.UP, current_cam.global_rotation.y)
+	var direction = move_input_vec.rotated(
+		Vector3.UP, current_cam.global_rotation.y)
 	
 	## Get the Floor Angle by comparing the floor normal against Vector3.UP.
 	## Then get the cross product to find a perpindicular axis to rotate \
@@ -217,11 +228,9 @@ func movement_process(delta : float):
 			blended_normal = get_up_direction().lerp(edge_ray.get_collision_normal(), 0.5)
 			if blended_normal.angle_to(get_up_direction()) > 0.1 \
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
-				print("Assigning Blended Normal")
 				update_up(blended_normal)
 				$player_mesh.material_override = test_mat_a
 			else:
-				print("Blended Normal is too steep or insignificant")
 				$player_mesh.material_override = test_mat_b
 	
 	## Finally, apply the velocity
@@ -290,6 +299,10 @@ func movement_process(delta : float):
 func action_cooldowns():
 	if magnet_cooldown > 0:
 		magnet_cooldown -= 1
+	if dodge_active > 0:
+		dodge_active -= 1
+	if dodge_cooldown > 0:
+		dodge_cooldown -= 1
 
 
 func set_jump_velocity():
@@ -297,6 +310,12 @@ func set_jump_velocity():
 	jump_velocity_mag = Vector2(
 		jump_velocity.x, 
 		jump_velocity.z).limit_length(form_speed).length()
+
+
+func action_effects(delta):
+	if dodge_active > 0:
+		print("Dodge Active : ", dodge_active)
+		velocity = dodge_direction * DODGE_SPEED
 
 
 func action_process(delta):
@@ -307,6 +326,8 @@ func action_process(delta):
 	## ... Right?
 	action_cooldowns()
 	
+	## This whole next section is just the inputs... might move to its own \
+	## function later.
 	if Input.is_action_just_pressed("jump"):
 		if current_form == Form.HUMAN and is_on_floor():
 			velocity.y = form_jump
@@ -324,6 +345,17 @@ func action_process(delta):
 			velocity *= 1.25
 			velocity.y = form_jump
 			set_jump_velocity()
+	
+	if Input.is_action_just_pressed("special"):
+		print("Special Key Pressed")
+		if current_form == Form.WOLF \
+		and (dodge_cooldown <= 0 or dodge_active <= 0) \
+		and move_input_vec != Vector3.ZERO:
+			print("Wolf Dodge")
+			dodge_cooldown = 15
+			dodge_active = 8
+			dodge_direction = velocity.normalized()
+	
 	if Input.is_action_just_pressed("form_switcher"):
 		if current_form == Form.HUMAN:
 			set_form_to(Form.SPIDER)
@@ -331,12 +363,19 @@ func action_process(delta):
 			set_form_to(Form.WOLF)
 		elif current_form == Form.WOLF:
 			set_form_to(Form.HUMAN)
+	
+	## Process Effects of actions after inputs assign the variables...
+	action_effects(delta)
 
 
 func _physics_process(delta):
 	cam_process(delta)
+	## movement_process handles Movement, Climbing, and Jumping.
 	movement_process(delta)
+	## action_process handles Attacks, Interactions, and Abilities.
 	action_process(delta)
+	## Lastly, apply Move and Slide. This allows Player Movement + Player Action
+	## to manipulate position and movement properly... I think...
 	move_and_slide()
 	lerp_mesh(delta)
 
