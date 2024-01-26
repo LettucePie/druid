@@ -39,10 +39,12 @@ var jump_velocity : Vector3 = Vector3.ZERO
 var jump_velocity_mag : float = 0.0
 
 
-## Druid Variables
+## Play Variables
 enum Form {HUMAN, SPIDER, RAT, WOLF}
 var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
+var nearest_interactable : Interactable = null
+var nearby_interactables : Array = []
 
 
 ## Action Variables
@@ -379,6 +381,38 @@ func _physics_process(delta):
 	move_and_slide()
 	lerp_mesh(delta)
 
+
+###
+### World to Player Block
+###
+func find_nearest_interactable():
+	## Filter through and find distance of each
+	var smallest_distance : float = 1000
+	for interactable in nearby_interactables:
+		var distance = position.distance_to(interactable.global_position)
+		if distance < smallest_distance:
+			nearest_interactable = interactable
+			smallest_distance = distance
+
+
+func proximity_interactable(interactable : Interactable):
+	## Add to Nearby Interactables list. 
+	nearby_interactables.append(interactable)
+	
+	## Check if multiple are in area, if so set nearest.
+	if nearby_interactables.size() > 1:
+		find_nearest_interactable()
+	else:
+		nearest_interactable = interactable
+
+
+func out_of_range_interactable(interactable : Interactable):
+	if nearby_interactables.has(interactable):
+		nearby_interactables.erase(interactable)
+	if nearby_interactables.size() > 1:
+		find_nearest_interactable()
+	else:
+		nearest_interactable = nearby_interactables.front()
 
 
 func _input(event):

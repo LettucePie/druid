@@ -254,3 +254,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 	? Bird Icon
 	- Rat Icon
 - Health
+- Interactable Prompts
+	- Lever
+	- Lift
+	- Activate
+	? Push
