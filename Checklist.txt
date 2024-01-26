@@ -31,7 +31,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 " - " Is a Task
 " ? " Is an idea or potential Task
 " ! " Is an important Note or Reminder.
-" X " Is a Completed Task
+" X " Is a Finished Task
 " # " Is a Polished Complete Task. (Use #1 for first iteration, #2, #3, #4, etc)
 
 
@@ -50,9 +50,13 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			- Swing Weapon
 			- Aim
 			- Fire Spell
+			- Interactions
+				- Pull Lever
+				- Lift Object
+				- Drop Object
 		- Connect Animations
-	- Movement
-		- Jumping
+	X Movement
+		X Jumping
 	- Spellcasting
 		- Aiming Spells
 		- Firing Spells
@@ -64,11 +68,15 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			- Large Cooldown
 		- Charge Beam
 			- Large Cooldown
+	- Interact
+		- Lever Pull
+		- Lift Crate
+		- Drop Crate
 
 
 - Spider Form
-	- Movement
-		- Jumping / Wall Dismount
+	X Movement
+		X Jumping / Wall Dismount
 		- Grapple / Swing
 	? Attacking
 	- Smart Wall Camera
