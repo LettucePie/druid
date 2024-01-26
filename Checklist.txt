@@ -1,4 +1,30 @@
 ###
+### Checklist Purpose
+###
+
+	Hello. This checklist is going to operate in phases. During the initial
+phase, the objective is to Note Ideas-and-design down naturally as they
+are concieved, and complete tasks at bare minimum. If Ideas seem thorough, mark 
+them as a task. If Ideas seem partially probable, mark them as Potential Tasks.
+Due to the nature of the creative process this phase is in constant operation.
+
+
+	During the Second Phase, the objective is to revisit each completed task
+with the goal of polishing and tuning. This is the best way to do this. It is
+important to not get caught up in Polishing and Tuning during the initial 
+creation. We need to get things done, for starters. Also we cannot possibly
+know the best iteration / polished form of a function or feature without having
+the whole picture available to us. It simply makes sense.
+
+
+1) Conceptualize
+2) Create
+3) Complete
+
+	Once the initial concept is there, it can reasonably be analyzed. Proper
+considerations on additional features can be made. I Cannot Stress This Enough.
+
+###
 ### Checklist Key
 ###
 
@@ -6,6 +32,7 @@
 " ? " Is an idea or potential Task
 " ! " Is an important Note or Reminder.
 " X " Is a Completed Task
+" # " Is a Polished Complete Task. (Use #1 for first iteration, #2, #3, #4, etc)
 
 
 ##
