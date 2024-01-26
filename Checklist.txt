@@ -147,6 +147,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 ##
 
 - Interactable Levers
+	- Player Proximity
+	- Scriptable Event
 - Pressure Switches
 - Platforming Obstacles
 	- Basic Platforming
@@ -164,6 +166,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 		- Rat
 			- 2D Segments
 			- Burrow under obstacles
+	- Activated Platforming
+		- Tree Path Growing into place.
 
 
 ##
@@ -227,6 +231,12 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			! Low Poly
 			- Foliage
 			- Rocks
+- Interactables
+	- Lever
+	- Button / Rune
+	- Crate / Statue
+	- Tree Platforms
+		- Growing and Sprouting
 
 
 ##
