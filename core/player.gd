@@ -5,6 +5,7 @@ class_name Player
 ## Signals
 signal request_form_wheel()
 signal report_current_form(form)
+signal report_interactive_popup(message)
 signal request_cam_movement(direction)
 
 
@@ -408,9 +409,17 @@ func proximity_interactable(interactable : Interactable):
 	
 	## Check if multiple are in area, if so set nearest.
 	if nearby_interactables.size() > 1:
+		var before_search = nearest_interactable
 		find_nearest_interactable()
+		if nearest_interactable != before_search:
+			emit_signal(
+				"report_interactive_popup", 
+				nearest_interactable.interactive_message())
 	else:
 		nearest_interactable = interactable
+		emit_signal(
+			"report_interactive_popup", 
+			nearest_interactable.interactive_message())
 
 
 func out_of_range_interactable(interactable : Interactable):
@@ -418,10 +427,14 @@ func out_of_range_interactable(interactable : Interactable):
 		nearby_interactables.erase(interactable)
 	if nearby_interactables.size() > 1:
 		find_nearest_interactable()
-	else:
+	elif nearby_interactables.size() == 1:
 		nearest_interactable = nearby_interactables.front()
-	if nearby_interactables.size() == 0:
+		emit_signal(
+			"report_interactive_popup", 
+			nearest_interactable.interactive_message())
+	elif nearby_interactables.size() == 0:
 		nearest_interactable = null
+		emit_signal("report_interactive_popup", "")
 
 
 func _input(event):

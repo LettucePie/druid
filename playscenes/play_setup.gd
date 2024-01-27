@@ -4,7 +4,7 @@ extends Node
 
 ## Core Variables
 @export var stage : Stage
-@export var gui : Control
+@export var gui : Gui
 var player : Player
 
 
@@ -27,6 +27,7 @@ func gather_core() -> bool:
 
 func connect_core() -> bool:
 	player.connect("report_current_form", gui.set_current_form)
+	player.connect("report_interactive_popup", gui.set_current_popup)
 	return true
 
 

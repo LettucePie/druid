@@ -11,15 +11,32 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1pmre")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="current_form_panel" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 36.0
 grow_horizontal = 2
 
-[node name="current_form" type="Label" parent="PanelContainer"]
+[node name="current_form" type="Label" parent="current_form_panel"]
 layout_mode = 2
 text = "Current Form : "
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="popup_control" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.803
+anchor_right = 0.5
+anchor_bottom = 0.803
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="popup_label" type="Label" parent="popup_control"]
+layout_mode = 2

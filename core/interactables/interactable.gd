@@ -10,6 +10,7 @@ enum Interact_Type {LEVER, BUTTON, PRESSURE}
 @export var interactable_type : Interact_Type
 @export var player_only : bool = true
 @export var start_active : bool = false
+@export var interact_message : String = ""
 @export var directs_animations : bool = false
 @export var animation_players : Array[AnimationPlayer]
 @export var active_anim : String = "activate"
@@ -25,6 +26,22 @@ func _ready():
 	if start_active:
 		activated = true
 		emit_signal("activate")
+
+
+func interactive_message() -> String:
+	if interact_message == "":
+		var new_message = ""
+		if interactable_type == Interact_Type.LEVER:
+			if activated:
+				new_message = "Disable Lever"
+			else:
+				new_message = "Activate Lever"
+		elif interactable_type == Interact_Type.BUTTON:
+			if !activated:
+				new_message = "Press Button"
+		return new_message
+	else:
+		return interact_message
 
 
 func call_activate():
