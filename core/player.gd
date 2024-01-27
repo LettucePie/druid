@@ -352,8 +352,10 @@ func action_process(delta):
 	if Input.is_action_just_pressed("interact"):
 		print("Interact Key Pressed")
 		if current_form == Form.HUMAN and nearest_interactable != null:
-			print("Interacting with Nearest Interactable")
 			nearest_interactable.interact_command()
+			emit_signal(
+				"report_interactive_popup", 
+				nearest_interactable.interactive_message())
 	
 	if Input.is_action_just_pressed("special"):
 		print("Special Key Pressed")
