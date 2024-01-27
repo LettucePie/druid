@@ -232,14 +232,12 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			- Foliage
 			- Rocks
 - Interactables
+	@ AnimationPlayer Support (For reactions)
 	@ Lever
 	- Button / Rune
 	- Crate / Statue
 	- Tree Platforms
 		- Growing and Sprouting
-- Reactive Base Type
-	! Keep it simple and limited, it shouldn't try to do everything.
-	- Activate and Deactivate Assigned or Scouted AnimationPlayer.
 
 
 ##
