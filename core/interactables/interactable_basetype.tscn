@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://23f2mh50xopy"]
+
+[ext_resource type="Script" path="res://core/interactables/interactable.gd" id="1_qh7yx"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_waedh"]
+radius = 1.56561
+
+[node name="interactable_basetype" type="Node3D"]
+script = ExtResource("1_qh7yx")
+
+[node name="proxim" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="proxim"]
+shape = SubResource("SphereShape3D_waedh")
+
+[connection signal="body_entered" from="proxim" to="." method="_on_proxim_body_entered"]
+[connection signal="body_exited" from="proxim" to="." method="_on_proxim_body_exited"]

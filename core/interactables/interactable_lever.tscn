@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3lt3gtogh1ip"]
+
+[ext_resource type="Script" path="res://core/interactables/interactable.gd" id="1_u7duv"]
+[ext_resource type="PackedScene" uid="uid://dy7o3mevu8fu" path="res://core/interactables/lever_visual.tscn" id="2_c6731"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_waedh"]
+radius = 1.56561
+
+[node name="interactable_lever" type="Node3D"]
+script = ExtResource("1_u7duv")
+
+[node name="proxim" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="proxim"]
+shape = SubResource("SphereShape3D_waedh")
+
+[node name="lever_visual" parent="." instance=ExtResource("2_c6731")]
+
+[connection signal="activate" from="." to="lever_visual" method="_on_interactable_lever_activate"]
+[connection signal="deactivate" from="." to="lever_visual" method="_on_interactable_lever_deactivate"]
+[connection signal="body_entered" from="proxim" to="." method="_on_proxim_body_entered"]
+[connection signal="body_exited" from="proxim" to="." method="_on_proxim_body_exited"]
