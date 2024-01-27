@@ -31,7 +31,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 " - " Is a Task
 " ? " Is an idea or potential Task
 " ! " Is an important Note or Reminder.
-" X " Is a Finished Task
+" @ " Is a Finished Task
 " # " Is a Polished Complete Task. (Use #1 for first iteration, #2, #3, #4, etc)
 
 
@@ -55,8 +55,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 				- Lift Object
 				- Drop Object
 		- Connect Animations
-	X Movement
-		X Jumping
+	@ Movement
+		@ Jumping
 	- Spellcasting
 		- Aiming Spells
 			- Tilt Aim Assist
@@ -76,8 +76,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 
 
 - Spider Form
-	X Movement
-		X Jumping / Wall Dismount
+	@ Movement
+		@ Jumping / Wall Dismount
 		- Grapple / Swing
 	? Attacking
 	- Smart Wall Camera
@@ -232,11 +232,14 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			- Foliage
 			- Rocks
 - Interactables
-	- Lever
+	@ Lever
 	- Button / Rune
 	- Crate / Statue
 	- Tree Platforms
 		- Growing and Sprouting
+- Reactive Base Type
+	! Keep it simple and limited, it shouldn't try to do everything.
+	- Activate and Deactivate Assigned or Scouted AnimationPlayer.
 
 
 ##
