@@ -256,7 +256,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 	- Rat Icon
 - Health
 - Interactable Prompts
-	- Lever
+	@ Lever
 	- Lift
-	- Activate
+	- Activate Button
 	? Push

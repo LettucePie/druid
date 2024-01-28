@@ -50,7 +50,7 @@ func _ready():
 	if connect_core():
 		print("Core elements signals are connected")
 	else:
-		print("Failed to connect Core ELements")
+		print("Failed to connect Core Elements")
 		get_tree().quit()
 	initialize_player()
 
