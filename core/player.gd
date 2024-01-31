@@ -55,7 +55,7 @@ var dodge_cooldown : int = 0
 var dodge_active : int = 0
 var air_dodge : int = 0
 var dodge_direction : Vector3
-const DODGE_SPEED = 10.0
+const DODGE_SPEED = 14.0
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
 ## This didn't work. It just made an array of 0, 0, 0.
@@ -381,11 +381,12 @@ func action_process(delta):
 		or jump_velocity == Vector3.ZERO):
 			print("Wolf Dodge")
 			dodge_cooldown = 15
-			dodge_active = 8
+			dodge_active = 10
 			dodge_direction = move_input_vec.normalized()
-			dodge_direction.y = clampf(velocity.normalized().y, 0, 1)
+#			dodge_direction.y = clampf(velocity.normalized().y, 0, 1)
 			if jump_velocity != Vector3.ZERO:
 				set_jump_velocity(dodge_direction * DODGE_SPEED)
+				dodge_direction.y = 0.12
 				air_dodge += 1
 	
 	if Input.is_action_just_pressed("form_switcher"):
