@@ -52,6 +52,7 @@ var nearby_interactables : Array = []
 var magnet_cooldown : int = 0
 var dodge_cooldown : int = 0
 var dodge_active : int = 0
+var air_dodge : int = 0
 var dodge_direction : Vector3
 const DODGE_SPEED = 10.0
 
@@ -188,6 +189,7 @@ func lerp_mesh(delta : float):
 func player_landed():
 	jump_velocity = Vector3.ZERO
 	$norm_vec/mag.visible = false
+	air_dodge = 0
 
 
 func movement_process(delta : float):
@@ -369,11 +371,17 @@ func action_process(delta):
 		print("Special Key Pressed")
 		if current_form == Form.WOLF \
 		and (dodge_cooldown <= 0 or dodge_active <= 0) \
-		and move_input_vec != Vector3.ZERO:
+		and move_input_vec != Vector3.ZERO \
+		and ((jump_velocity != Vector3.ZERO and air_dodge < 1) \
+		or jump_velocity == Vector3.ZERO):
 			print("Wolf Dodge")
 			dodge_cooldown = 15
 			dodge_active = 8
-			dodge_direction = velocity.normalized()
+			dodge_direction = move_input_vec.normalized()
+			dodge_direction.y = velocity.normalized().y
+			if jump_velocity != Vector3.ZERO:
+				jump_velocity = dodge_direction
+				air_dodge += 1
 	
 	if Input.is_action_just_pressed("form_switcher"):
 		if current_form == Form.HUMAN:
