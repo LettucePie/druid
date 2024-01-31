@@ -75,6 +75,14 @@ func set_form_to(form : Form):
 		current_form = form
 	set_form_variables(form)
 	emit_signal("report_current_form", form_as_string(form))
+	if nearest_interactable != null:
+		if form != Form.HUMAN:
+			emit_signal("report_interactive_popup", "")
+		else:
+			emit_signal(
+				"report_interactive_popup",
+				nearest_interactable.interactive_message()
+			)
 
 
 func set_form_variables(form : Form):
