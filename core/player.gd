@@ -30,6 +30,7 @@ var form_air_control : float = 0.15
 var form_mag_angle : float = 0.15
 const MAG_PULL = 10.5
 var move_input_vec : Vector3 = Vector3.ZERO
+var accelerated_dir : Vector3 = Vector3.ZERO
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
@@ -186,6 +187,37 @@ func lerp_mesh(delta : float):
 	$player_mesh.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
 
 
+func apply_jump_velocity(delta : float):
+	## Catch the directional movement and clamp down corner speed
+	var float_dir = Vector2(
+		accelerated_dir.x, 
+		accelerated_dir.z).limit_length(form_speed * form_air_control)
+	
+	## Add on the new airborne directional movement.
+	jump_velocity.x = clamp(
+		jump_velocity.x + float_dir.x * delta,
+		jump_velocity_mag * -1.0,
+		jump_velocity_mag
+	)
+	jump_velocity.z = clamp(
+		jump_velocity.z + float_dir.y * delta,
+		jump_velocity_mag * -1.0,
+		jump_velocity_mag
+	)
+	
+	## Clamp down the cornering speed AGAIN...
+	## There's probably a better way to do this.
+	var mag_limited = Vector2(
+		jump_velocity.x,
+		jump_velocity.z).limit_length(jump_velocity_mag)
+	jump_velocity.x = mag_limited.x
+	jump_velocity.z = mag_limited.y
+	
+	## Apply (possibly) modified jump velocity
+	velocity.x = jump_velocity.x
+	velocity.z = jump_velocity.z
+
+
 func player_landed():
 	jump_velocity = Vector3.ZERO
 	$norm_vec/mag.visible = false
@@ -247,7 +279,7 @@ func movement_process(delta : float):
 				$player_mesh.material_override = test_mat_b
 	
 	## Finally, apply the velocity
-	var accelerated_dir : Vector3 = direction * form_speed
+	accelerated_dir = direction * form_speed
 	if is_on_floor():
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:
@@ -270,34 +302,7 @@ func movement_process(delta : float):
 			
 			## Check if player has jumped, and apply jump velocity
 			if jump_velocity != Vector3.ZERO:
-				## Catch the directional movement and clamp down corner speed
-				var float_dir = Vector2(
-					accelerated_dir.x, 
-					accelerated_dir.z).limit_length(form_speed * form_air_control)
-				
-				## Add on the new airborne directional movement.
-				jump_velocity.x = clamp(
-					jump_velocity.x + float_dir.x * delta,
-					jump_velocity_mag * -1.0,
-					jump_velocity_mag
-				)
-				jump_velocity.z = clamp(
-					jump_velocity.z + float_dir.y * delta,
-					jump_velocity_mag * -1.0,
-					jump_velocity_mag
-				)
-				
-				## Clamp down the cornering speed AGAIN...
-				## There's probably a better way to do this.
-				var mag_limited = Vector2(
-					jump_velocity.x,
-					jump_velocity.z).limit_length(jump_velocity_mag)
-				jump_velocity.x = mag_limited.x
-				jump_velocity.z = mag_limited.y
-				
-				## Apply (possibly) modified jump velocity
-				velocity.x = jump_velocity.x
-				velocity.z = jump_velocity.z
+				apply_jump_velocity(delta)
 	
 	## For Testing Purposes.
 	## Resets player to Center if they "fall out"
@@ -318,8 +323,8 @@ func action_cooldowns():
 		dodge_cooldown -= 1
 
 
-func set_jump_velocity():
-	jump_velocity = velocity
+func set_jump_velocity(vel : Vector3):
+	jump_velocity = vel
 	jump_velocity_mag = Vector2(
 		jump_velocity.x, 
 		jump_velocity.z).limit_length(form_speed).length()
@@ -344,7 +349,7 @@ func action_process(delta):
 	if Input.is_action_just_pressed("jump"):
 		if current_form == Form.HUMAN and is_on_floor():
 			velocity.y = form_jump
-			set_jump_velocity()
+			set_jump_velocity(velocity)
 		if current_form == Form.SPIDER \
 		and (is_on_floor() or is_on_ceiling() or is_on_wall()):
 			if floor_angle >= form_mag_angle:
@@ -352,12 +357,12 @@ func action_process(delta):
 				velocity = get_up_direction() * 5
 			else:
 				velocity.y = form_jump
-			set_jump_velocity()
+			set_jump_velocity(velocity)
 		if current_form == Form.WOLF and is_on_floor():
 			## Adding Lunge Speed by multiplying velocity.
 			velocity *= 1.25
 			velocity.y = form_jump
-			set_jump_velocity()
+			set_jump_velocity(velocity)
 	
 	if Input.is_action_just_pressed("interact"):
 		print("Interact Key Pressed")
@@ -378,9 +383,9 @@ func action_process(delta):
 			dodge_cooldown = 15
 			dodge_active = 8
 			dodge_direction = move_input_vec.normalized()
-			dodge_direction.y = velocity.normalized().y
+			dodge_direction.y = clampf(velocity.normalized().y, 0, 1)
 			if jump_velocity != Vector3.ZERO:
-				jump_velocity = dodge_direction
+				set_jump_velocity(dodge_direction * DODGE_SPEED)
 				air_dodge += 1
 	
 	if Input.is_action_just_pressed("form_switcher"):
