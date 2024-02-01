@@ -382,7 +382,7 @@ func action_process(delta):
 			print("Wolf Dodge")
 			dodge_cooldown = 15
 			dodge_active = 10
-			dodge_direction = move_input_vec.normalized()
+			dodge_direction = accelerated_dir.normalized()
 #			dodge_direction.y = clampf(velocity.normalized().y, 0, 1)
 			if jump_velocity != Vector3.ZERO:
 				set_jump_velocity(dodge_direction * DODGE_SPEED)
