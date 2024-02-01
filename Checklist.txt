@@ -55,6 +55,11 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 				- Lift Object
 				- Drop Object
 		- Connect Animations
+		- Hair Styles
+			! Plane Meshes with texture for detail.
+			? 3 variants
+		- Ear Styles
+		? Weapon Styles
 	@ Movement
 		@ Jumping
 	- Spellcasting
