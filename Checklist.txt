@@ -42,8 +42,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 - Human Form
 	- Model
 		- Animations
-			- Walk
-			- Run
+			@ Walk
+			@ Run
 			- Jump
 			- Fall
 			- Crouch/Transform

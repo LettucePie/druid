@@ -13,6 +13,12 @@ signal request_cam_movement(direction)
 @export var test_mat_a : Material
 @export var test_mat_b : Material
 
+
+## Mesh / Animation Variables
+@onready var human_mesh : MeshInstance3D = $player_mesh/human_armature/Skeleton3D/human_mesh
+@onready var human_anim : AnimationPlayer = $player_mesh/AnimationPlayer
+
+
 ## Camera Variables
 var cam_locked : bool = false
 var cam_min_y : float = -PI
@@ -66,6 +72,7 @@ const DODGE_SPEED = 14.0
 func _ready():
 	current_cam = get_viewport().get_camera_3d()
 	motion_mode = 0
+	human_anim.play("walk")
 #	floor_max_angle = PI
 
 
@@ -266,9 +273,9 @@ func movement_process(delta : float):
 			if blended_normal.angle_to(get_up_direction()) > 0.1 \
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
 				update_up(blended_normal)
-				$player_mesh.material_override = test_mat_a
+				human_mesh.material_override = test_mat_a
 			else:
-				$player_mesh.material_override = test_mat_b
+				human_mesh.material_override = test_mat_b
 	
 	## Finally, apply the velocity
 	accelerated_dir = direction * form_speed
