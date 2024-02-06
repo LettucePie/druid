@@ -77,14 +77,6 @@ func set_form_to(form : Form):
 		current_form = form
 	set_form_variables(form)
 	emit_signal("report_current_form", form_as_string(form))
-	if nearest_interactable != null:
-		if form != Form.HUMAN:
-			emit_signal("report_interactive_popup", "")
-		else:
-			emit_signal(
-				"report_interactive_popup",
-				nearest_interactable.interactive_message()
-			)
 
 
 func set_form_variables(form : Form):
@@ -366,7 +358,7 @@ func action_process(delta):
 	
 	if Input.is_action_just_pressed("interact"):
 		print("Interact Key Pressed")
-		if current_form == Form.HUMAN and nearest_interactable != null:
+		if nearest_interactable != null:
 			nearest_interactable.interact_command()
 			emit_signal(
 				"report_interactive_popup", 
