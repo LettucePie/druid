@@ -171,6 +171,10 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 		- Rat
 			- 2D Segments
 			- Burrow under obstacles
+		- Unlocking the Forms
+			? Unlocking Variants per Biome
+				? Ocean Biome needs a Crab to walk along rapid current.
+				? Jungle Biome needs a Lizard and a Jaguar
 	- Activated Platforming
 		- Tree Path Growing into place.
 
@@ -236,6 +240,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			! Low Poly
 			- Foliage
 			- Rocks
+	? Ocean
 - Interactables
 	@ AnimationPlayer Support (For reactions)
 	@ Lever
