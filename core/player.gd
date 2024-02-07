@@ -53,6 +53,8 @@ var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
 var nearest_interactable : Interactable = null
 var nearby_interactables : Array = []
+var unlocked_skills
+var current_skill
 
 
 ## Action Variables
@@ -395,6 +397,18 @@ func action_process(delta):
 			set_form_to(Form.WOLF)
 		elif current_form == Form.WOLF:
 			set_form_to(Form.HUMAN)
+	
+	if Input.get_action_strength("fire") >= 0.3:
+		print("Fire Pressed")
+		## Future Self.
+		## Do we make an entire Skill/Ability Modular Component system...
+		## Or just hard code some strings to some effects?
+		if current_form == Form.HUMAN:
+			pass
+		elif current_form == Form.SPIDER:
+			pass
+		elif current_form == Form.WOLF:
+			pass
 	
 	## Process Effects of actions after inputs assign the variables...
 	action_effects(delta)

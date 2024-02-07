@@ -75,7 +75,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 		- Charge Beam
 			- Large Cooldown
 	- Interact
-		- Lever Pull
+		@ Lever Pull
 		- Lift Crate
 		- Drop Crate
 
@@ -101,8 +101,12 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 - Wolf Form
 	- Movement
 		- Sprinting
+			! Sprint is a Skill that is equipped in the same way Spells are.
+			! Sprint is activated with the Fire Spell input.
+			? Skills and Spells
 		- Long Jump
-		- Dodge
+		@ Dodge
+		? Sequenced Jump Points (A, B, C)
 	- Model
 		? Jaguar Variant
 		- Animations
@@ -151,9 +155,9 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 ## Gameplay / Puzzles
 ##
 
-- Interactable Levers
-	- Player Proximity
-	- Scriptable Event
+@ Interactable Levers
+	@ Player Proximity
+	@ Scriptable Event
 - Pressure Switches
 - Platforming Obstacles
 	- Basic Platforming
