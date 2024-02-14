@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=22 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 [ext_resource type="PackedScene" uid="uid://nprju05ce2c5" path="res://art/model/human_model_0.1.glb" id="2_dbf1p"]
@@ -12,6 +12,8 @@ albedo_color = Color(0, 1, 1, 1)
 [sub_resource type="Curve" id="Curve_hyoh0"]
 _data = [Vector2(0, 0.0526315), 0.0, 0.0, 0, 0, Vector2(0.498339, 0.357895), 2.20412, 2.20412, 0, 0, Vector2(0.611296, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.494737), 0.0, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_x4j4p"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tq1pq"]
 
@@ -76,6 +78,11 @@ test_mat_a = SubResource("StandardMaterial3D_vqemf")
 test_mat_b = SubResource("StandardMaterial3D_byb3j")
 cam_distance_curve = SubResource("Curve_hyoh0")
 
+[node name="player_animtree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_x4j4p")
+anim_player = NodePath("../player_mesh/AnimationPlayer")
+active = true
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_tq1pq")
 
@@ -95,39 +102,34 @@ mesh = SubResource("CylinderMesh_axjon")
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="player_mesh/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.0915746, -0.10598)
-bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/position = Vector3(-0.36429, 0.930019, -0.135927)
-bones/1/rotation = Quaternion(-0.049736, 0.00387346, 0.800762, 0.596902)
-bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
-bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138461, 0.947398)
-bones/5/rotation = Quaternion(-0.0154964, -0.0138742, 0.00379999, 0.999776)
-bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
-bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.00661403, 0.145293, 0.988093, 0.0501924)
-bones/11/rotation = Quaternion(-0.112649, -0.0230749, -0.016077, 0.993237)
-bones/12/position = Vector3(0.377148, 0.944996, -0.0548621)
-bones/12/rotation = Quaternion(-0.0192934, -0.0451559, -0.737552, 0.673503)
-bones/13/rotation = Quaternion(-0.0859248, -0.0264636, -0.250337, 0.963975)
-bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
-bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0847233, 0.321135, 0.942174, -0.0447433)
-bones/18/rotation = Quaternion(-0.614535, 0.028967, 0.0390837, 0.787388)
+bones/0/rotation = Quaternion(0.0493091, 0, 0, 0.998784)
+bones/1/rotation = Quaternion(-0.0339932, 0.0357186, 0.723505, 0.688556)
+bones/2/rotation = Quaternion(5.82866e-08, -1.47826e-07, 0.11213, 0.993694)
+bones/3/rotation = Quaternion(1.20855e-08, -8.41269e-08, 0.0135609, 0.999908)
+bones/5/rotation = Quaternion(-0.0493091, 0, 0, 0.998784)
+bones/10/rotation = Quaternion(-0.00200711, 0.0605337, 0.996862, 0.0509741)
+bones/11/rotation = Quaternion(0.0205992, -0.000185766, -0.00301035, 0.999783)
+bones/12/rotation = Quaternion(-0.0339946, -0.0357199, -0.723505, 0.688556)
+bones/13/rotation = Quaternion(-2.88105e-07, 9.071e-07, -0.11213, 0.993694)
+bones/14/rotation = Quaternion(-2.18497e-08, -8.69032e-08, -0.013561, 0.999908)
+bones/15/rotation = Quaternion(-1.22581e-07, 9.50359e-07, -0.15801, 0.987437)
+bones/17/rotation = Quaternion(0.00418095, 0.0606448, 0.996855, -0.0508419)
+bones/18/rotation = Quaternion(0.0206256, -0.00452885, 0.00282324, 0.999773)
 
 [node name="ear_a" parent="player_mesh/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253312, -0.0331121, -0.00151131, 0.992584, -0.121551, 0.0331745, 0.121534, 0.992033, 0.00067576, 1.7503, 0.19185)
+transform = Transform3D(1, 8.73115e-11, -4.00178e-11, -8.73115e-11, 1, 1.3064e-08, 4.00178e-11, -2.05146e-08, 1, 1.22236e-09, 1.86134, -0.00261299)
 bone_idx = 7
 
 [node name="hair_a" parent="player_mesh/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253312, -0.0331121, -0.00151131, 0.992584, -0.121551, 0.0331745, 0.121534, 0.992033, 0.00858759, 2.17115, -0.0273374)
+transform = Transform3D(1, 8.73115e-11, -4.00178e-11, -8.73115e-11, 1, 1.3064e-08, 4.00178e-11, -2.05146e-08, 1, 1.62981e-09, 2.25241, -0.271471)
 bone_idx = 8
 
 [node name="cape" parent="player_mesh/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416956, 0.0331651, 0.996384, -0.0782234, -0.00157782, 0.0783186, 0.996927, -0.0395435, 1.25801, -0.302836)
+transform = Transform3D(0.998816, -0.0311859, 0.0373244, 0.0283766, 0.996887, 0.0735656, -0.0395024, -0.0724194, 0.996592, -0.0558636, 1.2997, -0.430761)
 bone_idx = 9
 
 [node name="staff_a" parent="player_mesh/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.402635, -0.397955, 0.824328, 0.867268, 0.453911, -0.204477, -0.292799, 0.797243, 0.527894, 1.37876, 0.109154, 0.360237)
+transform = Transform3D(-0.183705, -1.59653e-07, 0.982982, 0.982982, 1.69146e-07, 0.183705, -1.49703e-07, 1, 1.02451e-07, 1.76788, 0.523789, -0.108567)
 bone_idx = 16
 
 [node name="standin_floor" parent="player_mesh" index="1"]
