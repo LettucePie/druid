@@ -16,6 +16,9 @@ signal request_cam_movement(direction)
 
 ## Mesh / Animation Variables
 @onready var human_mesh : MeshInstance3D = $player_mesh/human_armature/Skeleton3D/human_mesh
+@onready var anim_tree : AnimationTree = $player_animtree
+#@onready var anim_root : AnimationNodeStateMachine = anim_tree.tree_root
+#@onready var anim_node_movement : AnimationNode = anim_root.get_node("movement")
 @onready var human_anim : AnimationPlayer = $player_mesh/AnimationPlayer
 
 
@@ -74,7 +77,7 @@ const DODGE_SPEED = 14.0
 func _ready():
 	current_cam = get_viewport().get_camera_3d()
 	motion_mode = 0
-	human_anim.play("walk")
+#	human_anim.play("walk")
 #	floor_max_angle = PI
 
 
@@ -239,6 +242,8 @@ func movement_process(delta : float):
 		Input.get_axis("move_left", "move_right"), 
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
+	## Assign movement value on AnimationTree using input.length
+	anim_tree.set("parameters/movement/blend_position", move_input_vec.length())
 	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \

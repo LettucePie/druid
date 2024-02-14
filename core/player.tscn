@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=28 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
+[ext_resource type="Script" path="res://core/player_animtree.gd" id="2_4cmwe"]
 [ext_resource type="PackedScene" uid="uid://nprju05ce2c5" path="res://art/model/human_model_0.1.glb" id="2_dbf1p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqemf"]
@@ -13,7 +14,32 @@ albedo_color = Color(0, 1, 1, 1)
 _data = [Vector2(0, 0.0526315), 0.0, 0.0, 0, 0, Vector2(0.498339, 0.357895), 2.20412, 2.20412, 0, 0, Vector2(0.611296, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.494737), 0.0, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2o073"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_62nk0"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8tgen"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_214sk"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_2o073")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_62nk0")
+blend_point_1/pos = 0.118615
+blend_point_2/node = SubResource("AnimationNodeAnimation_8tgen")
+blend_point_2/pos = 0.699567
+min_space = 0.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p8k5g"]
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_x4j4p"]
+states/Start/position = Vector2(197, 100)
+states/movement/node = SubResource("AnimationNodeBlendSpace1D_214sk")
+states/movement/position = Vector2(541, 100)
+transitions = ["Start", "movement", SubResource("AnimationNodeStateMachineTransition_p8k5g")]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tq1pq"]
 
@@ -82,6 +108,8 @@ cam_distance_curve = SubResource("Curve_hyoh0")
 tree_root = SubResource("AnimationNodeStateMachine_x4j4p")
 anim_player = NodePath("../player_mesh/AnimationPlayer")
 active = true
+parameters/movement/blend_position = 0.000865801
+script = ExtResource("2_4cmwe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_tq1pq")
