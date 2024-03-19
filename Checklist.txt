@@ -49,7 +49,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			@ Land
 			- Crouch/Transform
 			- Swing Weapon
-				- Combo 1
+				@ Combo 1
 				- Combo 2
 				- Combo 3
 				- Jump-strike
