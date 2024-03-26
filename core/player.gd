@@ -67,6 +67,8 @@ var dodge_active : int = 0
 var air_dodge : int = 0
 var dodge_direction : Vector3
 const DODGE_SPEED = 14.0
+@export var attack_chain : int = 0
+@export var attack_interrupt : bool = false
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
 ## This didn't work. It just made an array of 0, 0, 0.
@@ -414,6 +416,24 @@ func action_process(delta):
 			pass
 		elif current_form == Form.WOLF:
 			pass
+	
+	if Input.is_action_just_pressed("attack"):
+		print("Attack Pressed")
+		if current_form == Form.HUMAN:
+			if attack_chain <= 0:
+				print("Start Attack")
+				attack_chain = 1
+				human_anim.play("attack_" + str(attack_chain))
+				attack_interrupt = false
+			elif attack_interrupt:
+				if attack_chain < 3:
+					attack_chain += 1
+					print("Attack Chain: ", attack_chain)
+				else:
+					print("Attack Chain Finished... Reset")
+					attack_chain = 1
+				human_anim.play("attack_" + str(attack_chain))
+				attack_interrupt = false
 	
 	## Process Effects of actions after inputs assign the variables...
 	action_effects(delta)

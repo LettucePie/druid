@@ -51,7 +51,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			- Swing Weapon
 				@ Combo 1
 				@ Combo 2
-				- Combo 3
+				@ Combo 3
 				- Jump-strike
 			- Aim
 			- Fire Spell
@@ -83,6 +83,9 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 		@ Lever Pull
 		- Lift Crate
 		- Drop Crate
+	- Attacking
+		@ 1,2,3 Attack Chain
+		- Jump-Strike
 
 
 - Spider Form
