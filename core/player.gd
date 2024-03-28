@@ -244,8 +244,9 @@ func movement_process(delta : float):
 		Input.get_axis("move_left", "move_right"), 
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
-	## Assign movement value on AnimationTree using input.length
-	anim_tree.set("parameters/movement_speed_blend/blend_position", move_input_vec.length())
+	
+	## Assign Movement input Length to movement_speed_blend
+	anim_tree.set("parameters/mobile/movement_speed_blend/blend_position", move_input_vec.length())
 	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \

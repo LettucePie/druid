@@ -1,0 +1,72 @@
+[gd_resource type="AnimationNodeBlendTree" load_steps=14 format=3 uid="uid://dvrq3t3we6m1h"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vnwp5"]
+animation = &"attack_1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ncfa0"]
+animation = &"attack_2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jb7fv"]
+animation = &"attack_3"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k7qk6"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lxc75"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yys1i"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_yc4o4"]
+states/End/position = Vector2(701, 119)
+states/Start/position = Vector2(221, 119)
+states/attack_1/node = SubResource("AnimationNodeAnimation_vnwp5")
+states/attack_1/position = Vector2(458, 55)
+states/attack_2/node = SubResource("AnimationNodeAnimation_ncfa0")
+states/attack_2/position = Vector2(458, 119)
+states/attack_3/node = SubResource("AnimationNodeAnimation_jb7fv")
+states/attack_3/position = Vector2(458, 188)
+transitions = ["attack_1", "End", SubResource("AnimationNodeStateMachineTransition_k7qk6"), "attack_2", "End", SubResource("AnimationNodeStateMachineTransition_lxc75"), "attack_3", "End", SubResource("AnimationNodeStateMachineTransition_yys1i")]
+graph_offset = Vector2(-44, -3)
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_1chkm"]
+filter_enabled = true
+filters = ["..:attack_chain", "..:attack_interrupt", "human_armature/Skeleton3D:Center", "human_armature/Skeleton3D:bicep.l", "human_armature/Skeleton3D:bicep.r", "human_armature/Skeleton3D:forearm.l", "human_armature/Skeleton3D:forearm.r", "human_armature/Skeleton3D:hand.l", "human_armature/Skeleton3D:hand.r", "human_armature/Skeleton3D:head", "human_armature/Skeleton3D:neck", "human_armature/Skeleton3D:shoulder.l", "human_armature/Skeleton3D:shoulder.r", "human_armature/Skeleton3D:staff.a"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l7vpf"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_q4ci0"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_axvxg"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_21o76"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_j6sap"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_l7vpf")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_q4ci0")
+blend_point_1/pos = 0.3
+blend_point_2/node = SubResource("AnimationNodeAnimation_axvxg")
+blend_point_2/pos = 0.6
+blend_point_3/node = SubResource("AnimationNodeAnimation_21o76")
+blend_point_3/pos = 0.0
+min_space = 0.0
+
+[resource]
+graph_offset = Vector2(-564.48, -104.091)
+nodes/attack_chain/node = SubResource("AnimationNodeStateMachine_yc4o4")
+nodes/attack_chain/position = Vector2(-360, 260)
+nodes/merge_attack/node = SubResource("AnimationNodeAdd2_1chkm")
+nodes/merge_attack/position = Vector2(40, 140)
+nodes/movement_speed_blend/node = SubResource("AnimationNodeBlendSpace1D_j6sap")
+nodes/movement_speed_blend/position = Vector2(-360, 120)
+nodes/output/position = Vector2(360, 140)
+node_connections = [&"output", 0, &"merge_attack", &"merge_attack", 0, &"movement_speed_blend", &"merge_attack", 1, &"attack_chain"]
