@@ -245,7 +245,7 @@ func movement_process(delta : float):
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	## Assign movement value on AnimationTree using input.length
-	anim_tree.set("parameters/movement/blend_position", move_input_vec.length())
+	anim_tree.set("parameters/movement_speed_blend/blend_position", move_input_vec.length())
 	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
@@ -253,7 +253,7 @@ func movement_process(delta : float):
 	var direction = move_input_vec.rotated(
 		Vector3.UP, current_cam.global_rotation.y)
 	
-	## Get the Floor Angle by comparing the floor normal against Vector3.UP.
+	## Get the Floor Angle by comparing the StateMachinefloor normal against Vector3.UP.
 	## Then get the cross product to find a perpindicular axis to rotate \
 	## the Orientated Input vector upon, by Floor Angle amount.
 	floor_angle = Vector3.UP.angle_to(get_up_direction())
@@ -419,11 +419,14 @@ func action_process(delta):
 	
 	if Input.is_action_just_pressed("attack"):
 		print("Attack Pressed")
+		print("attack_chain: ", attack_chain, " | attack_interrupt: ", attack_interrupt)
+		var attack_chain_playback = anim_tree.get("parameters/attack_chain/playback")
 		if current_form == Form.HUMAN:
 			if attack_chain <= 0:
 				print("Start Attack")
 				attack_chain = 1
-				human_anim.play("attack_" + str(attack_chain))
+#				human_anim.play("attack_" + str(attack_chain))
+				attack_chain_playback.start("attack_" + str(attack_chain))
 				attack_interrupt = false
 			elif attack_interrupt:
 				if attack_chain < 3:
@@ -432,7 +435,8 @@ func action_process(delta):
 				else:
 					print("Attack Chain Finished... Reset")
 					attack_chain = 1
-				human_anim.play("attack_" + str(attack_chain))
+#				human_anim.play("attack_" + str(attack_chain))
+				attack_chain_playback.start("attack_" + str(attack_chain))
 				attack_interrupt = false
 	
 	## Process Effects of actions after inputs assign the variables...
