@@ -69,6 +69,7 @@ var dodge_direction : Vector3
 const DODGE_SPEED = 14.0
 @export var attack_chain : int = 0
 @export var attack_interrupt : bool = false
+var aiming : bool = false
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
 ## This didn't work. It just made an array of 0, 0, 0.
@@ -149,7 +150,7 @@ func cam_process(delta):
 	
 	var parent_dial = current_cam.get_parent()
 	if parent_dial.name == "cam_dial":
-		if !cam_locked:
+		if !cam_locked and !aiming:
 			parent_dial.rotate_y(input.x * delta)
 			parent_dial.rotate(
 				parent_dial.transform.basis * Vector3.RIGHT, 
@@ -161,6 +162,8 @@ func cam_process(delta):
 			current_cam.position.z = \
 				cam_distance_max * cam_distance_curve.sample(x_percent)
 			current_cam.position.y = current_cam.position.z * 0.12
+		elif aiming:
+			pass
 		
 		parent_dial.rotation.y = clamp(
 			parent_dial.rotation.y, 
@@ -405,6 +408,14 @@ func action_process(delta):
 			set_form_to(Form.WOLF)
 		elif current_form == Form.WOLF:
 			set_form_to(Form.HUMAN)
+	
+	if Input.get_action_strength("aim") >= 0.3:
+		print("Aim Pressed")
+		aiming = true
+		$cam_dial/Aim_Cam.make_current()
+	elif !$cam_dial/Player_Cam.is_current():
+		aiming = false
+		$cam_dial/Player_Cam.make_current()
 	
 	if Input.get_action_strength("fire") >= 0.3:
 		print("Fire Pressed")
