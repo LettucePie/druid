@@ -53,8 +53,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 				@ Combo 2
 				@ Combo 3
 				- Jump-strike
-			- Aim
-			- Fire Spell
+			@ Aim
+			@ Fire Spell
 			- Interactions
 				- Pull Lever
 				- Lift Object
