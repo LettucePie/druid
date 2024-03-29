@@ -133,37 +133,37 @@ mesh = SubResource("CylinderMesh_axjon")
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="player_mesh/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.158355, -0.10598)
+bones/0/position = Vector3(0, -0.151714, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.0158436, -0.00474521, 0.7979, 0.602563)
+bones/1/rotation = Quaternion(-0.0114936, 0.0141269, 0.797327, 0.603272)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(0.0110317, -0.0138927, 0.00329454, 0.999837)
+bones/5/rotation = Quaternion(-0.0137709, -0.0138757, 0.00376719, 0.999802)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.214918, 0.256363, 0.939858, 0.0689639)
-bones/11/rotation = Quaternion(-0.425956, 0.00117183, -0.00277899, 0.904739)
+bones/10/rotation = Quaternion(-0.215304, 0.251043, 0.941293, 0.0677472)
+bones/11/rotation = Quaternion(-0.412271, 0.0011298, -0.00279638, 0.911056)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0821394, -0.0184854, -0.274531, 0.957885)
+bones/13/rotation = Quaternion(-0.0822697, -0.0187581, -0.273708, 0.958104)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0969373, 0.360569, 0.923576, -0.0871866)
-bones/18/rotation = Quaternion(-0.289388, -0.0948017, -0.015797, 0.952375)
+bones/17/rotation = Quaternion(0.0978795, 0.350505, 0.927442, -0.0861274)
+bones/18/rotation = Quaternion(-0.273933, -0.095045, -0.0142603, 0.956935)
 
 [node name="ear_a" parent="player_mesh/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00326886, 0.98474, -0.174, 0.0330476, 0.174012, 0.984189, 0.000675779, 1.67701, 0.233288)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00162584, 0.992159, -0.124975, 0.0331691, 0.12496, 0.991607, 0.000675778, 1.68981, 0.194556)
 bone_idx = 7
 
 [node name="hair_a" parent="player_mesh/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00326886, 0.98474, -0.174, 0.0330476, 0.174012, 0.984189, 0.00858761, 2.10889, 0.0367315)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00162584, 0.992159, -0.124975, 0.0331691, 0.12496, 0.991607, 0.00858761, 2.11141, -0.0231775)
 bone_idx = 8
 
 [node name="cape" parent="player_mesh/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332021, 0.990827, -0.130993, 0.000183597, 0.131059, 0.991375, -0.0395435, 1.21165, -0.286814)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0331704, 0.996108, -0.0816643, -0.0014633, 0.0817577, 0.996651, -0.0395435, 1.19922, -0.301826)
 bone_idx = 9
 
 [node name="staff_a" parent="player_mesh/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.415215, -0.289958, 0.862277, 0.848155, 0.466153, -0.251662, -0.328981, 0.835839, 0.439482, 1.37543, 0.00524759, 0.209116)
+transform = Transform3D(0.413614, -0.290568, 0.86284, 0.848849, 0.46575, -0.250063, -0.329207, 0.835851, 0.439289, 1.37682, 0.0131222, 0.20904)
 bone_idx = 16
 
 [node name="standin_floor" parent="player_mesh" index="1"]
