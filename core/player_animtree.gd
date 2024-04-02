@@ -15,25 +15,34 @@ func set_player_move(movement : float):
 	else:
 		set_mobile(false)
 	## Assign Movement input Length to movement_speed_blend
-	set("parameters/mobile/movement_speed_blend/blend_position", movement)
+	set("parameters/movement/blend_position", movement)
 
 
 func set_mobile(value : bool):
 	mobile = value
-	var state_machine = get("parameters/playback")
-	if mobile:
-		state_machine.travel("mobile")
+	set("parameters/stationary_or/blend_amount", int(value))
+	if value:
+		## Reset Stationary StateMachine
+		pass
+#		get("parameters/stationary/playback").start("Start")
 	else:
-		state_machine.travel("stationary")
+		## Reset Mobile StateMachine(s)
+		pass
+#		get("parameters/attack_chain/playback").start("Start")
 
 
 func start_attack(chain_number : int):
-	print("ANIMTREE: Starting Attack: ", chain_number)
-	var anim_playback = get("parameters/stationary/playback")
-	if mobile:
-		anim_playback = get("parameters/mobile/attack_chain/playback")
-	print("TargetPlayback.is_playing == ", anim_playback.is_playing())
-	anim_playback.start("attack_" + str(chain_number))
+#	var anim_playback = get("parameters/stationary/playback")
+#	if mobile:
+#		anim_playback = get("parameters/attack_chain/playback")
+#	print("ANIMTREE: Starting Attack: ", chain_number, " in playback: ", anim_playback)
+#	print(anim_playback, ".is_playing == ", anim_playback.is_playing())
+#	anim_playback.start("attack_" + str(chain_number))
+	
+	## Oh okay, so let's try syncing animations on both stationary and mobile.
+	get("parameters/stationary/playback").start("attack_" + str(chain_number))
+	get("parameters/attack_chain/playback").start("attack_" + str(chain_number))
+	print("Dang... I have to blend this in somehow... ugh")
 
 
 ####

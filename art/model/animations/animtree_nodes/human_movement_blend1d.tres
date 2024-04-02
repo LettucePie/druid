@@ -1,0 +1,19 @@
+[gd_resource type="AnimationNodeBlendSpace1D" load_steps=4 format=3 uid="uid://dc8k2o85s4da1"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7nmdp"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_31v5e"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pvc15"]
+animation = &"run"
+
+[resource]
+blend_point_0/node = SubResource("AnimationNodeAnimation_7nmdp")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_31v5e")
+blend_point_1/pos = 0.2
+blend_point_2/node = SubResource("AnimationNodeAnimation_pvc15")
+blend_point_2/pos = 0.5
+min_space = 0.0

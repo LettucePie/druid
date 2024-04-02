@@ -69,10 +69,6 @@ var dodge_direction : Vector3
 const DODGE_SPEED = 14.0
 @export var attack_chain : int = 0
 @export var attack_interrupt : bool = false
-## Testing variables
-var prev_attack_chain : int = 0
-var prev_attack_interrupt : bool = false
-##
 var aiming : bool = false
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
@@ -353,6 +349,10 @@ func action_effects(delta):
 		velocity = dodge_direction * DODGE_SPEED
 
 
+func attack_frames_active(active : bool):
+	pass
+
+
 func attack_finished():
 	print("Attack Finished on chain: ", attack_chain)
 	attack_chain = 0
@@ -441,23 +441,19 @@ func action_process(delta):
 			pass
 	
 	if Input.is_action_just_pressed("attack"):
-		print("Attack Pressed")
-		print("attack_chain: ", attack_chain, " | attack_interrupt: ", attack_interrupt)
+		print("Attack Key Pressed")
 		if current_form == Form.HUMAN:
 			if attack_chain <= 0:
-				print("Start Attack")
 				attack_chain = 1
 				attack_interrupt = false
-				anim_tree.start_attack(attack_chain)
+#				anim_tree.start_attack(attack_chain)
 			elif attack_interrupt:
 				if attack_chain < 3:
 					attack_chain += 1
-					print("Attack Chain: ", attack_chain)
 				else:
-					print("Attack Chain Finished... Reset")
 					attack_chain = 1
 				attack_interrupt = false
-				anim_tree.start_attack(attack_chain)
+#				anim_tree.start_attack(attack_chain)
 	
 	## Process Effects of actions after inputs assign the variables...
 	action_effects(delta)
@@ -473,13 +469,6 @@ func _physics_process(delta):
 	## to manipulate position and movement properly... I think...
 	move_and_slide()
 	lerp_mesh(delta)
-	## Testing anim variables
-	if prev_attack_chain != attack_chain:
-		print("AttackChainUpdate: ", prev_attack_chain, " -> ", attack_chain)
-		prev_attack_chain = attack_chain
-	if prev_attack_interrupt != attack_interrupt:
-		print("AttackInterruptUpdate: ", prev_attack_interrupt, " -> ", attack_interrupt)
-		prev_attack_interrupt = attack_interrupt
 
 
 ###
