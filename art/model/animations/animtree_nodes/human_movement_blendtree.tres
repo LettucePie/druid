@@ -1,13 +1,13 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=14 format=3 uid="uid://dvrq3t3we6m1h"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=18 format=3 uid="uid://dvrq3t3we6m1h"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vnwp5"]
-animation = &"attack_1"
+animation = &"coded/attack_1_coded"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ncfa0"]
-animation = &"attack_2"
+animation = &"coded/attack_2_coded"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jb7fv"]
-animation = &"attack_3"
+animation = &"coded/attack_3_coded"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k7qk6"]
 switch_mode = 2
@@ -21,17 +21,33 @@ advance_mode = 2
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mhe2s"]
+advance_mode = 2
+advance_expression = "attack_chain == 2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_eiuqx"]
+advance_mode = 2
+advance_expression = "attack_chain == 3"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2x5oe"]
+advance_mode = 2
+advance_expression = "attack_chain == 1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gpnlr"]
+advance_mode = 2
+advance_expression = "attack_chain == 1"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_yc4o4"]
 states/End/position = Vector2(701, 119)
 states/Start/position = Vector2(221, 119)
 states/attack_1/node = SubResource("AnimationNodeAnimation_vnwp5")
-states/attack_1/position = Vector2(458, 55)
+states/attack_1/position = Vector2(458, 41)
 states/attack_2/node = SubResource("AnimationNodeAnimation_ncfa0")
-states/attack_2/position = Vector2(458, 119)
+states/attack_2/position = Vector2(392, 119)
 states/attack_3/node = SubResource("AnimationNodeAnimation_jb7fv")
-states/attack_3/position = Vector2(458, 188)
-transitions = ["attack_1", "End", SubResource("AnimationNodeStateMachineTransition_k7qk6"), "attack_2", "End", SubResource("AnimationNodeStateMachineTransition_lxc75"), "attack_3", "End", SubResource("AnimationNodeStateMachineTransition_yys1i")]
-graph_offset = Vector2(-44, -3)
+states/attack_3/position = Vector2(458, 206)
+transitions = ["attack_1", "End", SubResource("AnimationNodeStateMachineTransition_k7qk6"), "attack_2", "End", SubResource("AnimationNodeStateMachineTransition_lxc75"), "attack_3", "End", SubResource("AnimationNodeStateMachineTransition_yys1i"), "attack_1", "attack_2", SubResource("AnimationNodeStateMachineTransition_mhe2s"), "attack_2", "attack_3", SubResource("AnimationNodeStateMachineTransition_eiuqx"), "attack_3", "attack_1", SubResource("AnimationNodeStateMachineTransition_2x5oe"), "Start", "attack_1", SubResource("AnimationNodeStateMachineTransition_gpnlr")]
+graph_offset = Vector2(-43, -13)
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_1chkm"]
 filter_enabled = true
@@ -61,7 +77,7 @@ blend_point_3/pos = 0.0
 min_space = 0.0
 
 [resource]
-graph_offset = Vector2(-564.48, -104.091)
+graph_offset = Vector2(-668.477, 90.7479)
 nodes/attack_chain/node = SubResource("AnimationNodeStateMachine_yc4o4")
 nodes/attack_chain/position = Vector2(-360, 260)
 nodes/merge_attack/node = SubResource("AnimationNodeAdd2_1chkm")

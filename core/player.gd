@@ -69,6 +69,10 @@ var dodge_direction : Vector3
 const DODGE_SPEED = 14.0
 @export var attack_chain : int = 0
 @export var attack_interrupt : bool = false
+## Testing variables
+var prev_attack_chain : int = 0
+var prev_attack_interrupt : bool = false
+##
 var aiming : bool = false
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
@@ -248,8 +252,9 @@ func movement_process(delta : float):
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
-	## Assign Movement input Length to movement_speed_blend
-	anim_tree.set("parameters/mobile/movement_speed_blend/blend_position", move_input_vec.length())
+	## Forward movement input length to anim_player
+	anim_tree.set_player_move(move_input_vec.length())
+	
 	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
@@ -348,6 +353,12 @@ func action_effects(delta):
 		velocity = dodge_direction * DODGE_SPEED
 
 
+func attack_finished():
+	print("Attack Finished on chain: ", attack_chain)
+	attack_chain = 0
+	attack_interrupt = false
+
+
 func action_process(delta):
 	## Process Action Cooldowns before... I guess?
 	## I'm not sure.
@@ -432,14 +443,12 @@ func action_process(delta):
 	if Input.is_action_just_pressed("attack"):
 		print("Attack Pressed")
 		print("attack_chain: ", attack_chain, " | attack_interrupt: ", attack_interrupt)
-		var attack_chain_playback = anim_tree.get("parameters/attack_chain/playback")
 		if current_form == Form.HUMAN:
 			if attack_chain <= 0:
 				print("Start Attack")
 				attack_chain = 1
-#				human_anim.play("attack_" + str(attack_chain))
-				attack_chain_playback.start("attack_" + str(attack_chain))
 				attack_interrupt = false
+				anim_tree.start_attack(attack_chain)
 			elif attack_interrupt:
 				if attack_chain < 3:
 					attack_chain += 1
@@ -447,9 +456,8 @@ func action_process(delta):
 				else:
 					print("Attack Chain Finished... Reset")
 					attack_chain = 1
-#				human_anim.play("attack_" + str(attack_chain))
-				attack_chain_playback.start("attack_" + str(attack_chain))
 				attack_interrupt = false
+				anim_tree.start_attack(attack_chain)
 	
 	## Process Effects of actions after inputs assign the variables...
 	action_effects(delta)
@@ -465,6 +473,13 @@ func _physics_process(delta):
 	## to manipulate position and movement properly... I think...
 	move_and_slide()
 	lerp_mesh(delta)
+	## Testing anim variables
+	if prev_attack_chain != attack_chain:
+		print("AttackChainUpdate: ", prev_attack_chain, " -> ", attack_chain)
+		prev_attack_chain = attack_chain
+	if prev_attack_interrupt != attack_interrupt:
+		print("AttackInterruptUpdate: ", prev_attack_interrupt, " -> ", attack_interrupt)
+		prev_attack_interrupt = attack_interrupt
 
 
 ###
