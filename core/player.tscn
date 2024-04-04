@@ -37,7 +37,6 @@ filter_enabled = true
 filters = ["human_armature/Skeleton3D:Center", "human_armature/Skeleton3D:leg.l", "human_armature/Skeleton3D:leg.r", "human_armature/Skeleton3D:thigh.l", "human_armature/Skeleton3D:thigh.r"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yjsvj"]
-graph_offset = Vector2(-603.727, 20.8016)
 nodes/actions/node = ExtResource("4_s82sa")
 nodes/actions/position = Vector2(-300, 80)
 nodes/blend_movement/node = SubResource("AnimationNodeBlend2_v3m60")
@@ -181,37 +180,37 @@ shape = SubResource("BoxShape3D_apw7h")
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="player_mesh/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.149404, -0.10598)
+bones/0/position = Vector3(0, -0.161839, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.0133226, 0.00619483, 0.797604, 0.603002)
+bones/1/rotation = Quaternion(-0.0161734, -0.00617678, 0.797931, 0.6025)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(0.00865624, -0.0138915, 0.0033399, 0.99986)
+bones/5/rotation = Quaternion(0.00794789, -0.0138911, 0.00335342, 0.999866)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.215437, 0.249192, 0.941785, 0.0673237)
-bones/11/rotation = Quaternion(-0.407491, 0.00111512, -0.00280223, 0.913204)
+bones/10/rotation = Quaternion(-0.214668, 0.259749, 0.938928, 0.069738)
+bones/11/rotation = Quaternion(-0.434862, 0.00119919, -0.0027673, 0.900492)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0834562, -0.0212485, -0.266178, 0.960069)
+bones/13/rotation = Quaternion(-0.0813517, -0.0168385, -0.279497, 0.956546)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0982054, 0.346986, 0.928764, -0.0857557)
-bones/18/rotation = Quaternion(-0.26856, -0.0951235, -0.0137269, 0.958456)
+bones/17/rotation = Quaternion(0.0963141, 0.367135, 0.920985, -0.0878746)
+bones/18/rotation = Quaternion(-0.299464, -0.094629, -0.0168008, 0.949255)
 
 [node name="ear_a" parent="player_mesh/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00311178, 0.985556, -0.169321, 0.0330628, 0.169331, 0.985005, 0.000675778, 1.68663, 0.229592)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00306493, 0.985795, -0.167925, 0.0330672, 0.167934, 0.985244, 0.000675778, 1.6744, 0.228489)
 bone_idx = 7
 
 [node name="hair_a" parent="player_mesh/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00311178, 0.985556, -0.169321, 0.0330628, 0.169331, 0.985005, 0.00858762, 2.11758, 0.0309856)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00306493, 0.985795, -0.167925, 0.0330672, 0.167934, 0.985244, 0.00858762, 2.10506, 0.0292725)
 bone_idx = 8
 
 [node name="cape" parent="player_mesh/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332026, 0.991439, -0.12628, 2.58237e-05, 0.126349, 0.991986, -0.0395435, 1.21881, -0.288293)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332026, 0.991617, -0.124875, -2.12304e-05, 0.124944, 0.992164, -0.0395435, 1.20584, -0.288732)
 bone_idx = 9
 
 [node name="staff_a" parent="player_mesh/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.398941, -0.296107, 0.867852, 0.855053, 0.46202, -0.235419, -0.331255, 0.835978, 0.437506, 1.38943, 0.0268136, 0.208325)
+transform = Transform3D(0.424846, -0.286259, 0.858814, 0.843906, 0.468562, -0.261291, -0.327611, 0.835766, 0.440642, 1.36698, -0.00563114, 0.20956)
 bone_idx = 16
 
 [node name="standin_floor" parent="player_mesh" index="1"]

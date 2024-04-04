@@ -60,6 +60,7 @@ var unlocked_skills
 var current_skill
 var enemies_close : Array = []
 var enemies_far : Array = []
+var enemies_struck : Array = []
 
 
 ## Action Variables
@@ -71,6 +72,8 @@ var dodge_direction : Vector3
 const DODGE_SPEED = 14.0
 @export var attack_chain : int = 0
 @export var attack_interrupt : bool = false
+var attack_active : bool = false
+var attack_active_ebrake : int = 0
 var aiming : bool = false
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
@@ -349,10 +352,35 @@ func action_effects(delta):
 	if dodge_active > 0:
 		print("Dodge Active : ", dodge_active)
 		velocity = dodge_direction * DODGE_SPEED
+	
+	## If attack frames are active, filter through the targets gathered \
+	## by the detection hitbox. Then apply the hit for this attack, and \
+	## add them to the list of struck enemies to prevent double-proc.
+	if attack_active and attack_active_ebrake > 0:
+		var proximity = []
+		proximity.append_array(enemies_close)
+		if attack_chain >= 3:
+			proximity.append_array(enemies_far)
+		for target in proximity:
+			if !enemies_struck.has(target):
+				print("Strike Enemy: ", target)
+				if target.has_method("player_hit"):
+					target.player_hit()
+				enemies_struck.append(target)
+		attack_active_ebrake -= 1
+		if attack_active_ebrake <= 0:
+			attack_frames_active(false)
 
 
+## Toggled by Animation Function calls.
+## NOTE : Please make sure to set to false upon animation interrupts.
 func attack_frames_active(active : bool):
-	pass
+	print("AttackFramesActive = ", active)
+	attack_active = active
+	if active:
+		attack_active_ebrake = 30 * attack_chain
+	else:
+		enemies_struck.clear()
 
 
 func attack_finished():
