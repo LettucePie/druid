@@ -58,6 +58,8 @@ var nearest_interactable : Interactable = null
 var nearby_interactables : Array = []
 var unlocked_skills
 var current_skill
+var enemies_close : Array = []
+var enemies_far : Array = []
 
 
 ## Action Variables
@@ -519,6 +521,32 @@ func out_of_range_interactable(interactable : Interactable):
 		emit_signal("report_interactive_popup", "")
 
 
+## IF nightmare... there are more elegant solutions to this
+func _on_hitbox_detection(body : Node3D, far : bool, register : bool):
+	print("HitBox Detection | far = ", far, " | register = ", register)
+	var registered = enemies_close.has(body)
+	if far:
+		registered = enemies_far.has(body)
+	if register and !registered:
+		if far:
+			enemies_far.append(body)
+		else:
+			enemies_close.append(body)
+		if body.has_method("set_color"):
+			if far:
+				body.set_color(Color.PINK)
+			else:
+				body.set_color(Color.DEEP_PINK)
+	elif !register and registered:
+		if far:
+			enemies_far.erase(body)
+		else:
+			enemies_close.erase(body)
+		if body.has_method("set_color"):
+			body.set_color(Color.WHITE)
+
+
 func _input(event):
 	pass
 #	print("Player Received Event: ", event)
+

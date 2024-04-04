@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=45 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 [ext_resource type="Script" path="res://core/player_animtree.gd" id="2_4cmwe"]
@@ -37,7 +37,7 @@ filter_enabled = true
 filters = ["human_armature/Skeleton3D:Center", "human_armature/Skeleton3D:leg.l", "human_armature/Skeleton3D:leg.r", "human_armature/Skeleton3D:thigh.l", "human_armature/Skeleton3D:thigh.r"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yjsvj"]
-graph_offset = Vector2(-524, 30)
+graph_offset = Vector2(-603.727, 20.8016)
 nodes/actions/node = ExtResource("4_s82sa")
 nodes/actions/position = Vector2(-300, 80)
 nodes/blend_movement/node = SubResource("AnimationNodeBlend2_v3m60")
@@ -57,6 +57,12 @@ material = SubResource("StandardMaterial3D_g87jm")
 top_radius = 0.25
 bottom_radius = 0.25
 height = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhvsd"]
+size = Vector3(1, 1, 0.748966)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_apw7h"]
+size = Vector3(1.54409, 1, 1.19948)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jxakw"]
 _data = {
@@ -151,43 +157,61 @@ target_position = Vector3(0, -1.25, 0)
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 mesh = SubResource("CylinderMesh_axjon")
 
+[node name="hitbox_small" type="Area3D" parent="swivel_ring"]
+collision_layer = 16
+collision_mask = 12
+input_ray_pickable = false
+
+[node name="boxshape1" type="CollisionShape3D" parent="swivel_ring/hitbox_small"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.130005, -0.406396)
+shape = SubResource("BoxShape3D_hhvsd")
+
+[node name="hitbox_big" type="Area3D" parent="swivel_ring"]
+collision_layer = 16
+collision_mask = 12
+input_ray_pickable = false
+
+[node name="boxshape2" type="CollisionShape3D" parent="swivel_ring/hitbox_big"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.219787, -0.957368)
+shape = SubResource("BoxShape3D_apw7h")
+
 [node name="player_mesh" parent="." instance=ExtResource("2_dbf1p")]
 
 [node name="human_armature" parent="player_mesh" index="0"]
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="player_mesh/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.148274, -0.10598)
+bones/0/position = Vector3(0, -0.149404, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.0129425, 0.00784376, 0.797551, 0.603061)
+bones/1/rotation = Quaternion(-0.0133226, 0.00619483, 0.797604, 0.603002)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(0.0073479, -0.0138907, 0.00336487, 0.999871)
+bones/5/rotation = Quaternion(0.00865624, -0.0138915, 0.0033399, 0.99986)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.215502, 0.248287, 0.942023, 0.0671166)
-bones/11/rotation = Quaternion(-0.405151, 0.00110794, -0.00280508, 0.914245)
+bones/10/rotation = Quaternion(-0.215437, 0.249192, 0.941785, 0.0673237)
+bones/11/rotation = Quaternion(-0.407491, 0.00111512, -0.00280223, 0.913204)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0836138, -0.0215799, -0.265174, 0.960326)
+bones/13/rotation = Quaternion(-0.0834562, -0.0212485, -0.266178, 0.960069)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0983641, 0.345266, 0.929405, -0.0855737)
-bones/18/rotation = Quaternion(-0.265898, -0.0951612, -0.0134627, 0.959198)
+bones/17/rotation = Quaternion(0.0982054, 0.346986, 0.928764, -0.0857557)
+bones/18/rotation = Quaternion(-0.26856, -0.0951235, -0.0137269, 0.958456)
 
 [node name="ear_a" parent="player_mesh/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00302524, 0.985996, -0.166743, 0.0330708, 0.166751, 0.985444, 0.000675779, 1.68813, 0.227555)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00311178, 0.985556, -0.169321, 0.0330628, 0.169331, 0.985005, 0.000675778, 1.68663, 0.229592)
 bone_idx = 7
 
 [node name="hair_a" parent="player_mesh/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00302524, 0.985996, -0.166743, 0.0330708, 0.166751, 0.985444, 0.00858762, 2.11855, 0.0278215)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00311178, 0.985556, -0.169321, 0.0330628, 0.169331, 0.985005, 0.00858762, 2.11758, 0.0309856)
 bone_idx = 8
 
 [node name="cape" parent="player_mesh/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332026, 0.991766, -0.123684, -6.10761e-05, 0.123754, 0.992313, -0.0395435, 1.21895, -0.289103)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332026, 0.991439, -0.12628, 2.58237e-05, 0.126349, 0.991986, -0.0395435, 1.21881, -0.288293)
 bone_idx = 9
 
 [node name="staff_a" parent="player_mesh/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.39698, -0.29684, 0.8685, 0.855861, 0.461516, -0.233464, -0.331526, 0.835996, 0.437266, 1.3911, 0.0294743, 0.208226)
+transform = Transform3D(0.398941, -0.296107, 0.867852, 0.855053, 0.46202, -0.235419, -0.331255, 0.835978, 0.437506, 1.38943, 0.0268136, 0.208325)
 bone_idx = 16
 
 [node name="standin_floor" parent="player_mesh" index="1"]
@@ -253,6 +277,10 @@ mesh = SubResource("PrismMesh_ma6o0")
 
 [connection signal="animation_finished" from="player_animtree" to="player_animtree" method="_on_animation_finished"]
 [connection signal="animation_started" from="player_animtree" to="player_animtree" method="_on_animation_started"]
+[connection signal="body_entered" from="swivel_ring/hitbox_small" to="." method="_on_hitbox_detection" binds= [false, true]]
+[connection signal="body_exited" from="swivel_ring/hitbox_small" to="." method="_on_hitbox_detection" binds= [false, false]]
+[connection signal="body_entered" from="swivel_ring/hitbox_big" to="." method="_on_hitbox_detection" binds= [true, true]]
+[connection signal="body_exited" from="swivel_ring/hitbox_big" to="." method="_on_hitbox_detection" binds= [true, false]]
 [connection signal="animation_finished" from="player_mesh/AnimationPlayer" to="player_animtree" method="_on_animation_player_animation_finished"]
 
 [editable path="player_mesh"]

@@ -118,6 +118,14 @@ special={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="col"
+3d_physics/layer_2="player"
+3d_physics/layer_3="enemy"
+3d_physics/layer_4="object"
+3d_physics/layer_5="detect"
+
 [rendering]
 
 renderer/rendering_method="mobile"

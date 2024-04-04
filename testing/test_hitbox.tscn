@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://c756d37bdl8yk"]
+
+[ext_resource type="Script" path="res://testing/test_hitbox.gd" id="1_g7x7w"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_02f4l"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3ycry"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0ob4o"]
+
+[node name="StaticBody3D" type="StaticBody3D"]
+collision_layer = 9
+collision_mask = 23
+script = ExtResource("1_g7x7w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_02f4l")
+
+[node name="mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_3ycry")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_0ob4o")

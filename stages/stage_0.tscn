@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://ddgwvml0m7dbo"]
+[gd_scene load_steps=12 format=3 uid="uid://ddgwvml0m7dbo"]
 
 [ext_resource type="Script" path="res://stages/stage.gd" id="1_8cdmm"]
 [ext_resource type="Texture2D" uid="uid://d4h6a07wyekdn" path="res://art/textures/forest_floor_a.png" id="2_mqfbb"]
 [ext_resource type="PackedScene" uid="uid://kakcm6rnbmqo" path="res://core/stage_pieces/winding_shape_a.tscn" id="3_g1715"]
 [ext_resource type="Script" path="res://core/stage_pieces/reactives/reactive_bridge.gd" id="4_65f8l"]
 [ext_resource type="PackedScene" uid="uid://b3lt3gtogh1ip" path="res://core/interactables/interactable_lever.tscn" id="5_2v1j8"]
+[ext_resource type="PackedScene" uid="uid://c756d37bdl8yk" path="res://testing/test_hitbox.tscn" id="6_5u8bn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_321b2"]
 size = Vector3(10, 0.5, 10)
@@ -101,6 +102,9 @@ shape = SubResource("ConcavePolygonShape3D_6m0vp")
 
 [node name="interactable_lever" parent="." instance=ExtResource("5_2v1j8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.82005, 0.140102, 2.00258)
+
+[node name="test_hitbox" parent="." instance=ExtResource("6_5u8bn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84619, 0.613841, 0)
 
 [connection signal="activate" from="interactable_lever" to="reactive_bridge" method="_on_activate"]
 [connection signal="deactivate" from="interactable_lever" to="reactive_bridge" method="_on_deactivate"]
