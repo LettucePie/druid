@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dr76jd4ct3d1f"]
+
+[ext_resource type="Texture2D" uid="uid://cgqgol0wuwfsa" path="res://art/textures/colorsheet.png" id="1_klhq1"]
+
+[resource]
+resource_name = "colorsheet_mat"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_klhq1")
+metallic = 1.0
