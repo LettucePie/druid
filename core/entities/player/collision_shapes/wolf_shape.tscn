@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://d22yujbpyofme"]
+
+[ext_resource type="Shape3D" uid="uid://dd5ocblvp8own" path="res://core/entities/player/collision_shapes/wolf_collisionshape.tres" id="1_x8257"]
+
+[node name="wolf_shape" type="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0236726, 0)
+shape = ExtResource("1_x8257")
+disabled = true

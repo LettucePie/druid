@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://deo4i0mfxnb4f"]
+
+[ext_resource type="Shape3D" uid="uid://cilp54h1w2neh" path="res://core/entities/player/collision_shapes/human_collisionshape.tres" id="1_6u3bb"]
+
+[node name="human_shape" type="CollisionShape3D"]
+shape = ExtResource("1_6u3bb")

@@ -14,12 +14,22 @@ signal request_cam_movement(direction)
 @export var test_mat_b : Material
 
 
+#### Form Assets
+## Collision Bodies
+@onready var human_shape : CollisionShape3D = $human_shape
+@onready var wolf_shape : CollisionShape3D = $wolf_shape
 ## Mesh / Animation Variables
-@onready var human_mesh : MeshInstance3D = $player_mesh/human_armature/Skeleton3D/human_mesh
-@onready var anim_tree : AnimationTree = $player_animtree
-#@onready var anim_root : AnimationNodeStateMachine = anim_tree.tree_root
-#@onready var anim_node_movement : AnimationNode = anim_root.get_node("movement")
-@onready var human_anim : AnimationPlayer = $player_mesh/AnimationPlayer
+# Human
+@onready var human_node : Node3D = $human_mesh 
+@onready var human_mesh : MeshInstance3D = $human_mesh/human_armature/Skeleton3D/human_mesh
+@onready var human_animtree : AnimationTree = $human_animtree
+@onready var human_anim : AnimationPlayer = $human_mesh/AnimationPlayer
+# Wolf
+@onready var wolf_node : Node3D = $wolf_mesh
+@onready var wolf_mesh : MeshInstance3D = $wolf_mesh/Armature/Skeleton3D/wolfmesh
+@onready var wolf_animtree : AnimationTree = $wolf_animtree
+@onready var wolf_anim : AnimationPlayer = $wolf_mesh/AnimationPlayer
+
 
 
 ## Camera Variables
@@ -54,6 +64,10 @@ var jump_velocity_mag : float = 0.0
 enum Form {HUMAN, SPIDER, RAT, WOLF}
 var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
+var current_anim : AnimationTree = human_animtree
+## TODO replace animtree calls with current_anim calls
+var current_mesh : MeshInstance3D = human_mesh
+## TODO replace human_mesh calls with current_mesh calls
 var nearest_interactable : Interactable = null
 var nearby_interactables : Array = []
 var unlocked_skills

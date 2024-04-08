@@ -1,4 +1,5 @@
 extends AnimationTree
+class_name AnimTreeTool
 
 @onready var anim : AnimationPlayer = get_node(anim_player)
 
@@ -11,6 +12,13 @@ var player_action : String = ""
 var performing : bool = false
 
 var override_anim : String = ""
+
+
+func _ready():
+	if !self.animation_started.is_connected(_on_animation_started):
+		self.animation_started.connect(_on_animation_started)
+	if !self.animation_finished.is_connected(_on_animation_finished):
+		self.animation_finished.connect(_on_animation_finished)
 
 
 ## Sets the movement value for the BlendSpace1D that flucuates between \

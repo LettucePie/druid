@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=48 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 [ext_resource type="Script" path="res://core/player_animtree.gd" id="2_4cmwe"]
@@ -6,7 +6,9 @@
 [ext_resource type="AnimationNodeBlendSpace1D" uid="uid://dc8k2o85s4da1" path="res://art/model/animations/animtree_nodes/human_movement_blend1d.tres" id="3_csu45"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://dnomb2r2caopu" path="res://art/model/animations/animtree_nodes/human_stationary_statemachine.tres" id="4_s82sa"]
 [ext_resource type="Animation" uid="uid://ce1hi8beucour" path="res://art/model/animations/human_0.1/aim_fire_small.res" id="5_2640a"]
+[ext_resource type="PackedScene" uid="uid://deo4i0mfxnb4f" path="res://core/entities/player/collision_shapes/human_shape.tscn" id="5_fobq8"]
 [ext_resource type="Animation" uid="uid://bx60lmiqnqgvb" path="res://art/model/animations/human_0.1/aim_idle.res" id="6_ngmar"]
+[ext_resource type="PackedScene" uid="uid://d22yujbpyofme" path="res://core/entities/player/collision_shapes/wolf_shape.tscn" id="6_o2077"]
 [ext_resource type="Animation" uid="uid://cb1s5vdrhgxku" path="res://art/model/animations/human_0.1/aim_pose.res" id="7_j853k"]
 [ext_resource type="Animation" uid="uid://ctwqpqoljb62q" path="res://art/model/animations/human_0.1/fall.res" id="8_mfjih"]
 [ext_resource type="Animation" uid="uid://bg8c286vb3hiv" path="res://art/model/animations/human_0.1/idle.res" id="9_nvm6h"]
@@ -21,6 +23,7 @@
 [ext_resource type="Animation" uid="uid://cnbwob2qbgxuf" path="res://art/model/animations/human_0.1/attack_2.res" id="18_xlxjb"]
 [ext_resource type="Animation" uid="uid://ca1iu4ma8pg84" path="res://art/model/animations/human_0.1/attack_3.res" id="19_17x3y"]
 [ext_resource type="AnimationLibrary" uid="uid://dktquc8enrunx" path="res://art/model/animations/human_0.1/anim_libs/attacks_coded.res" id="20_38tol"]
+[ext_resource type="PackedScene" uid="uid://dpokf241s066u" path="res://art/model/wolf_model_0.1.glb" id="23_4u3jf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqemf"]
 albedo_color = Color(1, 0, 1, 1)
@@ -37,7 +40,7 @@ filter_enabled = true
 filters = ["human_armature/Skeleton3D:Center", "human_armature/Skeleton3D:leg.l", "human_armature/Skeleton3D:leg.r", "human_armature/Skeleton3D:thigh.l", "human_armature/Skeleton3D:thigh.r"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yjsvj"]
-graph_offset = Vector2(-619.197, 66.3683)
+graph_offset = Vector2(-298.843, 29.2975)
 nodes/actions/node = ExtResource("4_s82sa")
 nodes/actions/position = Vector2(-300, 80)
 nodes/blend_movement/node = SubResource("AnimationNodeBlend2_v3m60")
@@ -47,7 +50,7 @@ nodes/movement/position = Vector2(-300, 300)
 nodes/output/position = Vector2(400, 160)
 node_connections = [&"output", 0, &"blend_movement", &"blend_movement", 0, &"actions", &"blend_movement", 1, &"movement"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_tq1pq"]
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_s5xfw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g87jm"]
 albedo_color = Color(1, 0.184314, 1, 1)
@@ -134,18 +137,26 @@ script = ExtResource("1_dpv4o")
 test_mat_a = SubResource("StandardMaterial3D_vqemf")
 test_mat_b = SubResource("StandardMaterial3D_byb3j")
 cam_distance_curve = SubResource("Curve_hyoh0")
+attack_chain = null
+attack_interrupt = null
 
-[node name="player_animtree" type="AnimationTree" parent="."]
+[node name="human_animtree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_yjsvj")
-anim_player = NodePath("../player_mesh/AnimationPlayer")
+anim_player = NodePath("../human_mesh/AnimationPlayer")
 advance_expression_base_node = NodePath("..")
 active = true
 parameters/blend_movement/blend_amount = 0
 parameters/movement/blend_position = 0
 script = ExtResource("2_4cmwe")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_tq1pq")
+[node name="wolf_animtree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeBlendTree_s5xfw")
+anim_player = NodePath("../wolf_mesh/AnimationPlayer")
+advance_expression_base_node = NodePath("..")
+
+[node name="human_shape" parent="." instance=ExtResource("5_fobq8")]
+
+[node name="wolf_shape" parent="." instance=ExtResource("6_o2077")]
 
 [node name="swivel_ring" type="Node3D" parent="."]
 
@@ -175,71 +186,74 @@ input_ray_pickable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.219787, -0.957368)
 shape = SubResource("BoxShape3D_apw7h")
 
-[node name="player_mesh" parent="." instance=ExtResource("2_dbf1p")]
+[node name="human_mesh" parent="." instance=ExtResource("2_dbf1p")]
 
-[node name="human_armature" parent="player_mesh" index="0"]
+[node name="human_armature" parent="human_mesh" index="0"]
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
-[node name="Skeleton3D" parent="player_mesh/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.161704, -0.10598)
+[node name="Skeleton3D" parent="human_mesh/human_armature" index="0"]
+bones/0/position = Vector3(0, -0.143106, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.0161765, -0.00619024, 0.797931, 0.6025)
+bones/1/rotation = Quaternion(-0.00923716, 0.0239067, 0.796913, 0.60355)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(0.00851499, -0.0138914, 0.0033426, 0.999862)
+bones/5/rotation = Quaternion(-0.0216573, -0.0138685, 0.00391702, 0.999662)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.214682, 0.259558, 0.93898, 0.0696943)
-bones/11/rotation = Quaternion(-0.434137, 0.00119696, -0.00276826, 0.900842)
+bones/10/rotation = Quaternion(-0.215796, 0.244121, 0.943111, 0.0661636)
+bones/11/rotation = Quaternion(-0.394355, 0.00107483, -0.00281796, 0.918953)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.081433, -0.0170082, -0.278985, 0.956685)
+bones/13/rotation = Quaternion(-0.083705, -0.0217718, -0.264593, 0.960474)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0963651, 0.366601, 0.921198, -0.0878186)
-bones/18/rotation = Quaternion(-0.298644, -0.0946435, -0.016719, 0.949513)
+bones/17/rotation = Quaternion(0.0990861, 0.337372, 0.932299, -0.0847365)
+bones/18/rotation = Quaternion(-0.253747, -0.0953239, -0.0122582, 0.962484)
 
-[node name="ear_a" parent="player_mesh/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00310244, 0.985604, -0.169043, 0.0330637, 0.169052, 0.985052, 0.000675778, 1.67437, 0.229372)
+[node name="ear_a" parent="human_mesh/human_armature/Skeleton3D" index="0"]
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00110231, 0.994007, -0.109314, 0.0331906, 0.10929, 0.993456, 0.000675779, 1.69997, 0.182181)
 bone_idx = 7
 
-[node name="hair_a" parent="player_mesh/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00310244, 0.985604, -0.169043, 0.0330637, 0.169052, 0.985052, 0.00858761, 2.10526, 0.030644)
+[node name="hair_a" parent="human_mesh/human_armature/Skeleton3D" index="1"]
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00110231, 0.994007, -0.109314, 0.0331906, 0.10929, 0.993456, 0.00858761, 2.11808, -0.0421778)
 bone_idx = 8
 
-[node name="cape" parent="player_mesh/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332026, 0.991475, -0.126, 1.64397e-05, 0.126069, 0.992022, -0.0395435, 1.2064, -0.28838)
+[node name="cape" parent="human_mesh/human_armature/Skeleton3D" index="2"]
+transform = Transform3D(0.999449, -0.0329398, 0.00416954, 0.0331432, 0.997274, -0.0659295, -0.00198647, 0.0660314, 0.997816, -0.0395435, 1.20161, -0.3064)
 bone_idx = 9
 
-[node name="staff_a" parent="player_mesh/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.423856, -0.286641, 0.859176, 0.844348, 0.468316, -0.2603, -0.327753, 0.835774, 0.440523, 1.36785, -0.00473873, 0.209516)
+[node name="staff_a" parent="human_mesh/human_armature/Skeleton3D" index="3"]
+transform = Transform3D(0.395844, -0.297264, 0.868874, 0.856326, 0.461224, -0.232331, -0.331682, 0.836006, 0.437127, 1.39206, 0.0355297, 0.208169)
 bone_idx = 16
 
-[node name="standin_floor" parent="player_mesh" index="1"]
+[node name="standin_floor" parent="human_mesh" index="1"]
 visible = false
 
-[node name="AnimationPlayer" parent="player_mesh" index="2"]
+[node name="AnimationPlayer" parent="human_mesh" index="2"]
 reset_on_save = false
 libraries = {
 "": SubResource("AnimationLibrary_jxakw"),
 "coded": ExtResource("20_38tol")
 }
 
-[node name="normal_gizmo" type="Node3D" parent="player_mesh"]
+[node name="normal_gizmo" type="Node3D" parent="human_mesh"]
 
-[node name="z" type="MeshInstance3D" parent="player_mesh/normal_gizmo"]
+[node name="z" type="MeshInstance3D" parent="human_mesh/normal_gizmo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.707599)
 mesh = SubResource("BoxMesh_55uq3")
 skeleton = NodePath("../../..")
 
-[node name="y" type="MeshInstance3D" parent="player_mesh/normal_gizmo"]
+[node name="y" type="MeshInstance3D" parent="human_mesh/normal_gizmo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69777, 0.000264585)
 mesh = SubResource("BoxMesh_chb3p")
 skeleton = NodePath("../../..")
 
-[node name="x" type="MeshInstance3D" parent="player_mesh/normal_gizmo"]
+[node name="x" type="MeshInstance3D" parent="human_mesh/normal_gizmo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.708, 0, 0)
 mesh = SubResource("BoxMesh_aftjj")
 skeleton = NodePath("../../..")
+
+[node name="wolf_mesh" parent="." instance=ExtResource("23_4u3jf")]
+transform = Transform3D(-0.115452, 0, -1.00931e-08, 0, 0.115452, 0, 1.00931e-08, 0, -0.115452, 0, 0.075846, 0)
 
 [node name="cam_dial" type="Node3D" parent="."]
 
@@ -275,12 +289,13 @@ material_override = SubResource("StandardMaterial3D_ao13a")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_ma6o0")
 
-[connection signal="animation_finished" from="player_animtree" to="player_animtree" method="_on_animation_finished"]
-[connection signal="animation_started" from="player_animtree" to="player_animtree" method="_on_animation_started"]
+[connection signal="animation_finished" from="human_animtree" to="human_animtree" method="_on_animation_finished"]
+[connection signal="animation_started" from="human_animtree" to="human_animtree" method="_on_animation_started"]
 [connection signal="body_entered" from="swivel_ring/hitbox_small" to="." method="_on_hitbox_detection" binds= [false, true]]
 [connection signal="body_exited" from="swivel_ring/hitbox_small" to="." method="_on_hitbox_detection" binds= [false, false]]
 [connection signal="body_entered" from="swivel_ring/hitbox_big" to="." method="_on_hitbox_detection" binds= [true, true]]
 [connection signal="body_exited" from="swivel_ring/hitbox_big" to="." method="_on_hitbox_detection" binds= [true, false]]
-[connection signal="animation_finished" from="player_mesh/AnimationPlayer" to="player_animtree" method="_on_animation_player_animation_finished"]
+[connection signal="animation_finished" from="human_mesh/AnimationPlayer" to="human_animtree" method="_on_animation_player_animation_finished"]
 
-[editable path="player_mesh"]
+[editable path="human_mesh"]
+[editable path="wolf_mesh"]
