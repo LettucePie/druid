@@ -21,14 +21,14 @@ signal request_cam_movement(direction)
 ## Mesh / Animation Variables
 # Human
 @onready var human_node : Node3D = $human_node 
-@onready var human_mesh : MeshInstance3D = $human_node/human_armature/Skeleton3D/human_mesh
+@onready var human_mesh : MeshInstance3D = $human_node/human_model/human_armature/Skeleton3D/human_mesh
 @onready var human_animtree : AnimationTree = $human_animtree
-@onready var human_anim : AnimationPlayer = $human_node/AnimationPlayer
+@onready var human_anim : AnimationPlayer = $human_node/human_model/AnimationPlayer
 # Wolf
 @onready var wolf_node : Node3D = $wolf_node
-@onready var wolf_mesh : MeshInstance3D = $wolf_node/Armature/Skeleton3D/wolfmesh
+@onready var wolf_mesh : MeshInstance3D = $wolf_node/wolf_model/Armature/Skeleton3D/wolfmesh
 @onready var wolf_animtree : AnimationTree = $wolf_animtree
-@onready var wolf_anim : AnimationPlayer = $wolf_node/AnimationPlayer
+@onready var wolf_anim : AnimationPlayer = $wolf_node/wolf_model/AnimationPlayer
 
 ## Iterative Lists
 @onready var animtrees : Array = [
@@ -79,9 +79,7 @@ enum Form {HUMAN, SPIDER, RAT, WOLF}
 var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
 var current_anim : AnimationTree = human_animtree
-## TODO replace animtree calls with current_anim calls
 var current_mesh : MeshInstance3D = human_mesh
-## TODO replace human_mesh calls with current_mesh calls
 var current_node : Node3D = human_node
 var nearest_interactable : Interactable = null
 var nearby_interactables : Array = []
@@ -134,6 +132,7 @@ func set_form_to(form : Form):
 
 func set_form_variables(form : Form):
 	if form == Form.HUMAN:
+		current_node = human_node
 		current_anim = human_animtree
 		current_mesh = human_mesh
 		motion_mode = 0
@@ -145,6 +144,7 @@ func set_form_variables(form : Form):
 		form_mag_angle = 0.8
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
+		current_node = human_node
 		current_anim = human_animtree
 		current_mesh = human_mesh
 		motion_mode = 0
@@ -157,6 +157,7 @@ func set_form_variables(form : Form):
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
+		current_node = wolf_node
 		current_anim = wolf_animtree
 		current_mesh = wolf_mesh
 		motion_mode = 0
@@ -356,9 +357,9 @@ func movement_process(delta : float):
 			if blended_normal.angle_to(get_up_direction()) > 0.1 \
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
 				update_up(blended_normal)
-				human_mesh.material_override = test_mat_a
+				current_mesh.material_override = test_mat_a
 			else:
-				human_mesh.material_override = test_mat_b
+				current_mesh.material_override = test_mat_b
 	
 	## Finally, apply the velocity
 	accelerated_dir = direction * form_speed
