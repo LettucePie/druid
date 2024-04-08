@@ -20,15 +20,29 @@ signal request_cam_movement(direction)
 @onready var wolf_shape : CollisionShape3D = $wolf_shape
 ## Mesh / Animation Variables
 # Human
-@onready var human_node : Node3D = $human_mesh 
-@onready var human_mesh : MeshInstance3D = $human_mesh/human_armature/Skeleton3D/human_mesh
+@onready var human_node : Node3D = $human_node 
+@onready var human_mesh : MeshInstance3D = $human_node/human_armature/Skeleton3D/human_mesh
 @onready var human_animtree : AnimationTree = $human_animtree
-@onready var human_anim : AnimationPlayer = $human_mesh/AnimationPlayer
+@onready var human_anim : AnimationPlayer = $human_node/AnimationPlayer
 # Wolf
-@onready var wolf_node : Node3D = $wolf_mesh
-@onready var wolf_mesh : MeshInstance3D = $wolf_mesh/Armature/Skeleton3D/wolfmesh
+@onready var wolf_node : Node3D = $wolf_node
+@onready var wolf_mesh : MeshInstance3D = $wolf_node/Armature/Skeleton3D/wolfmesh
 @onready var wolf_animtree : AnimationTree = $wolf_animtree
-@onready var wolf_anim : AnimationPlayer = $wolf_mesh/AnimationPlayer
+@onready var wolf_anim : AnimationPlayer = $wolf_node/AnimationPlayer
+
+## Iterative Lists
+@onready var animtrees : Array = [
+	$human_animtree,
+	$wolf_animtree
+	]
+@onready var colshapes : Array = [
+	$human_shape,
+	$wolf_shape
+	]
+@onready var nodemeshes : Array = [
+	$human_node,
+	$wolf_node
+	]
 
 
 
@@ -68,6 +82,7 @@ var current_anim : AnimationTree = human_animtree
 ## TODO replace animtree calls with current_anim calls
 var current_mesh : MeshInstance3D = human_mesh
 ## TODO replace human_mesh calls with current_mesh calls
+var current_node : Node3D = human_node
 var nearest_interactable : Interactable = null
 var nearby_interactables : Array = []
 var unlocked_skills
@@ -97,6 +112,9 @@ var aiming : bool = false
 
 
 func _ready():
+	current_anim = human_animtree
+	current_node = human_node
+	current_mesh = human_mesh
 	current_cam = get_viewport().get_camera_3d()
 	motion_mode = 0
 #	human_anim.play("walk")
@@ -110,11 +128,14 @@ func set_form_to(form : Form):
 	if available_forms.has(form):
 		current_form = form
 	set_form_variables(form)
+	set_form_components(form)
 	emit_signal("report_current_form", form_as_string(form))
 
 
 func set_form_variables(form : Form):
 	if form == Form.HUMAN:
+		current_anim = human_animtree
+		current_mesh = human_mesh
 		motion_mode = 0
 		climb_angle = 0.45
 		floor_max_angle = climb_angle
@@ -124,6 +145,8 @@ func set_form_variables(form : Form):
 		form_mag_angle = 0.8
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
+		current_anim = human_animtree
+		current_mesh = human_mesh
 		motion_mode = 0
 		climb_angle = PI + (PI / 2)
 		floor_max_angle = climb_angle
@@ -134,6 +157,8 @@ func set_form_variables(form : Form):
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
+		current_anim = wolf_animtree
+		current_mesh = wolf_mesh
 		motion_mode = 0
 		climb_angle = 0.5
 		floor_max_angle = climb_angle
@@ -142,6 +167,31 @@ func set_form_variables(form : Form):
 		form_air_control = 1.0
 		form_mag_angle = 0.4
 		update_up(Vector3.UP)
+
+
+func set_form_components(form : Form):
+	for at in animtrees:
+		at.active = false
+	for cs in colshapes:
+		cs.disabled = true
+	for nm in nodemeshes:
+		nm.visible = false
+	if form == Form.HUMAN:
+		human_animtree.active = true
+		human_shape.disabled = false
+		human_node.visible = true
+	if form == Form.SPIDER:
+		human_animtree.active = true
+		human_shape.disabled = false
+		human_node.visible = true
+	if form == Form.RAT:
+		human_animtree.active = true
+		human_shape.disabled = false
+		human_node.visible = true
+	if form == Form.WOLF:
+		wolf_animtree.active = true
+		wolf_shape.disabled = false
+		wolf_node.visible = true
 
 
 func form_as_string(form : Form) -> String:
@@ -210,9 +260,9 @@ func turn_swivel_ring(target : Vector3):
 
 
 func lerp_mesh(delta : float):
-	var mesh_t3 : Transform3D = $player_mesh.transform
+	var node_t3 : Transform3D = current_node.transform
 	var swiv_t3 : Transform3D = $swivel_ring.transform
-	$player_mesh.transform = mesh_t3.interpolate_with(swiv_t3, 0.25)
+	current_node.transform = node_t3.interpolate_with(swiv_t3, 0.25)
 
 
 func apply_jump_velocity(delta : float):
@@ -268,7 +318,7 @@ func movement_process(delta : float):
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
 	## Forward movement input length to anim_player
-	anim_tree.set_player_move(move_input_vec.length())
+	current_anim.set_player_move(move_input_vec.length())
 	
 	
 	## Orientate the input vector to the camera angle.
