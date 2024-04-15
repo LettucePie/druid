@@ -118,6 +118,7 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 	- Model
 		? Jaguar Variant
 		- Animations
+			@ Idle
 			- Movement
 			- Jump
 			- Sprint
