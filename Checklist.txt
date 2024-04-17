@@ -120,6 +120,9 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 		- Animations
 			@ Idle
 			- Movement
+				@ Walk
+				? Trot
+				- Run
 			- Jump
 			- Sprint
 			- Bite
