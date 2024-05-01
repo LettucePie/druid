@@ -122,12 +122,15 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 			- Movement
 				@ Walk
 				? Trot
-				- Run
-			- Jump
+				@ Run
+			@ Jump
+				@ Fall
+				@ Land
 			- Sprint
 			- Bite
 				- 3 Piece Combo
 			? Slash
+			- Dodge
 		- Connect Animations
 	- Attacking
 		- Combo
