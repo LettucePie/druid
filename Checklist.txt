@@ -131,6 +131,9 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 				- 3 Piece Combo
 			? Slash
 			- Dodge
+				@ Front Direction
+				@ Back Direction
+				- Side Direction
 		- Connect Animations
 	- Attacking
 		- Combo
