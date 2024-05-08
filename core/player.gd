@@ -319,7 +319,7 @@ func movement_process(delta : float):
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
 	## Forward movement input length to anim_player
-	current_anim.set_player_move(move_input_vec.length())
+	current_anim.set("parameters/movement/blend_position", move_input_vec.length())
 	
 	
 	## Orientate the input vector to the camera angle.
@@ -643,4 +643,5 @@ func _on_hitbox_detection(body : Node3D, far : bool, register : bool):
 func _input(event):
 	pass
 #	print("Player Received Event: ", event)
+
 
