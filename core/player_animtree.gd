@@ -5,12 +5,13 @@ class_name AnimTreeTool
 
 @export var actions : PackedStringArray = []
 @export var movements : PackedStringArray = []
+@export var blends_stature : bool = true ## Flag for set_mobile
+@export var movement_target : String = "parameters/movement/blend_position"
 
 var player_move : float = 0.0
 var mobile : bool = false
 var player_action : String = ""
 var performing : bool = false
-
 var override_anim : String = ""
 
 
@@ -25,12 +26,13 @@ func _ready():
 ## idling, walking, and running
 func set_player_move(movement : float):
 	player_move = movement
-	if movement > 0.1:
-		set_mobile(true)
-	else:
-		set_mobile(false)
+	if blends_stature:
+		if movement > 0.1:
+			set_mobile(true)
+		else:
+			set_mobile(false)
 	## Assign Movement input Length to movement_speed_blend
-	set("parameters/movement/blend_position", movement)
+	set(movement_target, movement)
 
 
 ## Enables or Disables the blending of Movement animations into current action
@@ -69,7 +71,8 @@ func _on_animation_finished(anim_name):
 ## unfiltered movement animation.
 func set_performing(value : bool):
 	performing = value
-	tree_root.get_node("blend_movement").filter_enabled = value
+	if blends_stature:
+		tree_root.get_node("blend_movement").filter_enabled = value
 
 
 ####

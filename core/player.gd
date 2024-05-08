@@ -70,7 +70,7 @@ var current_cam : Camera3D
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var climb_angle : float = 0.3
-var jump_velocity : Vector3 = Vector3.ZERO
+@export var jump_velocity : Vector3 = Vector3.ZERO
 var jump_velocity_mag : float = 0.0
 
 
@@ -411,6 +411,7 @@ func set_jump_velocity(vel : Vector3):
 	jump_velocity_mag = Vector2(
 		jump_velocity.x, 
 		jump_velocity.z).limit_length(form_speed).length()
+#	current_anim.force_play("jump")
 
 
 func action_effects(delta):
