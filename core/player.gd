@@ -406,6 +406,7 @@ func action_effects(delta):
 	## by the detection hitbox. Then apply the hit for this attack, and \
 	## add them to the list of struck enemies to prevent double-proc.
 	if attack_active and attack_active_ebrake > 0:
+		print("Attack Active and Attack E-Brake > 0")
 		var proximity = []
 		proximity.append_array(enemies_close)
 		if attack_chain >= 3:
@@ -525,14 +526,15 @@ func action_process(delta):
 			if attack_chain <= 0:
 				attack_chain = 1
 				attack_interrupt = false
-#				anim_tree.start_attack(attack_chain)
+				anim.start_attack(attack_chain)
 			elif attack_interrupt:
+				print("***Interrupting Attack!")
 				if attack_chain < 3:
 					attack_chain += 1
 				else:
 					attack_chain = 1
 				attack_interrupt = false
-#				anim_tree.start_attack(attack_chain)
+				anim.start_attack(attack_chain)
 	
 	## Process Effects of actions after inputs assign the variables...
 	action_effects(delta)

@@ -21,13 +21,11 @@ var anims : Array = []
 var form : Player.Form = Player.Form.HUMAN
 var current_tree : AnimationTree = human_tree
 var current_anim : AnimationPlayer = null
+var playback : AnimationNodeStateMachinePlayback = null
 var blends_stature : bool = true
 var movement_target : String = "parameters/movement/blend_position"
 var player_move : float = 0.0
 var mobile : bool = false
-var player_action : String = ""
-var performing : bool = false
-var override_anim : String = ""
 
 
 func _ready():
@@ -41,6 +39,7 @@ func _ready():
 	## Set Currents
 	current_tree = human_tree
 	current_anim = human_anim
+	playback = current_tree.get("parameters/playback")
 
 
 ## Creates lists of anim_trees and anim_players for iteration
@@ -61,7 +60,7 @@ func populate_lists():
 
 ## Connects all the animation start and end signals
 func connect_signals():
-	for a in anims:
+	for a in trees:
 		print(a)
 		if a.animation_started.is_connected(_on_animation_started) == false:
 			a.animation_started.connect(_on_animation_started)
@@ -94,7 +93,7 @@ func set_form(new_form : Player.Form):
 		current_anim = wolf_anim
 		blends_stature = false
 	current_tree.active = true
-
+	playback = current_tree.get("parameters/playback")
 
 
 ## Sets the movement value for the BlendSpace1D that flucuates between \
@@ -116,61 +115,21 @@ func set_mobile(value : bool):
 	current_tree.set("parameters/blend_movement/blend_amount", int(value))
 
 
-## Attack Chain Stuff ?
-## Maybe use Process to capture attack progress?
-## Maybe leave it on player.gd
+## Attack Chain Stuff
+## Pushes commands to play the next attack in chain.
+## Auto Advance Expression does not work.
+## Keep managing hit frames and interrupts on player.gd and animation timelines.
+func start_attack(chain : int):
+	print("Starting Attack at chain : ", chain)
+	playback.start("attack_" + str(chain))
 
 
-## Signal Receiver: Animations that are started by the Animation Tree get \
-## passed to here. Goal is to mark them as the current player action, and \
-## set the performing state.
+## Signal Receiver
 func _on_animation_started(anim_name):
 	print("AnimationTree Started Animation: ", anim_name)
-#	print(anim_name, " is action: ", actions.has(anim_name), " | is movement: ", movements.has(anim_name))
-	start_action(anim_name)
 
 
-## extension of _on_animation_started that's extracted for flexible calling.
-func start_action(action_name : String):
-	print("AnimationTree Starting Animation Action: ", action_name)
-	player_action = action_name
-	set_performing(true)
 
-
-## Signal Receiver: Once player action animations are finished, clear the \
-## current player action, and updated the performing state.
+## Signal Receiver
 func _on_animation_finished(anim_name):
 	print("AnimationTree Finished Animation: ", anim_name)
-	if player_action == anim_name:
-		set_performing(false)
-		player_action = ""
-
-
-## Controls whether we are performing an action, and reflects that in the \
-## movement blending filter. If not performing action, we get the full    \
-## unfiltered movement animation.
-func set_performing(value : bool):
-	performing = value
-	if blends_stature:
-		current_tree.tree_root.get_node("blend_movement").filter_enabled = value
-
-
-####
-####
-####
-
-
-## Override function
-func force_play(animation : String):
-	if current_tree.active and current_anim.has_animation(animation):
-		override_anim = animation
-		current_tree.active = false
-		current_anim.play(animation)
-		start_action(animation)
-
-
-func _on_animation_player_animation_finished(anim_name):
-	if !current_tree.active and override_anim != "":
-		override_anim = ""
-		current_tree.active = true
-#		_on_animation_finished(anim_name)
