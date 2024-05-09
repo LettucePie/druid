@@ -116,6 +116,11 @@ func set_mobile(value : bool):
 	current_tree.set("parameters/blend_movement/blend_amount", int(value))
 
 
+## Attack Chain Stuff ?
+## Maybe use Process to capture attack progress?
+## Maybe leave it on player.gd
+
+
 ## Signal Receiver: Animations that are started by the Animation Tree get \
 ## passed to here. Goal is to mark them as the current player action, and \
 ## set the performing state.
