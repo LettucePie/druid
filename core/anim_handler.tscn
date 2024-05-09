@@ -1,0 +1,39 @@
+[gd_scene load_steps=8 format=3 uid="uid://cpa4584we354u"]
+
+[ext_resource type="Script" path="res://core/anim_handler.gd" id="1_hb5lr"]
+[ext_resource type="AnimationNodeBlendSpace1D" uid="uid://dc8k2o85s4da1" path="res://art/model/animations/animtree_nodes/human_movement_blend1d.tres" id="2_bgic8"]
+[ext_resource type="AnimationNodeBlendSpace1D" uid="uid://b3nqb6nvlwe5o" path="res://art/model/animations/animtree_nodes/wolf_movement.tres" id="3_5gwba"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8ndn3"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_qojse"]
+states/movement/node = ExtResource("2_bgic8")
+states/movement/position = Vector2(532, 100)
+transitions = ["Start", "movement", SubResource("AnimationNodeStateMachineTransition_8ndn3")]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_17jpv"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_7b5l6"]
+states/movement/node = ExtResource("3_5gwba")
+states/movement/position = Vector2(511, 100)
+transitions = ["Start", "movement", SubResource("AnimationNodeStateMachineTransition_17jpv")]
+
+[node name="anim_handler" type="Node" node_paths=PackedStringArray("human_anim", "wolf_anim")]
+script = ExtResource("1_hb5lr")
+human_anim = NodePath("")
+wolf_anim = NodePath("")
+
+[node name="human_animtree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_qojse")
+anim_player = NodePath("../../human_node/human_model/AnimationPlayer")
+advance_expression_base_node = NodePath("../..")
+active = true
+parameters/movement/blend_position = 0
+
+[node name="wolf_animtree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_7b5l6")
+anim_player = NodePath("../../wolf_node/wolf_model/AnimationPlayer")
+advance_expression_base_node = NodePath("../..")
+parameters/movement/blend_position = 0
