@@ -43,6 +43,7 @@ func _ready():
 	current_anim = human_anim
 
 
+## Creates lists of anim_trees and anim_players for iteration
 func populate_lists():
 	## Clean
 	trees.clear()
@@ -58,6 +59,7 @@ func populate_lists():
 	]
 
 
+## Connects all the animation start and end signals
 func connect_signals():
 	for a in anims:
 		print(a)
@@ -65,6 +67,34 @@ func connect_signals():
 			a.animation_started.connect(_on_animation_started)
 		if a.animation_finished.is_connected(_on_animation_finished) == false:
 			a.animation_finished.connect(_on_animation_finished)
+
+
+## Setup current_tree and current_anim to the desired form.
+## also can be used for setting flags and parameters like 'blends_stature'
+func set_form(new_form : Player.Form):
+	for tree in trees:
+		tree.active = false
+	form = new_form
+	if form == Player.Form.HUMAN:
+		current_tree = human_tree
+		current_anim = human_anim
+		blends_stature = true
+	elif form == Player.Form.SPIDER:
+		print("Update upon Spider form addition")
+		current_tree = human_tree
+		current_anim = human_anim
+		blends_stature = true
+	elif form == Player.Form.RAT:
+		print("Update upon Rat form addition")
+		current_tree = human_tree
+		current_anim = human_anim
+		blends_stature = true
+	elif form == Player.Form.WOLF:
+		current_tree = wolf_tree
+		current_anim = wolf_anim
+		blends_stature = false
+	current_tree.active = true
+
 
 
 ## Sets the movement value for the BlendSpace1D that flucuates between \

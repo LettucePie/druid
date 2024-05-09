@@ -9,32 +9,27 @@ signal report_interactive_popup(message)
 signal request_cam_movement(direction)
 
 
+## Tools / Assistant Nodes
+@onready var anim : Player_Animator = $anim_handler
+@onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
+
+
 ## Testing Variables
 @export var test_mat_a : Material
 @export var test_mat_b : Material
 
 
 #### Form Assets
-## Collision Bodies
-@onready var human_shape : CollisionShape3D = $human_shape
-@onready var wolf_shape : CollisionShape3D = $wolf_shape
-## Mesh / Animation Variables
 # Human
 @onready var human_node : Node3D = $human_node 
+@onready var human_shape : CollisionShape3D = $human_shape
 @onready var human_mesh : MeshInstance3D = $human_node/human_model/human_armature/Skeleton3D/human_mesh
-@onready var human_animtree : AnimationTree = $human_animtree
-@onready var human_anim : AnimationPlayer = $human_node/human_model/AnimationPlayer
 # Wolf
 @onready var wolf_node : Node3D = $wolf_node
+@onready var wolf_shape : CollisionShape3D = $wolf_shape
 @onready var wolf_mesh : MeshInstance3D = $wolf_node/wolf_model/Armature/Skeleton3D/wolfmesh
-@onready var wolf_animtree : AnimationTree = $wolf_animtree
-@onready var wolf_anim : AnimationPlayer = $wolf_node/wolf_model/AnimationPlayer
 
 ## Iterative Lists
-@onready var animtrees : Array = [
-	$human_animtree,
-	$wolf_animtree
-	]
 @onready var colshapes : Array = [
 	$human_shape,
 	$wolf_shape
@@ -67,7 +62,6 @@ var accelerated_dir : Vector3 = Vector3.ZERO
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var current_cam : Camera3D
-@onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var climb_angle : float = 0.3
 @export var jump_velocity : Vector3 = Vector3.ZERO
@@ -78,7 +72,6 @@ var jump_velocity_mag : float = 0.0
 enum Form {HUMAN, SPIDER, RAT, WOLF}
 var available_forms : Array = [Form.HUMAN, Form.SPIDER, Form.WOLF]
 var current_form : Form = Form.HUMAN
-var current_anim : AnimationTree = human_animtree
 var current_mesh : MeshInstance3D = human_mesh
 var current_node : Node3D = human_node
 var nearest_interactable : Interactable = null
@@ -110,7 +103,6 @@ var aiming : bool = false
 
 
 func _ready():
-	current_anim = human_animtree
 	current_node = human_node
 	current_mesh = human_mesh
 	current_cam = get_viewport().get_camera_3d()
@@ -133,7 +125,6 @@ func set_form_to(form : Form):
 func set_form_variables(form : Form):
 	if form == Form.HUMAN:
 		current_node = human_node
-		current_anim = human_animtree
 		current_mesh = human_mesh
 		motion_mode = 0
 		climb_angle = 0.45
@@ -145,7 +136,6 @@ func set_form_variables(form : Form):
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		current_node = human_node
-		current_anim = human_animtree
 		current_mesh = human_mesh
 		motion_mode = 0
 		climb_angle = PI + (PI / 2)
@@ -158,7 +148,6 @@ func set_form_variables(form : Form):
 		pass
 	if form == Form.WOLF:
 		current_node = wolf_node
-		current_anim = wolf_animtree
 		current_mesh = wolf_mesh
 		motion_mode = 0
 		climb_angle = 0.5
@@ -171,28 +160,23 @@ func set_form_variables(form : Form):
 
 
 func set_form_components(form : Form):
-	for at in animtrees:
-		at.active = false
 	for cs in colshapes:
 		cs.disabled = true
 	for nm in nodemeshes:
 		nm.visible = false
 	if form == Form.HUMAN:
-		human_animtree.active = true
 		human_shape.disabled = false
 		human_node.visible = true
 	if form == Form.SPIDER:
-		human_animtree.active = true
 		human_shape.disabled = false
 		human_node.visible = true
 	if form == Form.RAT:
-		human_animtree.active = true
 		human_shape.disabled = false
 		human_node.visible = true
 	if form == Form.WOLF:
-		wolf_animtree.active = true
 		wolf_shape.disabled = false
 		wolf_node.visible = true
+	anim.set_form(form)
 
 
 func form_as_string(form : Form) -> String:
@@ -319,7 +303,7 @@ func movement_process(delta : float):
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
 	## Forward movement input length to anim_player
-	current_anim.set("parameters/movement/blend_position", move_input_vec.length())
+	anim.set_player_move(move_input_vec.length())
 	
 	
 	## Orientate the input vector to the camera angle.
@@ -411,7 +395,6 @@ func set_jump_velocity(vel : Vector3):
 	jump_velocity_mag = Vector2(
 		jump_velocity.x, 
 		jump_velocity.z).limit_length(form_speed).length()
-#	current_anim.force_play("jump")
 
 
 func action_effects(delta):
