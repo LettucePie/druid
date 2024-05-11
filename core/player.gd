@@ -285,6 +285,7 @@ func player_landed():
 	jump_velocity = Vector3.ZERO
 	$norm_vec/mag.visible = false
 	air_dodge = 0
+	anim.play("land")
 
 
 func movement_process(delta : float):
@@ -395,6 +396,7 @@ func set_jump_velocity(vel : Vector3):
 	jump_velocity_mag = Vector2(
 		jump_velocity.x, 
 		jump_velocity.z).limit_length(form_speed).length()
+	anim.play("jump")
 
 
 func action_effects(delta):
@@ -526,7 +528,7 @@ func action_process(delta):
 			if attack_chain <= 0:
 				attack_chain = 1
 				attack_interrupt = false
-				anim.start_attack(attack_chain)
+				anim.play("attack_" + str(attack_chain))
 			elif attack_interrupt:
 				print("***Interrupting Attack!")
 				if attack_chain < 3:
@@ -534,7 +536,7 @@ func action_process(delta):
 				else:
 					attack_chain = 1
 				attack_interrupt = false
-				anim.start_attack(attack_chain)
+				anim.play("attack_" + str(attack_chain))
 	
 	## Process Effects of actions after inputs assign the variables...
 	action_effects(delta)

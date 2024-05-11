@@ -4,6 +4,7 @@ class_name Player_Animator
 ## Revisit often
 
 #### Animation Trees and Player Nodes
+@onready var player : Player = get_parent()
 @onready var human_tree : AnimationTree = $human_animtree
 @onready var wolf_tree : AnimationTree = $wolf_animtree
 ##
@@ -11,16 +12,18 @@ class_name Player_Animator
 @export var wolf_anim : AnimationPlayer = null
 
 
-
 ## Lists
 var trees : Array = []
 var anims : Array = []
+## For when queuing animations, if these are active, ignore.
+var low_priority_animations : PackedStringArray = []
 
 
 ## Dynamics
 var form : Player.Form = Player.Form.HUMAN
 var current_tree : AnimationTree = human_tree
 var current_anim : AnimationPlayer = null
+var state_machine : AnimationNodeStateMachine = null
 var playback : AnimationNodeStateMachinePlayback = null
 var blends_stature : bool = true
 var movement_target : String = "parameters/movement/blend_position"
@@ -39,6 +42,7 @@ func _ready():
 	## Set Currents
 	current_tree = human_tree
 	current_anim = human_anim
+	state_machine = current_tree.tree_root
 	playback = current_tree.get("parameters/playback")
 
 
@@ -93,6 +97,7 @@ func set_form(new_form : Player.Form):
 		current_anim = wolf_anim
 		blends_stature = false
 	current_tree.active = true
+	state_machine = current_tree.tree_root
 	playback = current_tree.get("parameters/playback")
 
 
@@ -115,13 +120,25 @@ func set_mobile(value : bool):
 	current_tree.set("parameters/blend_movement/blend_amount", int(value))
 
 
-## Attack Chain Stuff
-## Pushes commands to play the next attack in chain.
-## Auto Advance Expression does not work.
-## Keep managing hit frames and interrupts on player.gd and animation timelines.
-func start_attack(chain : int):
-	print("Starting Attack at chain : ", chain)
-	playback.start("attack_" + str(chain))
+## Auto Advance Expression does not work well... at least in current config.
+## This is going to be the main avenue for playing animations.
+## Here we clarify animation name conversions, or other bonus effects per form.
+func play(animation : String):
+	print("Playing Animation ", animation)
+	if state_machine.has_node(animation):
+		playback.start(animation)
+	else:
+		print("State Machine missing animation-action ", animation, "!!!")
+		if current_anim.has_animation(animation):
+			print("Backup plan! Using AnimPlayer")
+			current_anim.play(animation)
+		else:
+			print("Animation ", animation, " COMPLETELY UNAVAILABLE")
+
+
+func queue(animation : String, at_end : bool):
+	print("Queuing Animation ", animation, " at end = ", at_end)
+	print("Fill this out lol")
 
 
 ## Signal Receiver
@@ -133,3 +150,5 @@ func _on_animation_started(anim_name):
 ## Signal Receiver
 func _on_animation_finished(anim_name):
 	print("AnimationTree Finished Animation: ", anim_name)
+	if anim_name == "jump" and !player.is_on_floor():
+		play("fall")

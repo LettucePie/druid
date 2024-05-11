@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=66 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 [ext_resource type="PackedScene" uid="uid://nprju05ce2c5" path="res://art/model/human_model_0.1.glb" id="2_dbf1p"]
@@ -44,6 +44,12 @@ animation = &"coded/attack_2_coded"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pb26x"]
 animation = &"coded/attack_3_coded"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8m2u3"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rxmtq"]
+animation = &"jump"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8ndn3"]
 advance_mode = 2
 
@@ -72,18 +78,48 @@ states/attack_2/node = SubResource("AnimationNodeAnimation_tnfqu")
 states/attack_2/position = Vector2(532, -64)
 states/attack_3/node = SubResource("AnimationNodeAnimation_pb26x")
 states/attack_3/position = Vector2(667, -11)
+states/fall/node = SubResource("AnimationNodeAnimation_8m2u3")
+states/fall/position = Vector2(424, 215)
+states/jump/node = SubResource("AnimationNodeAnimation_rxmtq")
+states/jump/position = Vector2(314, 215)
 states/movement/node = ExtResource("3_3woer")
 states/movement/position = Vector2(532, 100)
 transitions = ["Start", "movement", SubResource("AnimationNodeStateMachineTransition_8ndn3"), "movement", "attack_1", SubResource("AnimationNodeStateMachineTransition_i2sjk"), "attack_1", "attack_2", SubResource("AnimationNodeStateMachineTransition_b26hx"), "attack_2", "attack_3", SubResource("AnimationNodeStateMachineTransition_gjub2"), "attack_3", "movement", SubResource("AnimationNodeStateMachineTransition_nb23k"), "attack_2", "movement", SubResource("AnimationNodeStateMachineTransition_0gv4k"), "attack_1", "movement", SubResource("AnimationNodeStateMachineTransition_p8mt0")]
-graph_offset = Vector2(61, -100)
+graph_offset = Vector2(12, 6)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fvlgs"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4d28a"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o1bu8"]
+animation = &"land"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_17jpv"]
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0ev7i"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u52kt"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rb3kq"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_7b5l6"]
+states/fall/node = SubResource("AnimationNodeAnimation_fvlgs")
+states/fall/position = Vector2(452, 192)
+states/jump/node = SubResource("AnimationNodeAnimation_4d28a")
+states/jump/position = Vector2(323, 192)
+states/land/node = SubResource("AnimationNodeAnimation_o1bu8")
+states/land/position = Vector2(577, 192)
 states/movement/node = ExtResource("4_3ccqs")
 states/movement/position = Vector2(511, 100)
-transitions = ["Start", "movement", SubResource("AnimationNodeStateMachineTransition_17jpv")]
+transitions = ["Start", "movement", SubResource("AnimationNodeStateMachineTransition_17jpv"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_0ev7i"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_u52kt"), "land", "movement", SubResource("AnimationNodeStateMachineTransition_rb3kq")]
+graph_offset = Vector2(-33, 51)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g87jm"]
 albedo_color = Color(1, 0.184314, 1, 1)
@@ -230,37 +266,37 @@ visible = false
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="human_node/human_model/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.139057, -0.10598)
+bones/0/position = Vector3(0, -0.162283, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.00822359, 0.0282975, 0.7967, 0.603656)
+bones/1/rotation = Quaternion(-0.0148893, -0.00060277, 0.7978, 0.602738)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(-0.0250155, -0.0138652, 0.00398076, 0.999583)
+bones/5/rotation = Quaternion(-0.000208415, -0.0138861, 0.003509, 0.999897)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.216023, 0.240872, 0.943947, 0.0654201)
-bones/11/rotation = Quaternion(-0.385904, 0.00104892, -0.0028277, 0.922534)
+bones/10/rotation = Quaternion(-0.214679, 0.259591, 0.938971, 0.0697018)
+bones/11/rotation = Quaternion(-0.43423, 0.00119726, -0.00276817, 0.900797)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0844111, -0.0232602, -0.260079, 0.961609)
+bones/13/rotation = Quaternion(-0.0809153, -0.0159282, -0.282237, 0.955794)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.099645, 0.331192, 0.934512, -0.0840786)
-bones/18/rotation = Quaternion(-0.244246, -0.0954401, -0.0113179, 0.964939)
+bones/17/rotation = Quaternion(0.0963585, 0.366669, 0.921171, -0.0878258)
+bones/18/rotation = Quaternion(-0.298749, -0.0946416, -0.0167295, 0.94948)
 
 [node name="ear_a" parent="human_node/human_model/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000879261, 0.994719, -0.102636, 0.0331973, 0.102609, 0.994168, 0.000675779, 1.70462, 0.176903)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00252503, 0.988404, -0.151829, 0.0331128, 0.151829, 0.987852, 0.000675779, 1.67611, 0.215773)
 bone_idx = 7
 
 [node name="hair_a" parent="human_node/human_model/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000879261, 0.994719, -0.102636, 0.0331973, 0.102609, 0.994168, 0.00858762, 2.12121, -0.0502598)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00252503, 0.988404, -0.151829, 0.0331128, 0.151829, 0.987852, 0.00858761, 2.10346, 0.00955683)
 bone_idx = 8
 
 [node name="cape" parent="human_node/human_model/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0331291, 0.997695, -0.0592232, -0.00220912, 0.0593288, 0.998236, -0.0395435, 1.20299, -0.308318)
+transform = Transform3D(0.999449, -0.0329398, 0.00416954, 0.0331979, 0.993524, -0.108671, -0.000562929, 0.108749, 0.994069, -0.0395435, 1.19917, -0.293734)
 bone_idx = 9
 
 [node name="staff_a" parent="human_node/human_model/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.387006, -0.300539, 0.871724, 0.85989, 0.458939, -0.223527, -0.33289, 0.836093, 0.436043, 1.39949, 0.0465073, 0.207715)
+transform = Transform3D(0.430148, -0.284204, 0.856855, 0.841512, 0.469876, -0.266596, -0.326849, 0.83573, 0.441277, 1.36227, -0.0101222, 0.209798)
 bone_idx = 16
 
 [node name="standin_floor" parent="human_node/human_model" index="1"]
