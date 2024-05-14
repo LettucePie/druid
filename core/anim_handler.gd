@@ -134,6 +134,8 @@ func play(animation : String):
 			current_anim.play(animation)
 		else:
 			print("Animation ", animation, " COMPLETELY UNAVAILABLE")
+			print("Falling back to Animation Tree Start")
+			playback.start("Start")
 
 
 func queue(animation : String, at_end : bool):
