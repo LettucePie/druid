@@ -108,6 +108,8 @@ considerations on additional features can be made. I Cannot Stress This Enough.
 
 - Wolf Form
 	- Movement
+		? Turn Speed
+			? Decelerate for sharper turns.
 		- Sprinting
 			! Sprint is a Skill that is equipped in the same way Spells are.
 			! Sprint is activated with the Fire Spell input.

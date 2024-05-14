@@ -61,6 +61,7 @@ var move_input_vec : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
+var previous_position : Vector3 = Vector3.ZERO
 var current_cam : Camera3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var climb_angle : float = 0.3
@@ -303,10 +304,6 @@ func movement_process(delta : float):
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
-	## Forward movement input length to anim_player
-	anim.set_player_move(move_input_vec.length())
-	
-	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
 	## the ground, and only the ground.
@@ -328,6 +325,9 @@ func movement_process(delta : float):
 		## Turn the Swivel Ring to match the input direction.
 		## Swivel ring is used to help align the players input with
 		## Mesh and Edge Detection.
+		#?? What if we set it up so the swivel ring is current forward \
+		#?? vector for applied velocity. Compliment this with "turn speed" \
+		#?? variables for each form?
 		turn_swivel_ring(direction)
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
@@ -371,6 +371,9 @@ func movement_process(delta : float):
 			## Check if player has jumped, and apply jump velocity
 			if jump_velocity != Vector3.ZERO:
 				apply_jump_velocity(delta)
+	
+	## Forward velocity to anim_handler so it can apply it to movement anims
+	anim.set_player_move(velocity.length() / form_speed)
 	
 	## For Testing Purposes.
 	## Resets player to Center if they "fall out"
