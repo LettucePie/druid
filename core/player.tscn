@@ -106,6 +106,7 @@ advance_mode = 2
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u52kt"]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rb3kq"]
+reset = false
 switch_mode = 2
 advance_mode = 2
 
@@ -266,37 +267,37 @@ visible = false
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="human_node/human_model/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.144633, -0.10598)
+bones/0/position = Vector3(0, -0.1379, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.00963745, 0.0221722, 0.796992, 0.603506)
+bones/1/rotation = Quaternion(-0.00912927, 0.0243741, 0.796891, 0.603562)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(-0.0203478, -0.0138698, 0.00389216, 0.999689)
+bones/5/rotation = Quaternion(-0.0121733, -0.0138771, 0.00373681, 0.999823)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.21571, 0.24534, 0.942795, 0.0664425)
-bones/11/rotation = Quaternion(-0.39752, 0.00108454, -0.00281424, 0.917589)
+bones/10/rotation = Quaternion(-0.216087, 0.239941, 0.944184, 0.065207)
+bones/11/rotation = Quaternion(-0.383479, 0.00104148, -0.00283041, 0.923545)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0834457, -0.0212263, -0.266245, 0.960052)
+bones/13/rotation = Quaternion(-0.0850027, -0.0245102, -0.256282, 0.962545)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0988752, 0.339689, 0.931458, -0.0849826)
-bones/18/rotation = Quaternion(-0.257309, -0.0952778, -0.0126111, 0.961538)
+bones/17/rotation = Quaternion(0.0998042, 0.32942, 0.935139, -0.0838895)
+bones/18/rotation = Quaternion(-0.241522, -0.0954717, -0.0110485, 0.965624)
 
 [node name="ear_a" parent="human_node/human_model/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00118927, 0.993717, -0.111917, 0.0331876, 0.111894, 0.993166, 0.000675779, 1.6982, 0.184237)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00173184, 0.991754, -0.128144, 0.0331637, 0.12813, 0.991203, 0.00067578, 1.70328, 0.19706)
 bone_idx = 7
 
 [node name="hair_a" parent="human_node/human_model/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00118927, 0.993717, -0.111917, 0.0331876, 0.111894, 0.993166, 0.00858761, 2.11689, -0.0390247)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00173184, 0.991754, -0.128144, 0.0331637, 0.12813, 0.991203, 0.00858762, 2.12558, -0.0193251)
 bone_idx = 8
 
 [node name="cape" parent="human_node/human_model/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416954, 0.0331482, 0.997097, -0.0685437, -0.00189962, 0.0686442, 0.997639, -0.0395435, 1.20112, -0.305647)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0331749, 0.995842, -0.0848494, -0.00135728, 0.084941, 0.996385, -0.0395435, 1.21429, -0.300888)
 bone_idx = 9
 
 [node name="staff_a" parent="human_node/human_model/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.399073, -0.296058, 0.867808, 0.854999, 0.462053, -0.23555, -0.331237, 0.835976, 0.437522, 1.38932, 0.031482, 0.208332)
+transform = Transform3D(0.379554, -0.303273, 0.87405, 0.862816, 0.456995, -0.21611, -0.333897, 0.83617, 0.435123, 1.40568, 0.0535403, 0.20732)
 bone_idx = 16
 
 [node name="standin_floor" parent="human_node/human_model" index="1"]
@@ -330,6 +331,10 @@ skeleton = NodePath("../../../..")
 
 [node name="wolf_model" parent="wolf_node" instance=ExtResource("23_4u3jf")]
 transform = Transform3D(-0.115452, 0, -1.00931e-08, 0, 0.115452, 0, 1.00931e-08, 0, -0.115452, 0, 0.075846, 0)
+
+[node name="Skeleton3D" parent="wolf_node/wolf_model/Armature" index="0"]
+bones/11/rotation = Quaternion(-0.441557, 1.54199e-07, 3.77882e-08, 0.897233)
+bones/15/rotation = Quaternion(-0.461216, 1.34981e-07, 9.27538e-10, 0.887288)
 
 [node name="testfloor" parent="wolf_node/wolf_model" index="1"]
 visible = false
