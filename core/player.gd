@@ -247,7 +247,7 @@ func update_up(up : Vector3):
 
 ## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
 ## dictating the direction the player will travel.
-## TODO return a value to use for decceleration
+#### TODO return a value to use for deceleration
 func turn_swivel_ring(target : Vector3) -> float:
 	var speed_percent : float = velocity.length() / form_speed
 	print("Speed Percent = ", speed_percent)
@@ -260,8 +260,26 @@ func turn_swivel_ring(target : Vector3) -> float:
 	var result_basis : Basis = ring_basis.slerp(target_basis, speed_percent)
 	$swivel_ring.transform.basis = result_basis
 	
-	## Find the difference to calculate the level of decelleration to return
-	return 0.0
+	## Find the difference to calculate the level of deceleration to return
+	var angle_target = (ring_basis * Vector3.FORWARD).angle_to(
+		(target_basis * Vector3.FORWARD)
+	)
+	var angle_result = (ring_basis * Vector3.FORWARD).angle_to(
+		(result_basis * Vector3.FORWARD)
+	)
+	print("angle to target: ", angle_target, " deg: ", rad_to_deg(angle_target))
+	print("angle to result: ", angle_result, " deg: ", rad_to_deg(angle_result))
+	print("angle percent : ", angle_result / angle_target)
+	print("PI ", PI, " PI / 2 ", PI / 2, " deg to rad 180: ", deg_to_rad(180))
+	## Speed Percent lerp matches up with angle result / angle target
+	## I think we should compare the angle reduced against a curve.
+	## 180 degrees being taken off would return absolute deceleration \
+	## and just 5 would return tremendous deceleration.
+	## or just skip all that noise and use the speed percent since we know \
+	## it's the same lol
+	#### TODO visit later
+	#return clampf(1.0 - speed_percent, 0.0, 1.0)
+	return speed_percent
 
 
 func lerp_mesh(delta : float):
@@ -351,7 +369,8 @@ func movement_process(delta : float):
 		
 		## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
 		## direction. Here we update direction to equal our Swivel Ring Forward.
-		direction = $swivel_ring.transform.basis * Vector3.FORWARD
+		direction = ($swivel_ring.transform.basis * Vector3.FORWARD) \
+			* direction.length()
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
@@ -370,7 +389,8 @@ func movement_process(delta : float):
 				current_mesh.material_override = test_mat_b
 	
 	## Finally, apply the velocity
-	accelerated_dir = direction * form_speed
+	#### TODO figure out how to math this nicely
+	accelerated_dir = direction * (form_speed - (form_speed * decel))
 	if is_on_floor():
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:
