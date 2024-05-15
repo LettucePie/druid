@@ -56,9 +56,11 @@ var form_speed : float = 5.0
 var form_jump : float = 4.5
 var form_air_control : float = 0.15
 var form_mag_angle : float = 0.15
+var form_turn : float = 0.5
 const MAG_PULL = 10.5
 var move_input_vec : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
+@export var turn_responsiveness_curve : Curve
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var previous_position : Vector3 = Vector3.ZERO
@@ -134,6 +136,7 @@ func set_form_variables(form : Form):
 		form_jump = 4.5
 		form_air_control = 2.5
 		form_mag_angle = 0.8
+		form_turn = 0.5
 		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		current_node = human_node
@@ -145,6 +148,7 @@ func set_form_variables(form : Form):
 		form_jump = 4.0
 		form_air_control = 4.9
 		form_mag_angle = 0.15
+		form_turn = 0.8
 	if form == Form.RAT:
 		pass
 	if form == Form.WOLF:
@@ -157,6 +161,7 @@ func set_form_variables(form : Form):
 		form_jump = 5.0
 		form_air_control = 1.0
 		form_mag_angle = 0.4
+		form_turn = 0.25
 		update_up(Vector3.UP)
 
 
@@ -241,8 +246,21 @@ func update_up(up : Vector3):
 	$norm_vec.look_at(up + position, Vector3.UP)
 
 
+## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
+## dictating the direction the player will travel.
 func turn_swivel_ring(target : Vector3):
-	$swivel_ring.look_at(target + position, get_up_direction())
+	var speed_percent : float = velocity.length() / form_speed
+	print("Speed Percent = ", speed_percent)
+	speed_percent = turn_responsiveness_curve.sample(speed_percent)
+	print("Speed Percent converted on curve = ", speed_percent)
+	speed_percent = clampf(speed_percent, form_turn, 1.0)
+	print("Speed Percent clamped by form_turn min = ", speed_percent)
+	var dampened_target : Vector3 = \
+		($swivel_ring.transform.basis * Vector3.FORWARD).lerp(
+			target, speed_percent
+		).normalized()
+	print("Turn Target has been adjusted from ", target, " | into, ", dampened_target)
+	$swivel_ring.look_at(dampened_target + position, get_up_direction())
 
 
 func lerp_mesh(delta : float):
@@ -325,14 +343,11 @@ func movement_process(delta : float):
 		## Turn the Swivel Ring to match the input direction.
 		## Swivel ring is used to help align the players input with
 		## Mesh and Edge Detection.
-		#?? What if we set it up so the swivel ring is current forward \
-		#?? vector for applied velocity. Compliment this with "turn speed" \
-		#?? variables for each form?
-		print("Turning Swivel Ring to direction: ", direction)
-		print("Swivel Ring basis before: ", $swivel_ring.transform.basis)
 		turn_swivel_ring(direction)
-		print("Swivel Ring basis after: ", $swivel_ring.transform.basis)
-		print("Confusing multiply trick... ", $swivel_ring.transform.basis * Vector3.FORWARD)
+		
+		## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
+		## direction. Here we update direction to equal our Swivel Ring Forward.
+		direction = $swivel_ring.transform.basis * Vector3.FORWARD
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
