@@ -161,7 +161,7 @@ func set_form_variables(form : Form):
 		form_jump = 5.0
 		form_air_control = 1.0
 		form_mag_angle = 0.4
-		form_turn = 0.25
+		form_turn = 0.05
 		update_up(Vector3.UP)
 
 
@@ -247,20 +247,21 @@ func update_up(up : Vector3):
 
 ## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
 ## dictating the direction the player will travel.
-## TODO make this use angles and return a value to use for decceleration
-func turn_swivel_ring(target : Vector3):
+## TODO return a value to use for decceleration
+func turn_swivel_ring(target : Vector3) -> float:
 	var speed_percent : float = velocity.length() / form_speed
 	print("Speed Percent = ", speed_percent)
 	speed_percent = turn_responsiveness_curve.sample(speed_percent)
 	print("Speed Percent converted on curve = ", speed_percent)
 	speed_percent = clampf(speed_percent, form_turn, 1.0)
 	print("Speed Percent clamped by form_turn min = ", speed_percent)
-	var dampened_target : Vector3 = \
-		($swivel_ring.transform.basis * Vector3.FORWARD).lerp(
-			target, speed_percent
-		).normalized()
-	print("Turn Target has been adjusted from ", target, " | into, ", dampened_target)
-	$swivel_ring.look_at(dampened_target + position, get_up_direction())
+	var ring_basis : Basis = $swivel_ring.transform.basis
+	var target_basis : Basis = ring_basis.looking_at(target, get_up_direction())
+	var result_basis : Basis = ring_basis.slerp(target_basis, speed_percent)
+	$swivel_ring.transform.basis = result_basis
+	
+	## Find the difference to calculate the level of decelleration to return
+	return 0.0
 
 
 func lerp_mesh(delta : float):
@@ -322,6 +323,9 @@ func movement_process(delta : float):
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
+	## Setup Deceleration variable for sharp turn speed reductions.
+	var decel : float = 0.0
+	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
 	## the ground, and only the ground.
@@ -340,10 +344,10 @@ func movement_process(delta : float):
 	var blended_normal : Vector3 = get_up_direction()
 	if direction.length_squared() > 0.0:
 		
-		## Turn the Swivel Ring to match the input direction.
-		## Swivel ring is used to help align the players input with
-		## Mesh and Edge Detection.
-		turn_swivel_ring(direction)
+		## Turns the Swivel Ring to the target direction.
+		## The Function also generates a deceleration amount by comparing \
+		## how far/fast it could turn versus the form speed limitations.
+		decel = turn_swivel_ring(direction)
 		
 		## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
 		## direction. Here we update direction to equal our Swivel Ring Forward.
