@@ -242,12 +242,12 @@ func update_up(up : Vector3):
 	previous_normal = get_up_direction()
 	set_up_direction(up)
 	$magnet_ray.target_position = up * -1.0
-	print("Update Up : ", up)
 	$norm_vec.look_at(up + position, Vector3.UP)
 
 
 ## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
 ## dictating the direction the player will travel.
+## TODO make this use angles and return a value to use for decceleration
 func turn_swivel_ring(target : Vector3):
 	var speed_percent : float = velocity.length() / form_speed
 	print("Speed Percent = ", speed_percent)

@@ -273,34 +273,34 @@ visible = false
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="human_node/human_model/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.137028, -0.10598)
+bones/0/position = Vector3(0, -0.132363, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.00878944, 0.0258464, 0.796821, 0.603598)
+bones/1/rotation = Quaternion(-0.00688393, 0.0340991, 0.796395, 0.603776)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(-0.0142546, -0.0138753, 0.00377638, 0.999795)
+bones/5/rotation = Quaternion(-0.0267945, -0.0138634, 0.00401451, 0.999537)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.216136, 0.239239, 0.944362, 0.0650463)
-bones/11/rotation = Quaternion(-0.381649, 0.00103587, -0.00283247, 0.924303)
+bones/10/rotation = Quaternion(-0.216396, 0.235437, 0.945317, 0.0641762)
+bones/11/rotation = Quaternion(-0.371663, 0.00100528, -0.00284347, 0.928363)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.085116, -0.0247497, -0.255554, 0.962723)
+bones/13/rotation = Quaternion(-0.0857122, -0.0260127, -0.251711, 0.963649)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.099924, 0.328083, 0.935608, -0.0837468)
-bones/18/rotation = Quaternion(-0.239467, -0.0954949, -0.0108454, 0.966136)
+bones/17/rotation = Quaternion(0.100572, 0.320796, 0.938132, -0.0829671)
+bones/18/rotation = Quaternion(-0.228266, -0.0956141, -0.00973909, 0.968844)
 
 [node name="ear_a" parent="human_node/human_model/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00159374, 0.992279, -0.124015, 0.0331706, 0.124, 0.991728, 0.000675779, 1.70459, 0.193798)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000761081, 0.995078, -0.0990966, 0.0332002, 0.0990672, 0.994527, 0.000675776, 1.71162, 0.174106)
 
 [node name="hair_a" parent="human_node/human_model/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00159374, 0.992279, -0.124015, 0.0331706, 0.124, 0.991728, 0.00858761, 2.12598, -0.0243436)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000761081, 0.995078, -0.0990966, 0.0332002, 0.0990672, 0.994527, 0.00858761, 2.1274, -0.0545387)
 
 [node name="cape" parent="human_node/human_model/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416954, 0.0331689, 0.996187, -0.0806999, -0.00149539, 0.0807938, 0.99673, -0.0395435, 1.21353, -0.30211)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.033121, 0.9979, -0.0556694, -0.00232703, 0.0557769, 0.998441, -0.0395435, 1.20827, -0.309326)
 
 [node name="staff_a" parent="human_node/human_model/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.378123, -0.303795, 0.874489, 0.86337, 0.45662, -0.214687, -0.334089, 0.836186, 0.434946, 1.40686, 0.0555451, 0.207244)
+transform = Transform3D(0.37056, -0.30654, 0.876766, 0.866253, 0.454628, -0.207167, -0.335098, 0.836269, 0.434008, 1.41305, 0.0662109, 0.206832)
 
 [node name="standin_floor" parent="human_node/human_model" index="1"]
 visible = false
@@ -337,16 +337,16 @@ transform = Transform3D(-0.115452, 0, -1.00931e-08, 0, 0.115452, 0, 1.00931e-08,
 [node name="Skeleton3D" parent="wolf_node/wolf_model/Armature" index="0"]
 bones/1/rotation = Quaternion(0.656745, -8.93774e-16, -8.93774e-16, 0.754113)
 bones/2/rotation = Quaternion(0.12946, 1.04057e-15, -9.22106e-17, 0.991585)
-bones/3/rotation = Quaternion(-0.305444, 6.60695e-18, 8.18384e-17, 0.95221)
-bones/4/rotation = Quaternion(-0.28102, -1.06117e-18, 4.69573e-17, 0.959702)
+bones/3/rotation = Quaternion(-0.298934, 7.09194e-18, 8.1828e-17, 0.954274)
+bones/4/rotation = Quaternion(-0.288491, -1.56493e-18, 4.6962e-17, 0.957483)
 bones/5/rotation = Quaternion(0.456607, 1.48065e-22, -1.01387e-16, 0.889668)
 bones/6/rotation = Quaternion(0.859775, 0.204093, 0.0176992, -0.467782)
 bones/7/rotation = Quaternion(0.859775, -0.204093, -0.0176992, -0.467782)
-bones/8/position = Vector3(0.903733, 1.07858, 1.11551)
-bones/8/rotation = Quaternion(0.785862, -1.45165e-17, -3.63264e-18, 0.618402)
+bones/8/position = Vector3(0.903733, 1.10149, 1.10092)
+bones/8/rotation = Quaternion(0.782006, -1.45604e-17, -3.5943e-18, 0.623271)
 bones/9/rotation = Quaternion(0.102258, 1.18584e-07, 1.21901e-08, 0.994758)
-bones/12/position = Vector3(-0.903733, 1.07858, 1.11551)
-bones/12/rotation = Quaternion(0.785862, -1.45165e-17, -3.63264e-18, 0.618402)
+bones/12/position = Vector3(-0.903733, 1.10149, 1.10092)
+bones/12/rotation = Quaternion(0.782006, -1.45604e-17, -3.5943e-18, 0.623271)
 bones/13/rotation = Quaternion(0.102258, 1.18584e-07, 1.21901e-08, 0.994758)
 bones/16/rotation = Quaternion(0.649191, -0.000736844, -0.092586, 0.754969)
 bones/17/rotation = Quaternion(0.560286, -0.0218214, 0.0589299, 0.825912)
