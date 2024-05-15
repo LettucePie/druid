@@ -328,7 +328,11 @@ func movement_process(delta : float):
 		#?? What if we set it up so the swivel ring is current forward \
 		#?? vector for applied velocity. Compliment this with "turn speed" \
 		#?? variables for each form?
+		print("Turning Swivel Ring to direction: ", direction)
+		print("Swivel Ring basis before: ", $swivel_ring.transform.basis)
 		turn_swivel_ring(direction)
+		print("Swivel Ring basis after: ", $swivel_ring.transform.basis)
+		print("Confusing multiply trick... ", $swivel_ring.transform.basis * Vector3.FORWARD)
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
