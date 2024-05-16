@@ -61,6 +61,7 @@ const MAG_PULL = 10.5
 var move_input_vec : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
 @export var turn_responsiveness_curve : Curve
+@export var turn_decel_curve : Curve
 var floor_angle : float
 var previous_normal : Vector3 = Vector3.UP
 var previous_position : Vector3 = Vector3.ZERO
@@ -247,14 +248,10 @@ func update_up(up : Vector3):
 
 ## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
 ## dictating the direction the player will travel.
-#### TODO return a value to use for deceleration
 func turn_swivel_ring(target : Vector3) -> float:
 	var speed_percent : float = velocity.length() / form_speed
-	print("Speed Percent = ", speed_percent)
 	speed_percent = turn_responsiveness_curve.sample(speed_percent)
-	print("Speed Percent converted on curve = ", speed_percent)
 	speed_percent = clampf(speed_percent, form_turn, 1.0)
-	print("Speed Percent clamped by form_turn min = ", speed_percent)
 	var ring_basis : Basis = $swivel_ring.transform.basis
 	var target_basis : Basis = ring_basis.looking_at(target, get_up_direction())
 	var result_basis : Basis = ring_basis.slerp(target_basis, speed_percent)
@@ -267,19 +264,8 @@ func turn_swivel_ring(target : Vector3) -> float:
 	var angle_result = (ring_basis * Vector3.FORWARD).angle_to(
 		(result_basis * Vector3.FORWARD)
 	)
-	print("angle to target: ", angle_target, " deg: ", rad_to_deg(angle_target))
-	print("angle to result: ", angle_result, " deg: ", rad_to_deg(angle_result))
-	print("angle percent : ", angle_result / angle_target)
-	print("PI ", PI, " PI / 2 ", PI / 2, " deg to rad 180: ", deg_to_rad(180))
-	## Speed Percent lerp matches up with angle result / angle target
-	## I think we should compare the angle reduced against a curve.
-	## 180 degrees being taken off would return absolute deceleration \
-	## and just 5 would return tremendous deceleration.
-	## or just skip all that noise and use the speed percent since we know \
-	## it's the same lol
-	#### TODO visit later
-	#return clampf(1.0 - speed_percent, 0.0, 1.0)
-	return speed_percent
+	var lost_angle = angle_target - angle_result
+	return turn_decel_curve.sample(lost_angle / PI)
 
 
 func lerp_mesh(delta : float):
@@ -342,7 +328,7 @@ func movement_process(delta : float):
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
 	## Setup Deceleration variable for sharp turn speed reductions.
-	var decel : float = 0.0
+	var decel : float = 1.0
 	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
@@ -388,9 +374,12 @@ func movement_process(delta : float):
 			else:
 				current_mesh.material_override = test_mat_b
 	
+	## Testing decel
+	if decel < 1.0:
+		print("DECEL: ", decel)
+	
 	## Finally, apply the velocity
-	#### TODO figure out how to math this nicely
-	accelerated_dir = direction * (form_speed - (form_speed * decel))
+	accelerated_dir = direction * (form_speed * decel)
 	if is_on_floor():
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:

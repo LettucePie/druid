@@ -1,10 +1,13 @@
-[gd_scene load_steps=67 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=68 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
+[ext_resource type="Curve" uid="uid://dd0uugb3iebpm" path="res://core/entities/player/action_data/cam_distance_curve.tres" id="2_1ws1n"]
 [ext_resource type="PackedScene" uid="uid://nprju05ce2c5" path="res://art/model/human_model_0.1.glb" id="2_dbf1p"]
 [ext_resource type="Script" path="res://core/anim_handler.gd" id="2_r6jt5"]
 [ext_resource type="AnimationNodeBlendSpace1D" uid="uid://dc8k2o85s4da1" path="res://art/model/animations/animtree_nodes/human_movement_blend1d.tres" id="3_3woer"]
+[ext_resource type="Curve" uid="uid://cjkm707k6rskf" path="res://core/entities/player/action_data/turn_responsiveness_curve.tres" id="3_vhf20"]
 [ext_resource type="AnimationNodeBlendSpace1D" uid="uid://b3nqb6nvlwe5o" path="res://art/model/animations/animtree_nodes/wolf_movement.tres" id="4_3ccqs"]
+[ext_resource type="Curve" uid="uid://bvepqw8k0vx36" path="res://core/entities/player/action_data/turn_decel_curve.tres" id="4_4k7ag"]
 [ext_resource type="Animation" uid="uid://ce1hi8beucour" path="res://art/model/animations/human_0.1/aim_fire_small.res" id="5_2640a"]
 [ext_resource type="PackedScene" uid="uid://deo4i0mfxnb4f" path="res://core/entities/player/collision_shapes/human_shape.tscn" id="5_fobq8"]
 [ext_resource type="Animation" uid="uid://bx60lmiqnqgvb" path="res://art/model/animations/human_0.1/aim_idle.res" id="6_ngmar"]
@@ -30,14 +33,6 @@ albedo_color = Color(1, 0, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byb3j"]
 albedo_color = Color(0, 1, 1, 1)
-
-[sub_resource type="Curve" id="Curve_hyoh0"]
-_data = [Vector2(0, 0.0526315), 0.0, 0.0, 0, 0, Vector2(0.498339, 0.357895), 2.20412, 2.20412, 0, 0, Vector2(0.611296, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.494737), 0.0, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="Curve" id="Curve_81xlk"]
-_data = [Vector2(0, 1), 0.0, 0.113604, 0, 0, Vector2(1, 0), -0.150255, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e5xle"]
 animation = &"coded/attack_1_coded"
@@ -210,8 +205,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.96485, 0)
 script = ExtResource("1_dpv4o")
 test_mat_a = SubResource("StandardMaterial3D_vqemf")
 test_mat_b = SubResource("StandardMaterial3D_byb3j")
-cam_distance_curve = SubResource("Curve_hyoh0")
-turn_responsiveness_curve = SubResource("Curve_81xlk")
+cam_distance_curve = ExtResource("2_1ws1n")
+turn_responsiveness_curve = ExtResource("3_vhf20")
+turn_decel_curve = ExtResource("4_4k7ag")
 
 [node name="anim_handler" type="Node" parent="." node_paths=PackedStringArray("human_anim", "wolf_anim")]
 script = ExtResource("2_r6jt5")
@@ -273,34 +269,34 @@ visible = false
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="human_node/human_model/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.130953, -0.10598)
+bones/0/position = Vector3(0, -0.139093, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.00633588, 0.0364718, 0.796262, 0.603818)
+bones/1/rotation = Quaternion(-0.00823237, 0.0282595, 0.796702, 0.603655)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(-0.0309908, -0.0138589, 0.00409407, 0.999415)
+bones/5/rotation = Quaternion(-0.0249864, -0.0138652, 0.00398021, 0.999584)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.216463, 0.234435, 0.945566, 0.0639468)
-bones/11/rotation = Quaternion(-0.368626, 0.000995975, -0.00284676, 0.929573)
+bones/10/rotation = Quaternion(-0.216021, 0.240901, 0.943939, 0.0654266)
+bones/11/rotation = Quaternion(-0.385979, 0.00104915, -0.00282761, 0.922503)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0858897, -0.0263892, -0.250564, 0.963921)
+bones/13/rotation = Quaternion(-0.0844048, -0.0232469, -0.26012, 0.961599)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.100752, 0.318759, 0.938826, -0.0827485)
-bones/18/rotation = Quaternion(-0.224862, -0.0956477, -0.00940329, 0.969639)
+bones/17/rotation = Quaternion(0.0996401, 0.331247, 0.934493, -0.0840844)
+bones/18/rotation = Quaternion(-0.244331, -0.0954391, -0.0113263, 0.964917)
 
 [node name="ear_a" parent="human_node/human_model/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000482256, 0.995875, -0.0907415, 0.0332054, 0.0907075, 0.995324, 0.000675779, 1.71371, 0.167502)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000881196, 0.994713, -0.102694, 0.0331972, 0.102667, 0.994162, 0.000675779, 1.70458, 0.176949)
 
 [node name="hair_a" parent="human_node/human_model/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000482256, 0.995875, -0.0907415, 0.0332054, 0.0907075, 0.995324, 0.00858762, 2.12756, -0.0646259)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.000881196, 0.994713, -0.102694, 0.0331972, 0.102667, 0.994162, 0.00858762, 2.12119, -0.0501897)
 
 [node name="cape" parent="human_node/human_model/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0331003, 0.998333, -0.047283, -0.00260509, 0.047395, 0.998873, -0.0395435, 1.20632, -0.311686)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0331292, 0.997692, -0.0592814, -0.00220719, 0.0593869, 0.998233, -0.0395435, 1.20298, -0.308301)
 
 [node name="staff_a" parent="human_node/human_model/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.3683, -0.307354, 0.877433, 0.867101, 0.45403, -0.204922, -0.335397, 0.836295, 0.433726, 1.41489, 0.0694193, 0.206707)
+transform = Transform3D(0.387086, -0.30051, 0.871699, 0.859858, 0.45896, -0.223606, -0.332879, 0.836092, 0.436052, 1.39942, 0.0464092, 0.207719)
 
 [node name="standin_floor" parent="human_node/human_model" index="1"]
 visible = false
@@ -337,16 +333,16 @@ transform = Transform3D(-0.115452, 0, -1.00931e-08, 0, 0.115452, 0, 1.00931e-08,
 [node name="Skeleton3D" parent="wolf_node/wolf_model/Armature" index="0"]
 bones/1/rotation = Quaternion(0.656745, -8.93774e-16, -8.93774e-16, 0.754113)
 bones/2/rotation = Quaternion(0.12946, 1.04057e-15, -9.22106e-17, 0.991585)
-bones/3/rotation = Quaternion(-0.297115, 6.33099e-19, 6.90212e-17, 0.954842)
-bones/4/rotation = Quaternion(-0.290698, -7.19426e-19, 5.70392e-17, 0.956815)
+bones/3/rotation = Quaternion(-0.306229, -5.03065e-18, 5.93576e-17, 0.951958)
+bones/4/rotation = Quaternion(-0.286724, 3.00451e-19, 6.46525e-17, 0.958013)
 bones/5/rotation = Quaternion(0.456607, 1.48065e-22, -1.01387e-16, 0.889668)
 bones/6/rotation = Quaternion(0.859775, 0.204093, 0.0176992, -0.467782)
 bones/7/rotation = Quaternion(0.859775, -0.204093, -0.0176992, -0.467782)
-bones/8/position = Vector3(0.903733, 1.10845, 1.0965)
-bones/8/rotation = Quaternion(0.780831, -8.18204e-18, -1.52007e-19, 0.624743)
+bones/8/position = Vector3(0.903733, 1.07581, 1.11727)
+bones/8/rotation = Quaternion(0.786325, 6.02014e-18, 7.38278e-18, 0.617813)
 bones/9/rotation = Quaternion(0.102258, 1.18584e-07, 1.21901e-08, 0.994758)
-bones/12/position = Vector3(-0.903733, 1.10845, 1.0965)
-bones/12/rotation = Quaternion(0.780831, -8.18204e-18, -1.52007e-19, 0.624743)
+bones/12/position = Vector3(-0.903733, 1.07581, 1.11727)
+bones/12/rotation = Quaternion(0.786325, 6.02014e-18, 7.38278e-18, 0.617813)
 bones/13/rotation = Quaternion(0.102258, 1.18584e-07, 1.21901e-08, 0.994758)
 bones/16/rotation = Quaternion(0.649191, -0.000736844, -0.092586, 0.754969)
 bones/17/rotation = Quaternion(0.560286, -0.0218214, 0.0589299, 0.825912)
