@@ -14,11 +14,16 @@ config/name="Druid"
 run/main_scene="res://playscenes/play_0.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
+config/git_sha="718477a32b999d4ac715259e1f7fe695e920f0f1"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=472
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/git_sha_project_setting/plugin.cfg")
 
 [input]
 

@@ -4,4 +4,5 @@
 *.kra-autosave.kra
 *.blend1
 
+addons/
 export_presets.cfg
