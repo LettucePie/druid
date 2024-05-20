@@ -60,6 +60,7 @@ var form_mag_angle : float = 0.15
 var form_turn : float = 0.5
 const MAG_PULL = 10.5
 var move_input_vec : Vector3 = Vector3.ZERO
+var move_direction : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
 var acceleration : float = 0.0
 @export var turn_responsiveness_curve : Curve
@@ -332,13 +333,10 @@ func movement_process(delta : float):
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
-	## Setup Deceleration variable for sharp turn speed reductions.
-	var decel : float = 1.0
-	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
 	## the ground, and only the ground.
-	var direction = move_input_vec.rotated(
+	move_direction = move_input_vec.rotated(
 		Vector3.UP, current_cam.global_rotation.y)
 	
 	## Get the Floor Angle by comparing the StateMachinefloor normal against Vector3.UP.
@@ -347,34 +345,49 @@ func movement_process(delta : float):
 	floor_angle = Vector3.UP.angle_to(get_up_direction())
 	var cross_vec : Vector3 = Vector3.UP.cross(get_up_direction()).normalized()
 	if cross_vec != Vector3.ZERO:
-		direction = direction.rotated(cross_vec, floor_angle)
+		move_direction = move_direction.rotated(cross_vec, floor_angle)
+	
+	## Setup Swivel Direction and Deceleration variable for sharp turns and \
+	## speed reductions.
+	var swivel_dir : Vector3 = (
+		$swivel_ring.transform.basis * Vector3.FORWARD) \
+		* move_direction.length()
+	var decel : float = 1.0
 	
 	## Check if moving at all before bothering with edge_ray
 	var blended_normal : Vector3 = get_up_direction()
-	if direction.length_squared() > 0.0:
+	if move_direction.length_squared() > 0.0:
 		
 		## Accumulate Acceleration
 		acceleration = clampf(acceleration + form_accel, 0.0, 1.0)
 		
-		## Turns the Swivel Ring to the target direction.
-		## The Function also generates a deceleration amount by comparing \
-		## how far/fast it could turn versus the form speed limitations.
-		decel = turn_swivel_ring(direction)
+		if dodge_active <= 0:
+			## Turns the Swivel Ring to the target direction.
+			## The Function also generates a deceleration amount by comparing \
+			## how far/fast it could turn versus the form speed limitations.
+			decel = turn_swivel_ring(move_direction)
 		
-		## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
-		## direction. Here we update direction to equal our Swivel Ring Forward.
-		direction = ($swivel_ring.transform.basis * Vector3.FORWARD) \
-			* direction.length()
+			## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
+			## direction. 
+			## Here we update Swivel direction to equal our new \
+			## Swivel Ring Forward.
+			swivel_dir = ($swivel_ring.transform.basis * Vector3.FORWARD) \
+				* move_direction.length()
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
-		edge_ray.position.z = lerp(0.0, -0.3, direction.length_squared() / 1.0)
+		edge_ray.position.z = lerp(
+			0.0, 
+			-0.3, 
+			move_direction.length_squared() / 1.0)
 		if edge_ray.is_colliding():
 			
 			## Set the blended_normal to the halfway between the detected
 			## normal and the current up direction to enhance the 
 			## Magnet Pull while moving.
-			blended_normal = get_up_direction().lerp(edge_ray.get_collision_normal(), 0.5)
+			blended_normal = get_up_direction().lerp(
+				edge_ray.get_collision_normal(), 
+				0.5)
 			if blended_normal.angle_to(get_up_direction()) > 0.1 \
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
 				update_up(blended_normal)
@@ -390,7 +403,7 @@ func movement_process(delta : float):
 	acceleration *= move_input_vec.length()
 	
 	## Finally, apply the velocity
-	accelerated_dir = direction * (form_speed * acceleration)
+	accelerated_dir = swivel_dir * (form_speed * acceleration)
 	if is_on_floor():
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:
@@ -531,9 +544,10 @@ func action_process(delta):
 		and ((jump_velocity != Vector3.ZERO and air_dodge < 1) \
 		or jump_velocity == Vector3.ZERO):
 			print("Wolf Dodge")
+			print("move_direction: ", move_direction.normalized(), " | accel_dir: ", accelerated_dir.normalized())
 			dodge_cooldown = 15
 			dodge_active = 10
-			dodge_direction = accelerated_dir.normalized()
+			dodge_direction = move_direction.normalized()
 #			dodge_direction.y = clampf(velocity.normalized().y, 0, 1)
 			if jump_velocity != Vector3.ZERO:
 				set_jump_velocity(dodge_direction * DODGE_SPEED)
