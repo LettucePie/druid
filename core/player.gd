@@ -53,6 +53,7 @@ var cam_distance_max : float = 10.0
 
 ## Movement Variables
 var form_speed : float = 5.0
+var form_accel : float = 0.1
 var form_jump : float = 4.5
 var form_air_control : float = 0.15
 var form_mag_angle : float = 0.15
@@ -60,6 +61,7 @@ var form_turn : float = 0.5
 const MAG_PULL = 10.5
 var move_input_vec : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
+var acceleration : float = 0.0
 @export var turn_responsiveness_curve : Curve
 @export var turn_decel_curve : Curve
 var floor_angle : float
@@ -134,6 +136,7 @@ func set_form_variables(form : Form):
 		climb_angle = 0.45
 		floor_max_angle = climb_angle
 		form_speed = 5.0
+		form_accel = 0.1
 		form_jump = 4.5
 		form_air_control = 2.5
 		form_mag_angle = 0.8
@@ -146,6 +149,7 @@ func set_form_variables(form : Form):
 		climb_angle = PI + (PI / 2)
 		floor_max_angle = climb_angle
 		form_speed = 4.0
+		form_accel = 0.15
 		form_jump = 4.0
 		form_air_control = 4.9
 		form_mag_angle = 0.15
@@ -159,6 +163,7 @@ func set_form_variables(form : Form):
 		climb_angle = 0.5
 		floor_max_angle = climb_angle
 		form_speed = 7.0
+		form_accel = 0.08
 		form_jump = 5.0
 		form_air_control = 1.0
 		form_mag_angle = 0.4
@@ -348,6 +353,9 @@ func movement_process(delta : float):
 	var blended_normal : Vector3 = get_up_direction()
 	if direction.length_squared() > 0.0:
 		
+		## Accumulate Acceleration
+		acceleration = clampf(acceleration + form_accel, 0.0, 1.0)
+		
 		## Turns the Swivel Ring to the target direction.
 		## The Function also generates a deceleration amount by comparing \
 		## how far/fast it could turn versus the form speed limitations.
@@ -373,13 +381,16 @@ func movement_process(delta : float):
 				current_mesh.material_override = test_mat_a
 			else:
 				current_mesh.material_override = test_mat_b
+	else:
+		## Decay Acceleration
+		acceleration = clampf(acceleration - (form_accel * 2), 0.0, 1.0)
 	
-	## Testing decel
-	if decel < 1.0:
-		print("DECEL: ", decel)
+	## Apply percent of decel against acceleration, then scale by input axis
+	acceleration *= decel
+	acceleration *= move_input_vec.length()
 	
 	## Finally, apply the velocity
-	accelerated_dir = direction * (form_speed * decel)
+	accelerated_dir = direction * (form_speed * acceleration)
 	if is_on_floor():
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:
