@@ -63,6 +63,7 @@ var move_input_vec : Vector3 = Vector3.ZERO
 var move_direction : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
 var acceleration : float = 0.0
+var deceleration : float = 1.0
 @export var turn_responsiveness_curve : Curve
 @export var turn_decel_curve : Curve
 var floor_angle : float
@@ -260,6 +261,12 @@ func turn_swivel_ring(target : Vector3) -> float:
 	speed_percent = clampf(speed_percent, form_turn, 1.0)
 	var ring_basis : Basis = $swivel_ring.transform.basis
 	var target_basis : Basis = ring_basis.looking_at(target, get_up_direction())
+	if speed_percent >= 0.9 and speed_percent <= 1.0:
+		print("Sharp Turn: ", speed_percent)
+	if speed_percent >= 0.5 and speed_percent < 0.9:
+		print("Quick Turn: ", speed_percent)
+	if speed_percent < 0.5:
+		print("Slow Turn: ", speed_percent)
 	var result_basis : Basis = ring_basis.slerp(target_basis, speed_percent)
 	$swivel_ring.transform.basis = result_basis
 	
@@ -333,6 +340,15 @@ func movement_process(delta : float):
 		0, 
 		Input.get_axis("move_up", "move_down")).limit_length(1.0)
 	
+	## Test
+	var input_display_pos : Vector2 = Vector2(50, 50)
+	input_display_pos += Vector2(
+		move_input_vec.x,
+		move_input_vec.z
+		) * 50
+	input_display_pos -= $input_display_bg/input_display_point.pivot_offset
+	$input_display_bg/input_display_point.position = input_display_pos
+	
 	## Orientate the input vector to the camera angle.
 	## **Note** This is currently limited to the aspect of walking on \
 	## the ground, and only the ground.
@@ -352,7 +368,7 @@ func movement_process(delta : float):
 	var swivel_dir : Vector3 = (
 		$swivel_ring.transform.basis * Vector3.FORWARD) \
 		* move_direction.length()
-	var decel : float = 1.0
+	deceleration = clampf(deceleration + form_accel / 2, 0.0, 1.0)
 	
 	## Check if moving at all before bothering with edge_ray
 	var blended_normal : Vector3 = get_up_direction()
@@ -365,7 +381,9 @@ func movement_process(delta : float):
 			## Turns the Swivel Ring to the target direction.
 			## The Function also generates a deceleration amount by comparing \
 			## how far/fast it could turn versus the form speed limitations.
-			decel = turn_swivel_ring(move_direction)
+			var turn_decel = turn_swivel_ring(move_direction)
+			if turn_decel < deceleration:
+				deceleration = turn_decel
 		
 			## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
 			## direction. 
@@ -373,6 +391,12 @@ func movement_process(delta : float):
 			## Swivel Ring Forward.
 			swivel_dir = ($swivel_ring.transform.basis * Vector3.FORWARD) \
 				* move_direction.length()
+		
+		$deceleration.value = 1.0 - deceleration
+		
+		## Apply percent of decel against acceleration, then scale by input axis
+		acceleration *= deceleration
+		acceleration *= move_input_vec.length()
 		
 		## Move Edge Ray further when full sprinting and closer when creeping
 		## adds realism to the accuracy of the edge_detection
@@ -398,9 +422,8 @@ func movement_process(delta : float):
 		## Decay Acceleration
 		acceleration = clampf(acceleration - (form_accel * 2), 0.0, 1.0)
 	
-	## Apply percent of decel against acceleration, then scale by input axis
-	acceleration *= decel
-	acceleration *= move_input_vec.length()
+	## Test
+	$acceleration.value = acceleration
 	
 	## Finally, apply the velocity
 	accelerated_dir = swivel_dir * (form_speed * acceleration)
@@ -429,13 +452,21 @@ func movement_process(delta : float):
 				apply_jump_velocity(delta)
 	
 	## Forward velocity to anim_handler so it can apply it to movement anims
-	anim.set_player_move(velocity.length() / form_speed)
+	anim.set_player_move(acceleration)
+	#anim.set_player_move(velocity.length() / form_speed)
 	
 	## For Testing Purposes.
 	## Resets player to Center if they "fall out"
 	if position.y < -10:
 		velocity = Vector3.ZERO
 		position = Vector3(0, 2, 0)
+	var vel_display : Vector2 = Vector2(50, 50)
+	vel_display += Vector2(
+		accelerated_dir.x / form_speed,
+		accelerated_dir.z / form_speed
+		) * 50
+	vel_display -= $velocity_display_bg/velocity_display_point.pivot_offset
+	$velocity_display_bg/velocity_display_point.position = vel_display
 
 
 ###

@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://bmicu2av4r0qn"]
+[gd_scene load_steps=70 format=3 uid="uid://bmicu2av4r0qn"]
 
 [ext_resource type="Script" path="res://core/player.gd" id="1_dpv4o"]
 [ext_resource type="Curve" uid="uid://dd0uugb3iebpm" path="res://core/entities/player/action_data/cam_distance_curve.tres" id="2_1ws1n"]
@@ -200,6 +200,13 @@ albedo_color = Color(1, 0, 1, 1)
 [sub_resource type="PrismMesh" id="PrismMesh_ma6o0"]
 size = Vector3(0.62, 0.83, 0.295)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aevwl"]
+bg_color = Color(0.620938, 0.0197533, 0.0488233, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_586b2"]
+font_size = 12
+font_color = Color(1, 1, 1, 0.329412)
+
 [node name="player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.96485, 0)
 script = ExtResource("1_dpv4o")
@@ -269,34 +276,34 @@ visible = false
 transform = Transform3D(-0.312618, 0, -2.73299e-08, 0, 0.312618, 0, 2.73299e-08, 0, -0.312618, 0, 0.143265, 0)
 
 [node name="Skeleton3D" parent="human_node/human_model/human_armature" index="0"]
-bones/0/position = Vector3(0, -0.160347, -0.10598)
+bones/0/position = Vector3(0, -0.142431, -0.10598)
 bones/0/rotation = Quaternion(0.0914123, -0.00244562, -0.0016501, 0.995809)
-bones/1/rotation = Quaternion(-0.0161886, -0.00624288, 0.797932, 0.602497)
+bones/1/rotation = Quaternion(-0.0090601, 0.0246738, 0.796877, 0.60357)
 bones/2/rotation = Quaternion(0.0834039, -0.0313383, 0.324214, 0.941779)
 bones/3/rotation = Quaternion(0.317049, 0.0415371, 0.0138462, 0.947398)
-bones/5/rotation = Quaternion(0.010229, -0.0138923, 0.00330987, 0.999846)
+bones/5/rotation = Quaternion(-0.0222307, -0.013868, 0.00392791, 0.999649)
 bones/6/rotation = Quaternion(-0.0150778, -3.56578e-05, -0.000320333, 0.999886)
 bones/10/position = Vector3(-0.34512, -0.192523, -0.00858107)
-bones/10/rotation = Quaternion(-0.214801, 0.257955, 0.939422, 0.0693277)
-bones/11/rotation = Quaternion(-0.430042, 0.00118437, -0.00277367, 0.902804)
+bones/10/rotation = Quaternion(-0.215834, 0.243584, 0.94325, 0.0660407)
+bones/11/rotation = Quaternion(-0.392959, 0.00107056, -0.00281958, 0.919551)
 bones/12/rotation = Quaternion(-0.0599468, -0.00843683, -0.742144, 0.667501)
-bones/13/rotation = Quaternion(-0.0818117, -0.0177998, -0.276599, 0.957331)
+bones/13/rotation = Quaternion(-0.0838196, -0.0220131, -0.263862, 0.96066)
 bones/14/rotation = Quaternion(0.395912, -0.0344117, -0.113618, 0.910582)
 bones/17/position = Vector3(0.358753, -0.19082, -0.0116346)
-bones/17/rotation = Quaternion(0.0966523, 0.36358, 0.922394, -0.0875024)
-bones/18/rotation = Quaternion(-0.29401, -0.0947239, -0.0162572, 0.950958)
+bones/17/rotation = Quaternion(0.0991789, 0.33635, 0.932668, -0.0846279)
+bones/18/rotation = Quaternion(-0.252176, -0.0953437, -0.0121027, 0.962897)
 
 [node name="ear_a" parent="human_node/human_model/human_armature/Skeleton3D" index="0"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00321579, 0.985018, -0.172419, 0.0330528, 0.172431, 0.984467, 0.000675778, 1.67525, 0.232039)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00106423, 0.994131, -0.108174, 0.0331918, 0.10815, 0.99358, 0.00067578, 1.70075, 0.18128)
 
 [node name="hair_a" parent="human_node/human_model/human_armature/Skeleton3D" index="1"]
-transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00321579, 0.985018, -0.172419, 0.0330528, 0.172431, 0.984467, 0.00858761, 2.10681, 0.0347897)
+transform = Transform3D(0.999448, -0.00253311, -0.0331121, -0.00106423, 0.994131, -0.108174, 0.0331918, 0.10815, 0.99358, 0.00858762, 2.1186, -0.043558)
 
 [node name="cape" parent="human_node/human_model/human_armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0332024, 0.991037, -0.129401, 0.000130277, 0.129468, 0.991584, -0.0395435, 1.20905, -0.287315)
+transform = Transform3D(0.999449, -0.0329398, 0.00416953, 0.0331409, 0.997349, -0.0647848, -0.00202448, 0.0648873, 0.997891, -0.0395435, 1.20183, -0.306729)
 
 [node name="staff_a" parent="human_node/human_model/human_armature/Skeleton3D" index="3"]
-transform = Transform3D(0.41923, -0.288421, 0.860848, 0.846399, 0.467161, -0.255675, -0.328412, 0.835808, 0.439967, 1.37192, 0.000166111, 0.209303)
+transform = Transform3D(0.394414, -0.297796, 0.869342, 0.85691, 0.460856, -0.230906, -0.331879, 0.83602, 0.436952, 1.39327, 0.0373232, 0.208096)
 
 [node name="standin_floor" parent="human_node/human_model" index="1"]
 visible = false
@@ -333,16 +340,16 @@ transform = Transform3D(-0.115452, 0, -1.00931e-08, 0, 0.115452, 0, 1.00931e-08,
 [node name="Skeleton3D" parent="wolf_node/wolf_model/Armature" index="0"]
 bones/1/rotation = Quaternion(0.656745, -8.93774e-16, -8.93774e-16, 0.754113)
 bones/2/rotation = Quaternion(0.12946, 1.04057e-15, -9.22106e-17, 0.991585)
-bones/3/rotation = Quaternion(-0.337202, 4.22092e-18, 8.18341e-17, 0.941432)
-bones/4/rotation = Quaternion(-0.259247, 1.23711e-18, 5.54015e-17, 0.965811)
+bones/3/rotation = Quaternion(-0.310812, -5.37373e-18, 5.93611e-17, 0.950471)
+bones/4/rotation = Quaternion(-0.284466, 4.52723e-19, 6.46516e-17, 0.958686)
 bones/5/rotation = Quaternion(0.456607, 1.48065e-22, -1.01387e-16, 0.889668)
 bones/6/rotation = Quaternion(0.859775, 0.204093, 0.0176992, -0.467782)
 bones/7/rotation = Quaternion(0.859775, -0.204093, -0.0176992, -0.467782)
-bones/8/position = Vector3(0.903733, 0.966036, 1.18712)
-bones/8/rotation = Quaternion(0.804354, -1.42928e-17, -3.81885e-18, 0.59415)
+bones/8/position = Vector3(0.903733, 1.05964, 1.12756)
+bones/8/rotation = Quaternion(0.789025, 6.05244e-18, 7.35634e-18, 0.614361)
 bones/9/rotation = Quaternion(0.102258, 1.18584e-07, 1.21901e-08, 0.994758)
-bones/12/position = Vector3(-0.903733, 0.966036, 1.18712)
-bones/12/rotation = Quaternion(0.804354, -1.42928e-17, -3.81885e-18, 0.59415)
+bones/12/position = Vector3(-0.903733, 1.05964, 1.12756)
+bones/12/rotation = Quaternion(0.789025, 6.05244e-18, 7.35634e-18, 0.614361)
 bones/13/rotation = Quaternion(0.102258, 1.18584e-07, 1.21901e-08, 0.994758)
 bones/16/rotation = Quaternion(0.649191, -0.000736844, -0.092586, 0.754969)
 bones/17/rotation = Quaternion(0.560286, -0.0218214, 0.0589299, 0.825912)
@@ -390,6 +397,106 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 material_override = SubResource("StandardMaterial3D_ao13a")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_ma6o0")
+
+[node name="acceleration" type="ProgressBar" parent="."]
+anchors_preset = -1
+anchor_left = 0.225
+anchor_top = 0.091
+anchor_right = 0.775
+anchor_bottom = 0.148
+offset_top = 0.0479965
+offset_right = -3.05176e-05
+offset_bottom = 0.143997
+grow_horizontal = 2
+max_value = 1.0
+step = 0.001
+
+[node name="deceleration" type="ProgressBar" parent="."]
+anchors_preset = -1
+anchor_left = 0.225
+anchor_top = 0.157
+anchor_right = 0.775
+anchor_bottom = 0.214
+offset_top = -0.104004
+offset_right = -3.05176e-05
+offset_bottom = -0.00801086
+grow_horizontal = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_aevwl")
+max_value = 1.0
+step = 0.001
+fill_mode = 1
+
+[node name="input_display_bg" type="ColorRect" parent="."]
+anchors_preset = -1
+anchor_top = 0.153
+anchor_right = 0.156
+anchor_bottom = 0.364
+offset_top = -0.216003
+offset_right = 0.159996
+offset_bottom = 0.191986
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.0980392, 0.0980392, 0.219608)
+
+[node name="input_display_point" type="ColorRect" parent="input_display_bg"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 45.0
+offset_top = 45.0
+offset_right = -45.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(5, 5)
+color = Color(1, 0, 0, 1)
+
+[node name="Label" type="Label" parent="input_display_bg"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.17
+grow_horizontal = 2
+text = "input vec"
+label_settings = SubResource("LabelSettings_586b2")
+
+[node name="velocity_display_bg" type="ColorRect" parent="."]
+anchors_preset = -1
+anchor_top = 0.392
+anchor_right = 0.156
+anchor_bottom = 0.604
+offset_top = -0.0240021
+offset_right = 0.159996
+offset_bottom = -0.0880127
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.0980392, 0.0980392, 0.219608)
+
+[node name="velocity_display_point" type="ColorRect" parent="velocity_display_bg"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 45.0
+offset_top = 45.0
+offset_right = -45.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(5, 5)
+color = Color(0.863925, 0.000584692, 0.86161, 1)
+
+[node name="Label2" type="Label" parent="velocity_display_bg"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 17.0
+grow_horizontal = 2
+text = "velocity"
+label_settings = SubResource("LabelSettings_586b2")
 
 [connection signal="body_entered" from="swivel_ring/hitbox_small" to="." method="_on_hitbox_detection" binds= [false, true]]
 [connection signal="body_exited" from="swivel_ring/hitbox_small" to="." method="_on_hitbox_detection" binds= [false, false]]
