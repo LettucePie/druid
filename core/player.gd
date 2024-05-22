@@ -169,7 +169,7 @@ func set_form_variables(form : Form):
 		form_jump = 5.0
 		form_air_control = 1.0
 		form_mag_angle = 0.4
-		form_turn = 0.05
+		form_turn = 0.15
 		update_up(Vector3.UP)
 
 
