@@ -256,28 +256,22 @@ func update_up(up : Vector3):
 ## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
 ## dictating the direction the player will travel.
 func turn_swivel_ring(target : Vector3) -> float:
-	var speed_percent : float = velocity.length() / form_speed
+	var speed_percent : float = acceleration
 	speed_percent = turn_responsiveness_curve.sample(speed_percent)
 	speed_percent = clampf(speed_percent, form_turn, 1.0)
 	var ring_basis : Basis = $swivel_ring.transform.basis
 	var target_basis : Basis = ring_basis.looking_at(target, get_up_direction())
-	if speed_percent >= 0.9 and speed_percent <= 1.0:
-		print("Sharp Turn: ", speed_percent)
-	if speed_percent >= 0.5 and speed_percent < 0.9:
-		print("Quick Turn: ", speed_percent)
-	if speed_percent < 0.5:
-		print("Slow Turn: ", speed_percent)
 	var result_basis : Basis = ring_basis.slerp(target_basis, speed_percent)
 	$swivel_ring.transform.basis = result_basis
 	
 	## Find the difference to calculate the level of deceleration to return
-	var angle_target = (ring_basis * Vector3.FORWARD).angle_to(
-		(target_basis * Vector3.FORWARD)
+	var angle_target = (ring_basis * Vector3.FORWARD).signed_angle_to(
+		target_basis * Vector3.FORWARD, get_up_direction()
 	)
-	var angle_result = (ring_basis * Vector3.FORWARD).angle_to(
-		(result_basis * Vector3.FORWARD)
+	var angle_result = (ring_basis * Vector3.FORWARD).signed_angle_to(
+		result_basis * Vector3.FORWARD, get_up_direction()
 	)
-	var lost_angle = angle_target - angle_result
+	var lost_angle = abs(angle_target - angle_result)
 	return turn_decel_curve.sample(lost_angle / PI)
 
 
@@ -377,13 +371,18 @@ func movement_process(delta : float):
 		## Accumulate Acceleration
 		acceleration = clampf(acceleration + form_accel, 0.0, 1.0)
 		
-		if dodge_active <= 0:
+		if dodge_active <= 0 \
+		and move_direction.normalized() != velocity.normalized():
 			## Turns the Swivel Ring to the target direction.
 			## The Function also generates a deceleration amount by comparing \
 			## how far/fast it could turn versus the form speed limitations.
 			var turn_decel = turn_swivel_ring(move_direction)
 			if turn_decel < deceleration:
 				deceleration = turn_decel
+				#print("turn decel ", turn_decel, " less than ", deceleration)
+			else:
+				pass
+				#print("turn decel is negligible: ", turn_decel)
 		
 			## Input adjusts the Swivel Ring. The Swivel Ring dictates applied \
 			## direction. 
