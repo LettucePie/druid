@@ -64,6 +64,11 @@ var move_direction : Vector3 = Vector3.ZERO
 var accelerated_dir : Vector3 = Vector3.ZERO
 var acceleration : float = 0.0
 var deceleration : float = 1.0
+var velocity_buffer : PackedVector3Array = [
+	Vector3.FORWARD,
+	Vector3.FORWARD,
+	Vector3.FORWARD
+]
 @export var turn_responsiveness_curve : Curve
 @export var turn_decel_curve : Curve
 var floor_angle : float
@@ -427,6 +432,11 @@ func movement_process(delta : float):
 	## Finally, apply the velocity
 	accelerated_dir = swivel_dir * (form_speed * acceleration)
 	if is_on_floor():
+		if velocity != accelerated_dir:
+			velocity_buffer = PackedVector3Array([
+				velocity,
+				velocity_buffer[0],
+				velocity_buffer[1]])
 		velocity = accelerated_dir
 		if jump_velocity != Vector3.ZERO:
 			player_landed()
@@ -574,7 +584,7 @@ func action_process(delta):
 		and ((jump_velocity != Vector3.ZERO and air_dodge < 1) \
 		or jump_velocity == Vector3.ZERO):
 			print("Wolf Dodge")
-			print("move_direction: ", move_direction.normalized(), " | accel_dir: ", accelerated_dir.normalized())
+			print("move_direction: ", move_direction.normalized(), " | velocity: ", velocity.normalized())
 			dodge_cooldown = 15
 			dodge_active = 10
 			dodge_direction = move_direction.normalized()
