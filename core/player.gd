@@ -584,7 +584,19 @@ func action_process(delta):
 		and ((jump_velocity != Vector3.ZERO and air_dodge < 1) \
 		or jump_velocity == Vector3.ZERO):
 			print("Wolf Dodge")
-			print("move_direction: ", move_direction.normalized(), " | velocity: ", velocity.normalized())
+			var angle : float = move_direction.normalized().signed_angle_to(
+				velocity_buffer[2].normalized(),
+				get_up_direction()
+			)
+			var negative : bool = angle < 0.0
+			angle = abs(angle) / PI
+			print(PI, " ", angle)
+			if angle < 0.33:
+				print("Front Dodge")
+			elif angle >= 0.33 and angle < 0.60:
+				print("Side Dodge -- Left = ", negative)
+			else:
+				print("Back Dodge")
 			dodge_cooldown = 15
 			dodge_active = 10
 			dodge_direction = move_direction.normalized()
