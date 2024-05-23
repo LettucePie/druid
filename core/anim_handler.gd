@@ -120,6 +120,13 @@ func set_mobile(value : bool):
 	current_tree.set("parameters/blend_movement/blend_amount", int(value))
 
 
+func set_dodge_direction(dir : Vector2):
+	print("Setting Dodge Direction")
+	if state_machine.has_node("dodge"):
+		current_tree.set("parameters/dodge/blend_position", dir)
+		playback.start("dodge")
+
+
 ## Auto Advance Expression does not work well... at least in current config.
 ## This is going to be the main avenue for playing animations.
 ## Here we clarify animation name conversions, or other bonus effects per form.
