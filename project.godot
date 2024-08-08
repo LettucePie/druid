@@ -14,7 +14,7 @@ config/name="Druid"
 run/main_scene="res://playscenes/play_0.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
-config/git_sha="f3f88124ea182e4a9b2e51115e0cdeada9f278fa"
+config/git_sha="79803dc3f80112f2c68322fe7caeacb3f9367742"
 
 [display]
 

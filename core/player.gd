@@ -23,11 +23,13 @@ signal request_cam_movement(direction)
 # Human
 @onready var human_node : Node3D = $human_node 
 @onready var human_shape : CollisionShape3D = $human_shape
-@onready var human_mesh : MeshInstance3D = $human_node/human_model/human_armature/Skeleton3D/human_mesh
+@onready var human_mesh : MeshInstance3D = \
+$human_node/human_model/human_armature/Skeleton3D/human_mesh
 # Wolf
 @onready var wolf_node : Node3D = $wolf_node
 @onready var wolf_shape : CollisionShape3D = $wolf_shape
-@onready var wolf_mesh : MeshInstance3D = $wolf_node/wolf_model/Armature/Skeleton3D/wolfmesh
+@onready var wolf_mesh : MeshInstance3D = \
+$wolf_node/wolf_model/Armature/Skeleton3D/wolfmesh
 
 ## Iterative Lists
 @onready var colshapes : Array = [
@@ -42,6 +44,10 @@ signal request_cam_movement(direction)
 
 
 ## Camera Variables
+@onready var player_cam : Camera3D = $cam_dial/Player_Cam
+@onready var aim_cam : Camera3D = $cam_dial/aim_arm/Aim_Cam
+@onready var cam_dial : Node3D = $cam_dial
+@onready var aim_arm : Node3D = $cam_dial/aim_arm
 var cam_locked : bool = false
 var cam_min_y : float = -PI
 var cam_max_y : float = PI
@@ -108,6 +114,9 @@ const DODGE_SPEED = 14.0
 var attack_active : bool = false
 var attack_active_ebrake : int = 0
 var aiming : bool = false
+
+## Player Settings
+var invert_cam : bool = false
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
 ## This didn't work. It just made an array of 0, 0, 0.
@@ -218,35 +227,39 @@ func cam_process(delta):
 	current_cam = get_viewport().get_camera_3d()
 	var input : Vector2 = Vector2(
 		Input.get_axis("cam_left", "cam_right"),
-		Input.get_axis("cam_up", "cam_down")
+		Input.get_axis("cam_down", "cam_up")
 	).limit_length(1.0)
+	if invert_cam:
+		input.y *= -1.0
 	
-	var parent_dial = current_cam.get_parent()
-	if parent_dial.name == "cam_dial":
-		if !cam_locked and !aiming:
-			parent_dial.rotate_y(input.x * delta)
-			parent_dial.rotate(
-				parent_dial.transform.basis * Vector3.RIGHT, 
-				input.y * delta)
-			var x_percent = 1.0 - inverse_lerp(
-				cam_min_x, 
-				cam_max_x, 
-				parent_dial.rotation.x)
-			current_cam.position.z = \
-				cam_distance_max * cam_distance_curve.sample(x_percent)
-			current_cam.position.y = current_cam.position.z * 0.12
-		elif aiming:
-			pass
-		
-		parent_dial.rotation.y = clamp(
-			parent_dial.rotation.y, 
-			cam_min_y, 
-			cam_max_y)
-		parent_dial.rotation.x = clamp(
-			parent_dial.rotation.x,
-			cam_min_x,
-			cam_max_x)
+	if !cam_locked and !aiming:
+		cam_dial.rotate_y(input.x * delta)
+		cam_dial.rotate(
+			cam_dial.transform.basis * Vector3.RIGHT, 
+			input.y * delta)
+		var x_percent = 1.0 - inverse_lerp(
+			cam_min_x, 
+			cam_max_x, 
+			cam_dial.rotation.x)
+		current_cam.position.z = \
+			cam_distance_max * cam_distance_curve.sample(x_percent)
+		current_cam.position.y = current_cam.position.z * 0.12
+		clamp_cam_dolly_rotation(cam_dial)
+	elif aiming:
+		aim_arm.rotate_y(input.x * delta)
+		#aim_arm.rotate_x(input.y * delta)
+		clamp_cam_dolly_rotation(aim_arm)
 
+
+func clamp_cam_dolly_rotation(dolly):
+	dolly.rotation.y = clamp(
+		dolly.rotation.y, 
+		cam_min_y, 
+		cam_max_y)
+	dolly.rotation.x = clamp(
+		dolly.rotation.x,
+		cam_min_x,
+		cam_max_x)
 
 ###
 ### Movement Input Block
@@ -608,12 +621,14 @@ func action_process(delta):
 			set_form_to(Form.HUMAN)
 	
 	if Input.get_action_strength("aim") >= 0.3:
-		print("Aim Pressed")
-		aiming = true
-		$cam_dial/Aim_Cam.make_current()
-	elif !$cam_dial/Player_Cam.is_current():
+		if !aiming:
+			print("Aim Pressed")
+			aiming = true
+			aim_arm.rotation = Vector3.ZERO
+			aim_cam.make_current()
+	elif aiming:
 		aiming = false
-		$cam_dial/Player_Cam.make_current()
+		player_cam.make_current()
 	
 	if Input.get_action_strength("fire") >= 0.3:
 		print("Fire Pressed")
