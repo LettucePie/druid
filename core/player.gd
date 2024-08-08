@@ -232,8 +232,9 @@ func cam_process(delta):
 		Input.get_axis("cam_left", "cam_right"),
 		Input.get_axis("cam_down", "cam_up")
 	).limit_length(1.0)
-	if mouse_relative != Vector2.ZERO:
+	if mouse_relative != Vector2.ZERO and input == Vector2.ZERO:
 		input = mouse_relative
+		mouse_relative = Vector2.ZERO
 	if invert_cam:
 		input.y *= -1.0
 	input.x *= -1.0
