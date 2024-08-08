@@ -55,6 +55,7 @@ var cam_min_x : float = PI * -0.35
 var cam_max_x : float = PI * 0.35
 @export var cam_distance_curve : Curve
 var cam_distance_max : float = 10.0
+var aim_speed = 10.0
 
 
 ## Movement Variables
@@ -117,6 +118,7 @@ var aiming : bool = false
 
 ## Player Settings
 var invert_cam : bool = false
+var aim_sensitivity : float = 0.65 ## multiply the aim speed
 
 #var action_frame_vars : Array = [magnet_cooldown, dodge_cooldown, dodge_active]
 ## This didn't work. It just made an array of 0, 0, 0.
@@ -231,6 +233,7 @@ func cam_process(delta):
 	).limit_length(1.0)
 	if invert_cam:
 		input.y *= -1.0
+	input.x *= -1.0
 	
 	if !cam_locked and !aiming:
 		cam_dial.rotate_y(input.x * delta)
@@ -246,8 +249,13 @@ func cam_process(delta):
 		current_cam.position.y = current_cam.position.z * 0.12
 		clamp_cam_dolly_rotation(cam_dial)
 	elif aiming:
-		aim_arm.rotate_y(input.x * delta)
-		#aim_arm.rotate_x(input.y * delta)
+		cam_dial.rotate_y(input.x * (aim_speed * aim_sensitivity) * delta)
+		#aim_arm.rotate_y(input.x * delta)
+		#aim_arm.rotate(
+			#aim_arm.transform.basis * Vector3.UP,
+			#input.x * delta
+		#)
+		aim_arm.rotate_x(input.y * (aim_speed * aim_sensitivity) * delta)
 		clamp_cam_dolly_rotation(aim_arm)
 
 
