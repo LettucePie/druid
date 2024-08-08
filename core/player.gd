@@ -56,6 +56,7 @@ var cam_max_x : float = PI * 0.35
 @export var cam_distance_curve : Curve
 var cam_distance_max : float = 10.0
 var aim_speed = 10.0
+var mouse_relative : Vector2 = Vector2.ZERO
 
 
 ## Movement Variables
@@ -231,6 +232,8 @@ func cam_process(delta):
 		Input.get_axis("cam_left", "cam_right"),
 		Input.get_axis("cam_down", "cam_up")
 	).limit_length(1.0)
+	if mouse_relative != Vector2.ZERO:
+		input = mouse_relative
 	if invert_cam:
 		input.y *= -1.0
 	input.x *= -1.0
@@ -682,6 +685,11 @@ func _physics_process(delta):
 	lerp_mesh(delta)
 
 
+func _input(event):
+	if event is InputEventMouseMotion:
+		mouse_relative = event.relative
+
+
 ###
 ### World to Player Block
 ###
@@ -753,10 +761,3 @@ func _on_hitbox_detection(body : Node3D, far : bool, register : bool):
 			enemies_close.erase(body)
 		if body.has_method("set_color"):
 			body.set_color(Color.WHITE)
-
-
-func _input(event):
-	pass
-#	print("Player Received Event: ", event)
-
-
