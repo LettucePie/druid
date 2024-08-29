@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b44ybp87y8xsb"]
+
+[ext_resource type="Script" path="res://testing/testcontrol.gd" id="1_xtant"]
+
+[node name="testcontrol" type="Node3D"]
+script = ExtResource("1_xtant")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.915698, 0.401868, 0, -0.401868, 0.915698, 0, 1.72082, 3.12022)

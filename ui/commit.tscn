@@ -14,4 +14,4 @@ mouse_filter = 2
 bbcode_enabled = true
 text = "[color=#ffffff44]github.com/LettucePie/druid/tree/[/color]"
 script = ExtResource("1_j6ov3")
-manual_commit = "f3f88124ea182e4a9b2e51115e0cdeada9f278fa"
+manual_commit = "4217b5167c89b3ecea9b4f9b1844174c88be66f8"
