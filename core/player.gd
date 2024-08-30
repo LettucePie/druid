@@ -14,11 +14,6 @@ signal request_cam_movement(direction)
 @onready var edge_ray : RayCast3D = $swivel_ring/edge_ray
 
 
-## Testing Variables
-@export var test_mat_a : Material
-@export var test_mat_b : Material
-
-
 #### Form Assets
 # Human
 @onready var human_node : Node3D = $human_node 
@@ -444,9 +439,6 @@ func movement_process(delta : float):
 			if blended_normal.angle_to(get_up_direction()) > 0.1 \
 			and Vector3.UP.angle_to(blended_normal) < climb_angle:
 				update_up(blended_normal)
-				current_mesh.material_override = test_mat_a
-			else:
-				current_mesh.material_override = test_mat_b
 	else:
 		## Decay Acceleration
 		acceleration = clampf(acceleration - (form_accel * 2), 0.0, 1.0)
