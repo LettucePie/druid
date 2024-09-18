@@ -53,12 +53,18 @@ func _ready():
 		print("Failed to connect Core Elements")
 		get_tree().quit()
 	initialize_player()
+	detect_input()
 
 
 func initialize_player():
 	player.position = stage.start_point.position
 #	player.position = stage.checkpoint_spawns[stage.current_checkpoint].position
 	player.set_form_to(player.Form.HUMAN)
+
+
+func detect_input():
+	if !OS.has_feature("mobile"):
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
