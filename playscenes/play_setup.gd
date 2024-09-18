@@ -64,3 +64,15 @@ func initialize_player():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+
+## System Shortcuts
+func _input(event):
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ESCAPE:
+			get_tree().quit()
+		if event.pressed and event.keycode == KEY_F11:
+			if get_window().get_mode() == 3:
+				get_window().set_mode(0)
+			else:
+				get_window().set_mode(3)
