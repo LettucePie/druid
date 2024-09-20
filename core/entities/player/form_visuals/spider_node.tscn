@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://crvjor6e7j72u"]
+
+[ext_resource type="PackedScene" uid="uid://cs5ubujc260e2" path="res://art/model/spider_model_0.1.glb" id="1_00nvf"]
+[ext_resource type="Script" path="res://core/entities/player/form_visuals/spider_node.gd" id="1_an5wp"]
+
+[node name="spider_node" type="Node3D"]
+script = ExtResource("1_an5wp")
+
+[node name="spider_model_0_1" parent="." instance=ExtResource("1_00nvf")]
+
+[node name="Skeleton3D" parent="spider_model_0_1/SpiderArmature" index="8"]
+bones/0/rotation = Quaternion(-0.707107, 1.96704e-08, 0.707107, -3.09086e-08)
+bones/0/scale = Vector3(1, 1, 1)
+bones/1/rotation = Quaternion(-1.55178e-07, -2.82257e-08, -0.747388, 0.664388)
+bones/2/rotation = Quaternion(1.85182e-07, -4.68877e-08, 0.77904, 0.626974)
+bones/2/scale = Vector3(1, 1, 1)
+
+[editable path="spider_model_0_1"]
