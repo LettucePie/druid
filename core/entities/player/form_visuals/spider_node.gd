@@ -114,7 +114,7 @@ func manage_cycle():
 
 func walk(new_speed : float):
 	speed = new_speed
-	if speed > 0.8:
+	if speed > 0.5:
 		if anim.current_animation != "fast_bob":
 			anim.play("fast_bob")
 	else:
