@@ -20,6 +20,7 @@ var found_legs : bool = false
 var left_order : Array = [0, 2, 1, 3]
 var right_order : Array = [1, 3, 0, 2]
 var current_order : int = 0
+var flicking_legs : Array[Leg] = []
 var current_legs : Array[Leg] = []
 
 var walking : bool = false
@@ -52,12 +53,10 @@ func _ready():
 
 func _queue_legs():
 	print("Queue Legs")
-	if current_legs.size() <= 2:
+	if current_legs.size() <= 2 and flicking_legs.size() == 0:
 		print("Adding Legs from Order Index: ", current_order)
-		current_legs.append(legs_left[left_order[current_order]])
-		_flick_leg(legs_left[left_order[current_order]])
-		current_legs.append(legs_right[right_order[current_order]])
-		_flick_leg(legs_right[right_order[current_order]])
+		flicking_legs.append(legs_left[left_order[current_order]])
+		flicking_legs.append(legs_right[right_order[current_order]])
 		current_order += 1
 		if current_order > 3:
 			current_order = 0
@@ -65,34 +64,53 @@ func _queue_legs():
 		print("Leg Queue Full")
 
 
-func _flick_leg(leg : Leg):
-	leg.leg_node.rotation.y = leg.leg_front_y
-
 
 func _process(delta):
 	if found_legs and walking:
 		print("Walking")
-		var finished_legs : Array[Leg] = []
-		for leg in current_legs:
-			print("Moving Leg: ", leg.leg_node.name)
-			leg.leg_node.rotation.y = move_toward(
-				leg.leg_node.rotation.y, 
-				leg.leg_back_y, 
-				ROTATESPEED * speed
-			)
-			print(" - ", leg.leg_node.name, " rot_y : ", leg.leg_node.rotation.y, "\n - ", leg.leg_back_y)
-			if is_equal_approx(leg.leg_node.rotation.y, leg.leg_back_y):
-				finished_legs.append(leg)
-				print("Leg Finished Journey: ", leg.leg_node.name)
-		if finished_legs.size() > 0:
-			for finished in finished_legs:
-				current_legs.erase(finished)
-		_queue_legs()
+		manage_flicking()
+		manage_cycle()
 		
 		# I think a proc walk cycle could be fun.
 		# just make an array of rotation instructions.
 		# an offset list of the left legs and right legs maybe?
 
+
+func manage_flicking():
+	var flicked_legs : Array[Leg] = []
+	for leg in flicking_legs:
+		print("Flicking Leg: ", leg.leg_node.name)
+		leg.leg_node.rotation.y = move_toward(
+			leg.leg_node.rotation.y,
+			leg.leg_front_y,
+			FLICKSPEED
+		)
+		if is_equal_approx(leg.leg_node.rotation.y, leg.leg_front_y):
+			flicked_legs.append(leg)
+			print("Leg Finished Flicking: ", leg.leg_node.name)
+	if flicked_legs.size() > 0:
+		for flicked in flicked_legs:
+			flicking_legs.erase(flicked)
+			current_legs.append(flicked)
+
+
+func manage_cycle():
+	var finished_legs : Array[Leg] = []
+	for leg in current_legs:
+		print("Moving Leg: ", leg.leg_node.name)
+		leg.leg_node.rotation.y = move_toward(
+			leg.leg_node.rotation.y, 
+			leg.leg_back_y, 
+			ROTATESPEED * speed
+		)
+		print(" - ", leg.leg_node.name, " rot_y : ", leg.leg_node.rotation.y, "\n - ", leg.leg_back_y)
+		if is_equal_approx(leg.leg_node.rotation.y, leg.leg_back_y):
+			finished_legs.append(leg)
+			print("Leg Finished Journey: ", leg.leg_node.name)
+	if finished_legs.size() > 0:
+		for finished in finished_legs:
+			current_legs.erase(finished)
+	_queue_legs()
 
 func walk(new_speed : float):
 	speed = new_speed
