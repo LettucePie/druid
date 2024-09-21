@@ -23,7 +23,7 @@ window/size/viewport_height=472
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/git_sha_project_setting/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

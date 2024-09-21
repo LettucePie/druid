@@ -1,15 +1,16 @@
 extends Node
 
-var anim : AnimationPlayer
+@onready var spider : Node3D = $Node3D/spider_node
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	anim = $Node3D/spider_node.anim
+
+
+func _process(delta):
+	$Node3D/dial.rotate_y(delta / 2)
 
 
 func _on_anim_1_pressed():
-	pass # Replace with function body.
+	spider.walk(0.2)
 
 
 func _on_anim_2_pressed():
-	pass # Replace with function body.
+	spider.walk(0.8)
