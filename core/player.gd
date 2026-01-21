@@ -158,7 +158,6 @@ func set_form_variables(form : Form):
 		form_air_control = 2.5
 		form_mag_angle = 0.8
 		form_turn = 0.5
-		update_up(Vector3.UP)
 	if form == Form.SPIDER:
 		current_node = human_node
 		current_mesh = human_mesh
@@ -187,7 +186,6 @@ func set_form_variables(form : Form):
 		form_air_control = 1.0
 		form_mag_angle = 0.4
 		form_turn = 0.15
-		update_up(Vector3.UP)
 
 
 func set_form_components(form : Form):
@@ -276,11 +274,6 @@ func clamp_cam_dolly_rotation(dolly):
 ###
 ### Movement Input Block
 ###
-func update_up(up : Vector3):
-	previous_normal = get_up_direction()
-	set_up_direction(up)
-	$magnet_ray.target_position = up * -1.0
-	$norm_vec.look_at(up + position, Vector3.UP)
 
 
 ## Turns the Swivel Ring to the input direction. The Swivel Ring is used for \
@@ -360,8 +353,13 @@ func movement_process(delta : float):
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var move_input_vec = Vector3(
+		Input.get_axis("move_left", "move_right"), 
+		0, 
+		Input.get_axis("move_up", "move_down")).limit_length(1.0)
+	turn_swivel_ring(move_input_vec)
+	var input_dir : Vector3 = move_input_vec
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.z)).normalized()
 	if direction:
 		velocity.x = direction.x * form_speed
 		velocity.z = direction.z * form_speed
