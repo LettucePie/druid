@@ -58,6 +58,7 @@ var mouse_relative : Vector2 = Vector2.ZERO
 var form_speed : float = 5.0
 var form_accel : float = 0.1
 var form_jump : float = 4.5
+var form_weight : float = 1.0
 var form_air_control : float = 0.15
 var form_mag_angle : float = 0.15
 var form_turn : float = 0.5
@@ -127,6 +128,7 @@ func _ready():
 	current_mesh = human_mesh
 	current_cam = get_viewport().get_camera_3d()
 	motion_mode = 0
+	set_form_to(Form.HUMAN)
 #	human_anim.play("walk")
 #	floor_max_angle = PI
 
@@ -152,6 +154,7 @@ func set_form_variables(form : Form):
 		form_speed = 5.0
 		form_accel = 0.1
 		form_jump = 4.5
+		form_weight = 1.2
 		form_air_control = 2.5
 		form_mag_angle = 0.8
 		form_turn = 0.5
@@ -165,6 +168,7 @@ func set_form_variables(form : Form):
 		form_speed = 4.0
 		form_accel = 0.15
 		form_jump = 4.0
+		form_weight = 0.8
 		form_air_control = 4.9
 		form_mag_angle = 0.15
 		form_turn = 0.8
@@ -179,6 +183,7 @@ func set_form_variables(form : Form):
 		form_speed = 7.0
 		form_accel = 0.08
 		form_jump = 5.0
+		form_weight = 1.2
 		form_air_control = 1.0
 		form_mag_angle = 0.4
 		form_turn = 0.15
@@ -470,7 +475,7 @@ func movement_process(delta : float):
 			if blended_normal != Vector3.UP:
 				update_up(Vector3.UP)
 			## Apply Gravity
-			velocity.y -= gravity * delta
+			velocity.y -= (gravity * form_weight) * delta
 			$norm_vec/mag.visible = false
 			
 			## Check if player has jumped, and apply jump velocity

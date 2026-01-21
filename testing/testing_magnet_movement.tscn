@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ceh73cvblfle2"]
+
+[ext_resource type="PackedScene" uid="uid://0icxcw1asu7r" path="res://stages/stage_1.tscn" id="1_ovvgp"]
+[ext_resource type="Script" path="res://testing/testing_magnet_movement.gd" id="2_h3uyg"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u3kxo"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_46cpj"]
+
+[node name="testing_magnet_movement" type="Node3D"]
+
+[node name="stage_1" parent="." instance=ExtResource("1_ovvgp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.44445, 0)
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.69896, 0.457532, 27.8637)
+script = ExtResource("2_h3uyg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_u3kxo")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_46cpj")
+
+[node name="Node3D" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(0.531753, 0, 0.846899, 0, 1, 0, -0.846899, 0, 0.531753, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.978825, 0.204701, 0, -0.204701, 0.978825, 0, 1.46302, 6.49506)
