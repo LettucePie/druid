@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://0icxcw1asu7r"]
+
+[ext_resource type="PackedScene" uid="uid://dib0nfsjs5krn" path="res://art/model/environment/stage_tiles/stage_1.glb" id="1_pi2wl"]
+
+[node name="stage_1" type="Node3D"]
+
+[node name="stage_1" parent="." instance=ExtResource("1_pi2wl")]
