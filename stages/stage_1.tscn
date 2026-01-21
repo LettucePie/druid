@@ -9,6 +9,7 @@ data = PackedVector3Array(-80.0925, -1, -80.0925, -79.8775, 14.3708, 80.2429, -8
 [node name="stage_1" type="Node3D"]
 
 [node name="terrain_meshes" parent="." instance=ExtResource("1_pi2wl")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="terrain_meshes/base_terrain" index="0"]
 
@@ -20,6 +21,6 @@ transform = Transform3D(-0.504928, 0.859464, -0.0798106, -0.594316, -0.279116, 0
 shadow_enabled = true
 
 [node name="player" parent="." instance=ExtResource("2_cy58v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.5226, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3248, 0)
 
 [editable path="terrain_meshes"]
